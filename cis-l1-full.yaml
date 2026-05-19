@@ -1,0 +1,157 @@
+- name: CIS Debian Linux 13 (Trixie) Benchmark v1.0 Server L1
+  hosts: localhost
+  become: true
+  become_method: sudo
+  vars_files:
+    - "./options/kernel_module_options.yaml"
+    - "./options/fs_options.yaml"
+
+  tasks:
+    - name: "Assert Options"
+      ansible.builtin.assert:
+        that:
+          - require_overlay | lower in ['yes', 'no']
+          - require_squashfs | lower in ['yes', 'no']
+          - require_udf | lower in ['yes', 'no']
+          - tmp_size | lower is match("^\d{1,}[gmk]$")
+          - shm_size | lower is match("^\d{1,}[gmk]$")
+          - is_home_partition | lower in ['yes', 'no']
+          - is_var_tmp_partition | lower in ['yes', 'no']
+          - is_var_log_partition | lower in ['yes', 'no']
+          - is_var_log_audit_partition | lower in ['yes', 'no']
+          - is_var_partition | lower in ['yes', 'no']
+        fail_msg:
+          - "Ensure that options are correctly set in each option.yaml:"
+          - "kernel_module_options.yaml: every option accepts only yes or no"
+          - "fs_options.yaml: *_size accepts sizes such as 1G, 1024M, or 1048576K"
+          - "fs_options.yaml: is_*_partition accepts only yes or no"
+
+    - name: "1.1.1.1 Ensure cramfs kernel module is not available"
+      ansible.builtin.include_tasks:
+        file: "./tasks/disable_kernel_module.yaml"
+      vars:
+        kernel_module: "cramfs"
+
+    - name: "1.1.1.2 Ensure freevxfs kernel module is not available"
+      ansible.builtin.include_tasks:
+        file: "./tasks/disable_kernel_module.yaml"
+      vars:
+        kernel_module: "freevxfs"
+
+    - name: "1.1.1.3 Ensure hfs kernel module is not available"
+      ansible.builtin.include_tasks:
+        file: "./tasks/disable_kernel_module.yaml"
+      vars:
+        kernel_module: "hfs"
+
+    - name: "1.1.1.4 Ensure hfsplus kernel module is not available"
+      ansible.builtin.include_tasks:
+        file: "./tasks/disable_kernel_module.yaml"
+      vars:
+        kernel_module: "hfsplus"
+
+    - name: "1.1.1.5 Ensure jffs2 kernel module is not available"
+      ansible.builtin.include_tasks:
+        file: "./tasks/disable_kernel_module.yaml"
+      vars:
+        kernel_module: "jffs2"
+
+    - name: "1.1.1.6 Ensure overlay kernel module is not available"
+      ansible.builtin.include_tasks:
+        file: "./tasks/disable_kernel_module.yaml"
+      vars:
+        kernel_module: "overlay"
+      when:
+        - require_overlay | lower == "no"
+
+    - name: "1.1.1.7 Ensure squashfs kernel module is not available"
+      ansible.builtin.include_tasks:
+        file: "./tasks/disable_kernel_module.yaml"
+      vars:
+        kernel_module: "squashfs"
+      when:
+        - require_squashfs | lower == "no"
+
+    - name: "1.1.1.8 Ensure udf kernel module is not available"
+      ansible.builtin.include_tasks:
+        file: "./tasks/disable_kernel_module.yaml"
+      vars:
+        kernel_module: "udf"
+      when:
+        - require_udf | lower == "no"
+
+    - name: "1.1.1.9 Ensure firewire-core kernel module is not available"
+      ansible.builtin.include_tasks:
+        file: "./tasks/disable_kernel_module.yaml"
+      vars:
+        kernel_module: "firewire_core"
+
+    - name: "1.1.1.10 Ensure usb-storage kernel module is not available"
+      ansible.builtin.include_tasks:
+        file: "./tasks/disable_kernel_module.yaml"
+      vars:
+        kernel_module: "usb_storage"
+
+    - name: "1.1.2.1 Ensure /tmp is tmpfs or separate partition, and nodev, noexec, and nosuid is set"
+      ansible.builtin.include_tasks:
+        file: "./tasks/configure_tmpfs_partition.yaml"
+      vars:
+        fs: "/tmp"
+        size: "{{ tmp_size }}"
+
+    - name: "1.1.2.2 Ensure /dev/shm is tmpfs or separate partition, and nodev, noexec, and nosuid is set"
+      ansible.builtin.include_tasks:
+        file: "./tasks/configure_tmpfs_partition.yaml"
+      vars:
+        fs: "/dev/shm"
+        size: "{{ shm_size }}"
+
+    - name: "1.1.2.3 Ensure /home has nodev and nosuid set"
+      ansible.builtin.include_tasks:
+        file: "./tasks/configure_fs_partition.yaml"
+      vars:
+        fs: "{{ home_device }}"
+        mountpoint: "{{ home_mount }}"
+        type: "{{ fs_type }}"
+      when:
+        - is_home_partition | lower == "yes"
+
+    - name: "1.1.2.4 Ensure /var has nodev and nosuid set"
+      ansible.builtin.include_tasks:
+        file: "./tasks/configure_fs_partition.yaml"
+      vars:
+        fs: "{{ var_device }}"
+        mountpoint: "{{ var_mount }}"
+        type: "{{ fs_type }}"
+      when:
+        - is_var_partition | lower == "yes"
+
+    - name: "1.1.2.5 Ensure /var/tmp has nodev and nosuid set"
+      ansible.builtin.include_tasks:
+        file: "./tasks/configure_fs_partition_noexec.yaml"
+      vars:
+        fs: "{{ var_tmp_device }}"
+        mountpoint: "{{ var_tmp_mount }}"
+        type: "{{ fs_type }}"
+      when:
+        - is_var_tmp_partition | lower == "yes"
+
+    - name: "1.1.2.6 Ensure /var/log has nodev and nosuid set"
+      ansible.builtin.include_tasks:
+        file: "./tasks/configure_fs_partition_noexec.yaml"
+      vars:
+        fs: "{{ var_log_device }}"
+        mountpoint: "{{ var_log_mount }}"
+        type: "{{ fs_type }}"
+      when:
+        - is_var_log_partition | lower == "yes"
+
+    - name: "1.1.2.7 Ensure /var/log/audit has nodev and nosuid set"
+      ansible.builtin.include_tasks:
+        file: "./tasks/configure_fs_partition_noexec.yaml"
+      vars:
+        fs: "{{ var_log_audit_device }}"
+        mountpoint: "{{ var_log_audit_mount }}"
+        type: "{{ fs_type }}"
+      when:
+        - is_var_log_audit_partition | lower == "yes"
