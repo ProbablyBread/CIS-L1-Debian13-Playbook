@@ -1,0 +1,7 @@
+- name: FS_SETTINGS
+  hosts: localhost
+  gather_facts: true
+  become: true
+  become_method: sudo
+  vars_files:
+    - "./options/fs_options.yaml"
