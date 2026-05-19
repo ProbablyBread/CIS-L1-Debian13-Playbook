@@ -1,0 +1,25 @@
+- name: "Checking {{ kernel_module }}..."
+  ansible.builtin.shell: "modprobe --showconfig | egrep -i \"(^blacklist {{ kernel_module }}$|^install {{ kernel_module }} /bin/false$)\""
+  register: status
+  ignore_errors: true
+
+- block:
+  - name: "Disabling {{ kernel_module }}..."
+    ansible.builtin.copy:
+      dest: "/etc/modprobe.d/99-{{ kernel_module }}-disable.conf"
+      content: |
+        blacklist {{ kernel_module }}
+        install {{ kernel_module }} /bin/false
+      owner: root
+      group: root
+      mode: '0644'
+    register: disable_conf
+
+  - name: "Unloading {{ kernel_module }}..."
+    community.general.modprobe:
+      name: "{{ kernel_module }}"
+      state: absent
+    when:
+      - disable_conf.changed
+
+  when: status.rc == 1
