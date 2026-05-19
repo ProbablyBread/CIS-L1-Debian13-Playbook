@@ -1,0 +1,3 @@
+require_overlay: "no" # if containerisation is required
+require_squashfs: "no" # if Snap/squashfs is required
+require_udf: "no" # if running on Azure
