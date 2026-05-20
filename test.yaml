@@ -5,3 +5,12 @@
   become_method: sudo
   vars_files:
     - "./options/fs_options.yaml"
+
+  tasks:
+    - name: "1.2.1.4 Ensure access to /etc/apt/trusted.gpg.d is configured"
+      ansible.builtin.include_tasks:
+        file: "./tasks/configure_file_permissions.yaml"
+      vars:
+        path: "/etc/apt/trusted.gpg.d"
+        owner: "root"
+        group: "root"

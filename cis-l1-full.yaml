@@ -155,3 +155,39 @@
         type: "{{ fs_type }}"
       when:
         - is_var_log_audit_partition | lower == "yes"
+
+    - name: "1.2.1.4/1.2.1.3 Ensure access to /etc/apt/trusted.gpg.d is configured"
+      ansible.builtin.include_tasks:
+        file: "./tasks/configure_file_permissions.yaml"
+      vars:
+        path: "/etc/apt/trusted.gpg.d"
+        owner: "root"
+        group: "root"
+        perms: "u=rwX,g=rX,o=rX"
+
+    - name: "1.2.1.5/1.2.1.6 Ensure access to /etc/apt/auth.conf.d is configured"
+      ansible.builtin.include_tasks:
+        file: "./tasks/configure_file_permissions.yaml"
+      vars:
+        path: "/etc/apt/auth.conf.d"
+        owner: "root"
+        group: "root"
+        perms: "u=rwX,g=rX,o="
+
+    - name: "1.2.1.7/1.2.1.3 Ensure access to /usr/share/keyrings is configured"
+      ansible.builtin.include_tasks:
+        file: "./tasks/configure_file_permissions.yaml"
+      vars:
+        path: "/usr/share/keyrings"
+        owner: "root"
+        group: "root"
+        perms: "u=rwX,g=rX,o=rX"
+
+    - name: "1.2.1.8/1.2.1.9 Ensure access to /etc/apt/sources.list.d is configured"
+      ansible.builtin.include_tasks:
+        file: "./tasks/configure_file_permissions.yaml"
+      vars:
+        path: "/etc/apt/sources.list.d"
+        owner: "root"
+        group: "root"
+        perms: "u=rwX,g=rX,o=rX"
