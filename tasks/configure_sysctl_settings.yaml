@@ -1,0 +1,5 @@
+- name: "Configuring {{ setting }} to {{ value }}..."
+  ansible.posix.sysctl:
+    name: "{{ setting }}"
+    value: "{{ value }}"
+    state: present
