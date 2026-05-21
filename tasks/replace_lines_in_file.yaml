@@ -1,5 +1,0 @@
-- name: "Configuring {{ path }}..."
-  ansible.builtin.replace:
-    path: "{{ path }}"
-    regexp: "{{ regexp }}"
-    replace: "{{ replace }}"

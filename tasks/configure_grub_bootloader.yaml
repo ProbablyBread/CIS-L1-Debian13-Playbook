@@ -1,0 +1,6 @@
+- name: "Configuring bootloader..."
+  ansible.builtin.lineinfile:
+    path: "/etc/default/grub"
+    backrefs: true
+    regexp: "{{ regexp }}" 
+    line: "{{ replacement }}"
