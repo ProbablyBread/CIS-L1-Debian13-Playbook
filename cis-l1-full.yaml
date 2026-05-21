@@ -1,7 +1,5 @@
 - name: CIS Debian Linux 13 (Trixie) Benchmark v1.0 Server L1
   hosts: localhost
-  become: true
-  become_method: sudo
   vars_files:
     - "./options/kernel_module_options.yaml"
     - "./options/fs_options.yaml"
