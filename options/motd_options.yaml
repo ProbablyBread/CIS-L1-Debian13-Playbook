@@ -1,3 +1,9 @@
+# Configures the MOTD and login messages via /etc/motd and /etc/issue(.net) respectively
+#
+# require_motd - if this is set to "no", the motd variable has no effect, and /etc/motd will be deleted
+# issue - sets the login banner message for local (console) login
+# issue_net - sets the login banner message for network (SSH etc) login
+
 require_motd: "no"
 motd: "This is an MOTD message"
 issue: "Please do not login if you are not authorised."

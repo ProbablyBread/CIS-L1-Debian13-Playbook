@@ -6,6 +6,7 @@ If this playbook is to be used on existing installations of Debian 13, **make a 
 
 ## Before Using This Playbook
 - **Carefully review the options in ./options/\*.yaml** before running this playbook.
+- Explanations and appropriate values for each option is in each of the .yaml files for easy reference.
 - In particular: 
     - kernel_module_options.yaml: Ensure that the filesystems you need are not blacklisted
     - fs_options.yaml: The playbook assumes that you do not have partitioning done by default. If required, filesystem partitions are to follow the filesystem as per /etc/fstab
