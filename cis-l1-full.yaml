@@ -5,6 +5,7 @@
     - "./options/fs_options.yaml"
     - "./options/bootloader_options.yaml"
     - "./options/coredump_options.yaml"
+    - "./options/motd_options.yaml"
 
   tasks:
     - name: "Assert Options"
@@ -22,6 +23,7 @@
           - is_var_partition | lower in ['yes', 'no']
           - bootloader_pbkdf2 is match("^grub.pbkdf2.*")
           - require_coredump | lower in ['yes', 'no']
+          - require_motd | lower in ['yes', 'no']
 
         fail_msg:
           - "Ensure that options are correctly set in each option.yaml. See README.md."
@@ -323,7 +325,7 @@
         create: true
         state: present
 
-    - name: "Uninstalling systemd-coredump..."
+    - name: "Coredump is not required: Uninstalling systemd-coredump..."
       ansible.builtin.apt:
         name: "systemd-coredump"
         state: absent
@@ -334,3 +336,34 @@
       ansible.builtin.include_tasks:
         file: "./tasks/configure_coredump_settings.yaml"
       when: require_coredump | lower == "yes" 
+
+    - name: "MOTD is not required: Removing /etc/motd..."
+      ansible.builtin.file:
+        path: "/etc/motd"
+        state: absent
+      when: require_motd | lower == "no"
+
+    - name: "1.6.1 Ensure /etc/motd is configured"
+      ansible.builtin.copy:
+        dest: "/etc/motd"
+        content: "{{ motd }}\n"
+        owner: root
+        group: root
+        mode: '0644'
+      when: require_motd | lower == "yes"
+
+    - name: "1.6.2 Ensure /etc/issue is configured"
+      ansible.builtin.copy:
+        dest: "/etc/issue"
+        content: "{{ issue }}\n"
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: "1.6.3 Ensure /etc/issue.net is configured"
+      ansible.builtin.copy:
+        dest: "/etc/issue.net"
+        content: "{{ issue_net }}\n"
+        owner: root
+        group: root
+        mode: '0644'

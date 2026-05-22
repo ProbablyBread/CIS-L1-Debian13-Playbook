@@ -1,0 +1,4 @@
+require_motd: "no"
+motd: "This is an MOTD message"
+issue: "Please do not login if you are not authorised."
+issue_net: "Please do not login if you are not authorised."
