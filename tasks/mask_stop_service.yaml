@@ -1,0 +1,5 @@
+- name: "Masking and stopping {{ service }}..."
+  ansible.builtin.systemd_service:
+    name: "{{ service }}"
+    state: stopped
+    masked: true

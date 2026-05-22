@@ -1,0 +1,20 @@
+- name: "..."
+  ansible.builtin.assert:
+    that:
+      - require_overlay | lower in ['yes', 'no']
+      - require_squashfs | lower in ['yes', 'no']
+      - require_udf | lower in ['yes', 'no']
+      - tmp_size | lower is match("^\d{1,}[gmk]$")
+      - shm_size | lower is match("^\d{1,}[gmk]$")
+      - is_home_partition | lower in ['yes', 'no']
+      - is_var_tmp_partition | lower in ['yes', 'no']
+      - is_var_log_partition | lower in ['yes', 'no']
+      - is_var_log_audit_partition | lower in ['yes', 'no']
+      - is_var_partition | lower in ['yes', 'no']
+      - bootloader_pbkdf2 is match("^grub.pbkdf2.*")
+      - require_coredump | lower in ['yes', 'no']
+      - require_motd | lower in ['yes', 'no']
+
+    fail_msg:
+      - "Ensure that options are correctly set in each option.yaml. See README.md."
+

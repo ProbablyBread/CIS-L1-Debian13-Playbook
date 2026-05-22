@@ -1,0 +1,75 @@
+# Configures whether services are required on the system
+#
+# require_* - sets if a service is required. if "no", completely uninstalls the service
+# run_* - sets if a service is required to be running, only effective if require_* is set to "yes". if "no", masks and stops the service.
+
+require_autofs: "no"
+run_autofs: "no"
+
+require_avahi_daemon: "no"
+run_avahi_daemon: "no"
+
+# affects only the kea package
+require_dhcp: "no" 
+run_dhcp: "no"
+
+# affects only the bind9 package
+require_dns: "no"
+run_dns: "no"
+
+require_dnsmasq: "no"
+run_dnsmasq: "no"
+
+# affects only the vsftpd package
+require_ftp: "no"
+run_ftp: "no"
+
+# affects only the slapd package
+require_ldap: "no"
+run_ldap: "no"
+
+# affects only the dovecot packages
+require_pop3: "no"
+run_pop3: "no"
+require_imap: "no"
+run_imap: "no"
+
+# affects only the nfs-kernel-server package
+require_nfs: "no"
+run_nfs: "no"
+
+# affects only the ypserv package
+require_nis: "no"
+run_nis: "no"
+
+require_cups: "no"
+run_cups: "no"
+
+require_rpcbind: "no"
+run_rpcbind: "no"
+
+require_rsync: "no"
+run_rsync: "no"
+
+require_samba: "no"
+run_samba: "no"
+
+require_snmp: "no"
+run_snmp: "no"
+
+# affects only the inetutils telnetd package
+require_telnet: "no"
+run_telnet: "no"
+
+# affects only the tftpd-hpa package
+require_tftp: "no"
+run_tftp: "no"
+
+# affects only the squid package
+require_proxy: "no"
+run_proxy: "no"
+
+require_nginx: "no"
+run_nginx: "no"
+require_apache: "no"
+run_apache: "no"

@@ -9,25 +9,9 @@
 
   tasks:
     - name: "Assert Options"
-      ansible.builtin.assert:
-        that:
-          - require_overlay | lower in ['yes', 'no']
-          - require_squashfs | lower in ['yes', 'no']
-          - require_udf | lower in ['yes', 'no']
-          - tmp_size | lower is match("^\d{1,}[gmk]$")
-          - shm_size | lower is match("^\d{1,}[gmk]$")
-          - is_home_partition | lower in ['yes', 'no']
-          - is_var_tmp_partition | lower in ['yes', 'no']
-          - is_var_log_partition | lower in ['yes', 'no']
-          - is_var_log_audit_partition | lower in ['yes', 'no']
-          - is_var_partition | lower in ['yes', 'no']
-          - bootloader_pbkdf2 is match("^grub.pbkdf2.*")
-          - require_coredump | lower in ['yes', 'no']
-          - require_motd | lower in ['yes', 'no']
+      ansible.builtin.include_tasks:
+        file: "./tasks/assert_options.yaml"
 
-        fail_msg:
-          - "Ensure that options are correctly set in each option.yaml. See README.md."
-      
     - name: "1.1.1.1 Ensure cramfs kernel module is not available"
       ansible.builtin.include_tasks:
         file: "./tasks/disable_kernel_module.yaml"
@@ -93,8 +77,6 @@
         file: "./tasks/disable_kernel_module.yaml"
       vars:
         kernel_module: "usb_storage"
-    
-
     
     - name: "1.1.2.1 Ensure /tmp is tmpfs or separate partition, and nodev, noexec, and nosuid is set"
       ansible.builtin.include_tasks:
@@ -367,3 +349,329 @@
         owner: root
         group: root
         mode: '0644'
+
+    - name: "2.1.1 Ensure autofs services are not in use"
+      ansible.builtin.include_tasks:
+        file: "./tasks/mask_stop_service.yaml"
+      vars:
+        service: "autofs.service"
+      when:
+        - require_autofs: "yes"
+        - run_autofs: "no"
+
+    - name: "Uninstalling autofs..."
+      ansible.builtin.apt:
+        name: "autofs"
+        state: absent
+        purge: true
+      when: 
+        require_autofs: "no" 
+
+    - name: "2.1.2 Ensure avahi daemon services are not in use"
+      ansible.builtin.include_tasks:
+        file: "./tasks/mask_stop_service.yaml"
+      vars:
+        service:
+          - "avahi-daemon.service"
+          - "avahi-daemon.socket"
+      when:
+        - require_avahi_daemon: "yes"
+        - run_avahi_daemon: "no"
+
+    - name: "Uninstalling avahi-daemon..."
+      ansible.builtin.apt:
+        name: "avahi-daemon"
+        state: absent
+        purge: true
+      when: 
+        require_avahi_daemon: "no"
+
+    - name: "2.1.3 Ensure dhcp server services are not in use"
+      ansible.builtin.include_tasks:
+        file: "./tasks/mask_stop_service.yaml"
+      vars:
+        service:
+          - "kea-dhcp-ddns-server.service"
+          - "kea-dhcp4-server.service"
+          - "kea-dhcp6-server.service"
+      when:
+        - require_dhcp: "yes"
+        - run_dhcp: "no"
+
+    - name: "Uninstalling kea..."
+      ansible.builtin.apt:
+        name: "kea"
+        state: absent
+        purge: true
+      when:
+        require_kea: "no"
+
+    - name: "2.1.4 Ensure dns server services are not in use"
+      ansible.builtin.include_tasks:
+        file: "./tasks/mask_stop_service.yaml"
+      vars:
+        service: "named.service"
+      when:
+        - require_dns: "yes"
+        - run_dns: "no"
+
+    - name: "Uninstalling bind9..."
+      ansible.builtin.apt:
+        name: "bind9"
+        state: absent
+        purge: true
+      when:
+        require_dns: "no"
+
+    - name: "2.1.5 Ensure dnsmasq services are not in use"
+      ansible.builtin.include_tasks:
+        file: "./tasks/mask_stop_service.yaml"
+      vars:
+        service: "dnsmasq.service"
+      when:
+        - require_dnsmasq: "yes"
+        - run_dnsmasq: "no"
+
+    - name: "Uninstalling dnsmasq..."
+      ansible.builtin.apt:
+        name: "dnsmasq"
+        state: absent
+        purge: true
+      when:
+        require_dnsmasq: "no"
+
+    - name: "2.1.6 Ensure ftp server services are not in use"
+      ansible.builtin.include_tasks:
+        file: "./tasks/mask_stop_service.yaml"
+      vars:
+        service: "vsftpd.service"
+      when:
+        - require_ftp: "yes"
+        - run_ftp: "no"
+
+    - name: "Uninstalling vsftpd..."
+      ansible.builtin.apt:
+        name: "vsftpd"
+        state: absent
+        purge: true
+      when: 
+        require_ftp: "no"
+
+    - name: "2.1.7 Ensure ldap server services are not in use"
+      ansible.builtin.include_tasks:
+        file: "./tasks/mask_stop_service.yaml"
+      vars:
+        service: "slapd.service"
+      when:
+        - require_ldap: "yes"
+        - run_ldap: "no"
+
+    - name: "Uninstalling slapd..."
+      ansible.builtin.apt:
+        name: "slapd"
+        state: absent
+        purge: true
+      when: 
+        require_ldap: "no"
+
+    - name: "2.1.8 Ensure message access server services are not in use"
+      ansible.builtin.include_tasks:
+        file: "./tasks/mask_stop_service.yaml"
+      vars:
+        service: 
+          - "dovecot.socket"
+          - "dovecot.service"
+      when:
+        - require_pop3: "yes" or require_imap: "yes"
+        - run_pop3: "no"
+        - run_imap: "no"
+
+    - name: "Uninstalling dovecot-imapd..."
+      ansible.builtin.apt:
+        name: "dovecot-imapd"
+        state: absent
+        purge: true
+      when:
+        require_imap: "no"
+
+    - name: "Uninstalling dovecot-pop3d"
+      ansible.builtin.apt:
+        name: "dovecot-pop3d"
+        state: absent
+        purge: true
+      when:
+        require_pop3: "no"
+
+    - name: "2.1.9 Ensure network file system services are not in use"
+      ansible.builtin.include_tasks:
+        file: "./tasks/mask_stop_service.yaml"
+      vars:
+        service: "nfs-server.service"
+      when:
+        - require_nfs: "yes"
+        - run_nfs: "no"
+
+    - name: "Uninstalling nfs-kernel-server..."
+      ansible.builtin.apt:
+        name: "nfs-kernel-server"
+        state: absent
+        purge: true
+      when: 
+        require_nfs: "no"
+
+    - name: "2.1.10 Ensure nis server services are not in use"
+      ansible.builtin.include_tasks:
+        file: "./tasks/mask_stop_service.yaml"
+      vars:
+        service: "ypserv.service"
+      when:
+        - require_nis: "yes"
+        - run_nis: "no"
+
+    - name: "Uninstalling ypserv..."
+      ansible.builtin.apt:
+        name: "ypserv"
+        state: absent
+        purge: true
+      when:
+        require_nis: "no"
+
+    - name: "2.1.11 Ensure print server services are not in use"
+      ansible.builtin.include_tasks:
+        file: "./tasks/mask_stop_service.yaml"
+      vars:
+        service: 
+          - "cups.socket"
+          - "cups.service"
+      when:
+        - require_cups: "yes"
+        - run_cups: "no"
+
+    - name: "Uninstalling cups..."
+      ansible.builtin.apt:
+        name: "cups"
+        state: absent
+        purge: true
+      when:
+        require_cups: "no"
+
+    - name: "2.1.12 Ensure rpcbind services are not in use"
+      ansible.builtin.include_tasks:
+        file: "./tasks/mask_stop_service.yaml"
+      vars:
+        service: 
+          - "rpcbind.socket"
+          - "rpcbind.service"
+      when:
+        - require_rpcbind: "yes"
+        - run_rpcbind: "no"
+
+    - name: "Uninstalling rpcbind..."
+      ansible.builtin.apt:
+        name: "rpcbind"
+        state: absent
+        purge: true
+      when: 
+        require_rpcbind: "no"
+
+    - name: "2.1.13 Ensure rsync services are not in use"
+      ansible.builtin.include_tasks:
+        file: "./tasks/mask_stop_service.yaml"
+      vars:
+        service: "rsync.service"
+      when:
+        - require_rsync: "yes"
+        - run_rsync: "no"
+
+    - name: "Uninstalling rsync..."
+      ansible.builtin.apt:
+        name: "rsync"
+        state: absent
+        purge: true
+      when:
+        require_rsync: "no"
+
+    - name: "2.1.14 Ensure samba file server services are not in use"
+      ansible.builtin.include_tasks:
+        file: "./tasks/mask_stop_service.yaml"
+      vars:
+        service: "smbd.service"
+      when:
+        - require_samba: "yes"
+        - run_samba: "no"
+
+    - name: "Uninstalling samba..."
+      ansible.builtin.apt:
+        name: "samba"
+        state: absent
+        purge: true
+      when:
+        require_samba: "no"
+
+    - name: "2.1.15 Ensure snmp services are not in use"
+      ansible.builtin.include_tasks:
+        file: "./tasks/mask_stop_service.yaml"
+      vars:
+        service: "snmpd.service"
+      when:
+        - require_snmp: "yes"
+        - run_snmp: "no"
+
+    - name: "Uninstalling snmpd..."
+      ansible.builtin.apt:
+        name: "snmpd"
+        state: absent
+        purge: true
+      when:
+        require_snmp: "no"
+
+    - name: "2.1.16 Ensure telnet-server services are not in use"
+      ansible.builtin.include_tasks:
+        file: "./tasks/mask_stop_service.yaml"
+      vars:
+        service: "inetutils-inetd.service"
+      when:
+        - require_telnet: "yes"
+        - run_telnet: "no"
+
+    - name: "Uninstalling telnetd..."
+      ansible.builtin.apt:
+        name: "telnetd"
+        state: absent
+        purge: true
+      when:
+        require_telnet: "no"
+
+    - name: "2.1.17 Ensure tftp server services are not in use"
+      ansible.builtin.include_tasks:
+        file: "./tasks/mask_stop_service.yaml"
+      vars:
+        service: "tftpd-hpa.service"
+      when:
+        - require_tftp: "yes"
+        - run_tftp: "no"
+
+    - name: "Uninstalling tftpd-hpa..."
+      ansible.builtin.apt:
+        name: "tftpd-hpa"
+        state: absent
+        purge: true
+      when: 
+        require_tftp: "no"
+
+    - name: "2.1.18 Ensure web proxy server services are not in use"
+      ansible.builtin.include_tasks:
+        file: "./tasks/mask_stop_service.yaml"
+      vars:
+        service: "squid.service"
+      when:
+        - require_proxy: "yes"
+        - run_proxy: "no"
+
+    - name: "Uninstalling squid..."
+      ansible.builtin.apt:
+        name: "squid"
+        state: absent
+        purge: true
+      when:
+        require_proxy: "no"
