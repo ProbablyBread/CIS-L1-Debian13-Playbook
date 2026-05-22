@@ -1,8 +1,13 @@
 # CIS L1 Debian 13 (Trixie) Hardening
 ## Foreword
-This playbook has only been tested on a fresh installation of Debian 13, and **may potentially break installations** that already have been customised or **may potentially break applications** that have already been installed. 
+This playbook has only been tested on a fresh installation of Debian 13, and **may potentially break installations** that already have been customised or **may potentially break applications** that have already been installed. This playbook has also **not** been tested on desktop environments.
 
 If this playbook is to be used on existing installations of Debian 13, **make a backup before applying**. 
+
+## Excluded Sections
+This playbook includes all the Automated compliance settings as much as possible. All Manual compliance settings have to be done, well, manually. This playbook also **does not** apply Level 2 compliance settings.
+
+Furthermore, since this playbook isn't tested on desktop environments, the entire 1.7 section is skipped.
 
 ## Before Using This Playbook
 - **Carefully review the options in ./options/\*.yaml** before running this playbook.
