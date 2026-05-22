@@ -1,0 +1,17 @@
+- name: "1.5.12 Ensure systemd-coredump ProcessSizeMax is configured"
+  ansible.builtin.lineinfile:
+    path: "/etc/systemd/coredump.conf.d/99-cis-coredump.conf"
+    backrefs: true
+    regex: ^\[Coredump\]\n((?:.*\n)*)ProcessSizeMax=.*$
+    line: \[Coredump\]\n\1ProcessSizeMax=0
+    create: true
+    state: present
+
+- name: "1.5.13 Ensure systemd-coredump Storage is configured"
+  ansible.builtin.lineinfile:
+    path: "/etc/systemd/coredump.conf.d/99-cis-coredump.conf"
+    backrefs: true
+    regex: ^\[Coredump\]\n((?:.*\n)*)Storage=.*$
+    line: \[Coredump\]\n\1Storage=none
+    create: true
+    state: present

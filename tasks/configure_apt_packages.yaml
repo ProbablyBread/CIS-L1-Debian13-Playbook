@@ -1,4 +1,0 @@
-- name: "Configuring {{ package }}"
-  ansible.builtin.apt:
-    name: "{{ package }}"
-    state: "{{ state }}"

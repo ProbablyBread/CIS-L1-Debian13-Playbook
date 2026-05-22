@@ -4,6 +4,7 @@
     - "./options/kernel_module_options.yaml"
     - "./options/fs_options.yaml"
     - "./options/bootloader_options.yaml"
+    - "./options/coredump_options.yaml"
 
   tasks:
     - name: "Assert Options"
@@ -20,10 +21,11 @@
           - is_var_log_audit_partition | lower in ['yes', 'no']
           - is_var_partition | lower in ['yes', 'no']
           - bootloader_pbkdf2 is match("^grub.pbkdf2.*")
+          - require_coredump | lower in ['yes', 'no']
 
         fail_msg:
           - "Ensure that options are correctly set in each option.yaml. See README.md."
-
+      
     - name: "1.1.1.1 Ensure cramfs kernel module is not available"
       ansible.builtin.include_tasks:
         file: "./tasks/disable_kernel_module.yaml"
@@ -89,7 +91,9 @@
         file: "./tasks/disable_kernel_module.yaml"
       vars:
         kernel_module: "usb_storage"
+    
 
+    
     - name: "1.1.2.1 Ensure /tmp is tmpfs or separate partition, and nodev, noexec, and nosuid is set"
       ansible.builtin.include_tasks:
         file: "./tasks/configure_tmpfs_partition.yaml"
@@ -153,48 +157,46 @@
         type: "{{ fs_type }}"
       when:
         - is_var_log_audit_partition | lower == "yes"
-
+    
     - name: "1.2.1.4/1.2.1.3 Ensure access to /etc/apt/trusted.gpg.d is configured"
-      ansible.builtin.include_tasks:
-        file: "./tasks/configure_file_permissions.yaml"
-      vars:
+      ansible.builtin.file:
         path: "/etc/apt/trusted.gpg.d"
-        owner: "root"
-        group: "root"
-        perms: "u=rwX,g=rX,o=rX"
+        state: directory
+        recurse: yes
+        owner: root
+        group: root
+        mode: "u=rwX,g=rX,o=rX"
 
     - name: "1.2.1.5/1.2.1.6 Ensure access to /etc/apt/auth.conf.d is configured"
-      ansible.builtin.include_tasks:
-        file: "./tasks/configure_file_permissions.yaml"
-      vars:
+      ansible.builtin.file:
         path: "/etc/apt/auth.conf.d"
-        owner: "root"
-        group: "root"
-        perms: "u=rwX,g=rX,o="
+        state: directory
+        recurse: yes
+        owner: root
+        group: root
+        mode: "u=rwX,g=rX,o="
 
     - name: "1.2.1.7/1.2.1.3 Ensure access to /usr/share/keyrings is configured"
-      ansible.builtin.include_tasks:
-        file: "./tasks/configure_file_permissions.yaml"
-      vars:
+      ansible.builtin.file:
         path: "/usr/share/keyrings"
-        owner: "root"
-        group: "root"
-        perms: "u=rwX,g=rX,o=rX"
+        state: directory
+        recurse: yes
+        owner: root
+        group: root
+        mode: "u=rwX,g=rX,o=rX"
 
     - name: "1.2.1.8/1.2.1.9 Ensure access to /etc/apt/sources.list.d is configured"
-      ansible.builtin.include_tasks:
-        file: "./tasks/configure_file_permissions.yaml"
-      vars:
+      ansible.builtin.file:
         path: "/etc/apt/sources.list.d"
-        owner: "root"
-        group: "root"
-        perms: "u=rwX,g=rX,o=rX"
-
+        state: directory
+        recurse: yes
+        owner: root
+        group: root
+        mode: "u=rwX,g=rX,o=rX"
+    
     - name: "1.3.1.1 Ensure apparmor packages are installed"
-      ansible.builtin.include_tasks:
-        file: "./tasks/configure_apt_packages.yaml"
-      vars:
-        package: apparmor
+      ansible.builtin.apt:
+        name: "apparmor"
         state: present
 
     - name: "1.3.1.2 Ensure apparmor is enabled"
@@ -204,14 +206,6 @@
         regexp: ^(GRUB_CMDLINE_LINUX=.*)apparmor=0(.*$)
         line: \1apparmor=1 security=apparmor\2
         backrefs: true
- 
-    - name: "1.3.1.4 Ensure apparmor_restrict_unprivileged_unconfined is enabled"
-      ansible.builtin.include_tasks:
-        file: "./tasks/configure_sysctl_settings.yaml"
-      vars:
-        setting: "kernel.apparmor_restrict_unprivileged_unconfined"
-        value: "1"       
-        state: present
 
     - name: "1.4.1 Ensure bootloader password is set"
       register: bootloader_pw
@@ -248,4 +242,95 @@
         owner: root
         group: root
         mode: '0600'
+    
+    - name: "1.3.1.4 Ensure apparmor_restrict_unprivileged_unconfined is enabled"
+      ansible.builtin.include_tasks:
+        file: "./tasks/configure_sysctl_settings.yaml"
+      vars:
+        setting: "kernel.apparmor_restrict_unprivileged_unconfined"
+        value: "1"       
 
+    - name: "1.5.1 Ensure fs.protected_hardlinks is configured"
+      ansible.builtin.include_tasks:
+        file: "./tasks/configure_sysctl_settings.yaml"
+      vars:
+        setting: "fs.protected_hardlinks"
+        value: "1"
+
+    - name: "1.5.2 Ensure fs.protected_symlinks is configured"
+      ansible.builtin.include_tasks:
+        file: "./tasks/configure_sysctl_settings.yaml"
+      vars:
+        setting: "fs.protected_symlinks"
+        value: "1"
+
+    - name: "1.5.3 Ensure kernel.yama.ptrace_scope is configured"
+      ansible.builtin.include_tasks:
+        file: "./tasks/configure_sysctl_settings.yaml"
+      vars:
+        setting: "kernel.yama.ptrace_scope"
+        value: "2"
+
+    - name: "1.5.4 Ensure fs.suid_dumpable is configured"
+      ansible.builtin.include_tasks:
+        file: "./tasks/configure_sysctl_settings.yaml"
+      vars:
+        setting: "fs.suid_dumpable"
+        value: "0"
+
+    - name: "1.5.5 Ensure kernel.dmesg_restrict is configured"
+      ansible.builtin.include_tasks:
+        file: "./tasks/configure_sysctl_settings.yaml"
+      vars:
+        setting: "kernel.dmesg_restrict"
+        value: "1"
+
+    - name: "1.5.8 Ensure kernel.kptr_restrict is configured"
+      ansible.builtin.include_tasks:
+        file: "./tasks/configure_sysctl_settings.yaml"
+      vars:
+        setting: "kernel.kptr_restrict"
+        value: "2"
+
+    - name: "1.5.9 Ensure kernel.randomize_va_space is configured"
+      ansible.builtin.include_tasks:
+        file: "./tasks/configure_sysctl_settings.yaml"
+      vars:
+        setting: "kernel.randomize_va_space"
+        value: "2"
+
+    - name: "Attempting to restore prelink binaries..."
+      ansible.builtin.command: prelink -ua
+      ignore_errors: true
+    
+    - name: "1.5.6 Ensure prelink is not installed"
+      ansible.builtin.apt:
+        name: "prelink"
+        state: absent
+        purge: true
+
+    - name: "1.5.7 Ensure Automatic Error Reporting is configured"
+      ansible.builtin.apt:
+        name: "apport"
+        purge: true
+        state: absent
+
+    - name: "1.5.11 Ensure core file size is configured"
+      ansible.builtin.lineinfile:
+        path: "/etc/security/limits.d/99-cis-limits.conf"
+        regex: ^\*\s+hard\s+core\s+\d$
+        line: "*  hard  core  0"
+        create: true
+        state: present
+
+    - name: "Uninstalling systemd-coredump..."
+      ansible.builtin.apt:
+        name: "systemd-coredump"
+        state: absent
+        purge: true
+      when: require_coredump | lower == no
+
+    - name: "Setting coredump settings..." 
+      ansible.builtin.include_tasks:
+        file: "./tasks/configure_coredump_settings.yaml"
+      when: require_coredump | lower == yes 

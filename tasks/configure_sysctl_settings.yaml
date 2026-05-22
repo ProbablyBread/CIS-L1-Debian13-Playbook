@@ -3,4 +3,5 @@
     name: "{{ setting }}"
     value: "{{ value }}"
     sysctl_file: /etc/sysctl.d/99-cis.conf
+    sysctl_set: true
     state: present

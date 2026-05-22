@@ -1,8 +1,0 @@
-- name: "Configuring files in {{ path }}..."
-  ansible.builtin.file:
-    path: "{{ path }}"
-    state: directory
-    recurse: yes
-    owner: "{{ owner }}"
-    group: "{{ group }}"
-    mode: "{{ perms }}"
