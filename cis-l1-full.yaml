@@ -328,9 +328,9 @@
         name: "systemd-coredump"
         state: absent
         purge: true
-      when: require_coredump | lower == no
+      when: require_coredump | lower == "no"
 
     - name: "Setting coredump settings..." 
       ansible.builtin.include_tasks:
         file: "./tasks/configure_coredump_settings.yaml"
-      when: require_coredump | lower == yes 
+      when: require_coredump | lower == "yes" 
