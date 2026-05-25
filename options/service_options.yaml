@@ -73,3 +73,6 @@ require_nginx: "no"
 run_nginx: "no"
 require_apache: "no"
 run_apache: "no"
+
+require_xinetd: "no"
+run_xinetd: "no"

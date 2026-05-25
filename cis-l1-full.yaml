@@ -675,3 +675,57 @@
         purge: true
       when:
         require_proxy: "no"
+
+    - name: "2.1.19 Ensure web server services are not in use (Apache)"
+      ansible.builtin.include_tasks:
+        file: "./tasks/mask_stop_service.yaml"
+      vars:
+        service: 
+          - "apache2.service"
+          - "apache2.socket"
+      when: 
+        - require_apache: "yes"
+        - run_apache: "no"
+
+    - name: "Uninstalling apache2..."
+      ansible.builtin.apt:
+        name: "apache2"
+        state: absent
+        purge: true
+      when: 
+        require_apache: "no"
+
+    - name: "2.1.19 Ensure web server services are not in use (Nginx)"
+      ansible.builtin.include_tasks:
+        file: "./tasks/mask_stop_service.yaml"
+      vars:
+        service: "nginx.service"
+      when: 
+        - require_nginx: "yes"
+        - run_nginx: "no"
+
+    - name: "Uninstalling nginx..."
+      ansible.builtin.apt:
+        name: "nginx"
+        state: absent
+        purge: true
+      when: 
+        require_nginx: "no"
+
+    - name: "2.1.20 Ensure xinetd services are not in use"
+      ansible.builtin.include_tasks:
+        file: "./tasks/mask_stop_service.yaml"
+      vars:
+        service: "xinetd.service"
+      when:
+        - require_xinetd: "yes"
+        - run_xinetd: "no"
+
+    - name: "Uninstalling xinetd..."
+      ansible.builtin.apt:
+        name: "xinetd"
+        state: absent
+        purge: true
+      when:
+        require_xinetd: "no"
+
