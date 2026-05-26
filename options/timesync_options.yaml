@@ -20,6 +20,6 @@ timesyncd_primary: "0.asia.pool.ntp.org 1.asia.pool.ntp.org 2.asia.pool.ntp.org 
 timesyncd_fallback: ""
 
 use_chrony: "no"
-chrony_pools: ""
+chrony_pools: "asia.pool.ntp.org pool.ntp.org"
 chrony_pools_max_sources: 4
-chrony_servers: ""
+chrony_servers: "0.asia.pool.ntp.org 1.asia.pool.ntp.org"

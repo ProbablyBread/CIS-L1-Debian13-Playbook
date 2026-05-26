@@ -11,6 +11,13 @@
     enabled: false
     masked: true
 
+- name: "Ensuring systemd-timesyncd is active..."
+  ansible.builtin.systemd_service:
+    name: "systemd-timesyncd.service"
+    state: started
+    enabled: true
+    masked: false
+
 - name: "Configuring systemd-timesyncd primary NTP..."
   register: timesyncd_primary
   community.general.ini_file:
@@ -38,9 +45,3 @@
     masked: false
   when: timesyncd_primary.changed or timesyncd_fallback.changed
 
-- name: "Ensuring systemd-timesyncd is active..."
-  ansible.builtin.systemd_service:
-    name: "systemd-timesyncd.service"
-    state: started
-    enabled: true
-    masked: false
