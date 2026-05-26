@@ -59,5 +59,11 @@
       - require_xinetd | lower in ['yes', 'no']
       - run_xinetd | lower in ['yes', 'no']
       - require_internet_mta | lower in ['yes', 'no']
+      - require_client_nis | lower in ['yes', 'no']
+      - require_client_rsh | lower in ['yes', 'no']
+      - require_client_talk | lower in ['yes', 'no']
+      - require_client_telnet | lower in ['yes', 'no']
+      - require_client_ldap | lower in ['yes', 'no']
+      - require_client_ftp | lower in ['yes', 'no']
     fail_msg:
       - "Ensure that options are correctly set in each option.yaml. See README.md and each option.yaml file."

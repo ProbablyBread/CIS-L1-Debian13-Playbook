@@ -7,6 +7,7 @@
     - "./options/coredump_options.yaml"
     - "./options/motd_options.yaml"
     - "./options/service_options.yaml"
+    - "./options/client_service_options.yaml"
 
   tasks:
     - name: "Assert Options..."
@@ -739,3 +740,59 @@
         state: present
       when: 
         require_internet_mta == "no"
+
+    - name: "2.2.1 Ensure nis client is not installed"
+      ansible.builtin.apt:
+        name: "nis"
+        state: absent
+        purge: true
+      when: 
+        require_client_nis == "no"
+
+    - name: "2.2.2 Ensure rsh client is not installed"
+      ansible.builtin.apt:
+        name: "rsh" 
+        state: absent
+        purge: true
+      when:
+        require_client_rsh == "no"
+
+    - name: "2.2.3 Ensure talk client is not installed"
+      ansible.builtin.apt:
+        name: "talk"
+        state: absent
+        purge: true
+      when:
+        require_client_talk == "no"
+
+    - name: "2.2.4 Ensure telnet client is not installed"
+      ansible.builtin.apt:
+        name: "{{ client_service }}"
+        state: absent
+        purge: true
+      when: 
+        require_client_telnet == "no"
+      vars:
+        client_service:
+          - "telnet"
+          - "inetutils-telnet"
+
+    - name: "2.2.5 Ensure ldap client is not installed"
+      ansible.builtin.apt:
+        name: "ldap-util"
+        state: absent
+        purge: true
+      when:
+        require_client_ldap == "no"
+
+    - name: "2.2.6 Ensure ftp client is not installed"
+      ansible.builtin.apt:
+        name: "{{ client_service }}"
+        state: absent
+        purge: true
+      when:
+        require_client_ftp == "no"
+      vars:
+        client_service:
+          - "tnftp"
+          - "ftp"
