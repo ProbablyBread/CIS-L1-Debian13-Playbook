@@ -1,4 +1,5 @@
 - name: "..."
+  register: assertions
   ansible.builtin.assert:
     that:
       - require_overlay | lower in ['yes', 'no']
@@ -65,5 +66,9 @@
       - require_client_telnet | lower in ['yes', 'no']
       - require_client_ldap | lower in ['yes', 'no']
       - require_client_ftp | lower in ['yes', 'no']
+      - use_systemd_timesyncd | lower in ['yes', 'no']
+      - use_chrony | lower in ['yes', 'no']
+      - chrony_pools_max_sources is match("^\d+$")
+      - use_systemd_timesyncd | lower != use_chrony | lower 
     fail_msg:
       - "Ensure that options are correctly set in each option.yaml. See README.md and each option.yaml file."
