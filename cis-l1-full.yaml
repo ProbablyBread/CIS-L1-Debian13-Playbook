@@ -6,9 +6,10 @@
     - "./options/bootloader_options.yaml"
     - "./options/coredump_options.yaml"
     - "./options/motd_options.yaml"
+    - "./options/service_options.yaml"
 
   tasks:
-    - name: "Assert Options"
+    - name: "Assert Options..."
       ansible.builtin.include_tasks:
         file: "./tasks/assert_options.yaml"
 
@@ -213,7 +214,7 @@
       ansible.builtin.lineinfile:
         path: "/etc/grub.d/10_linux"
         regexp: ^CLASS="--class gnu-linux --class gnu --class os.*"
-        line: CLASS="--class gnu-linux --class gnu --class os" 
+        line: CLASS="--class gnu-linux --class gnu --class os"
       when: bootloader_password_required == true
         
     - name: "Regenerating bootloader configuration..."
@@ -232,7 +233,7 @@
         file: "./tasks/configure_sysctl_settings.yaml"
       vars:
         setting: "kernel.apparmor_restrict_unprivileged_unconfined"
-        value: "1"       
+        value: "1"      
 
     - name: "1.5.1 Ensure fs.protected_hardlinks is configured"
       ansible.builtin.include_tasks:
@@ -307,19 +308,19 @@
         create: true
         state: present
 
-    - name: "Coredump is not required: Uninstalling systemd-coredump..."
+    - name: "Uninstalling systemd-coredump..."
       ansible.builtin.apt:
         name: "systemd-coredump"
         state: absent
         purge: true
       when: require_coredump | lower == "no"
 
-    - name: "Setting coredump settings..." 
+    - name: "Setting coredump settings..."
       ansible.builtin.include_tasks:
         file: "./tasks/configure_coredump_settings.yaml"
-      when: require_coredump | lower == "yes" 
+      when: require_coredump | lower == "yes"
 
-    - name: "MOTD is not required: Removing /etc/motd..."
+    - name: "Removing /etc/motd..."
       ansible.builtin.file:
         path: "/etc/motd"
         state: absent
@@ -356,8 +357,8 @@
       vars:
         service: "autofs.service"
       when:
-        - require_autofs: "yes"
-        - run_autofs: "no"
+        - require_autofs == "yes"
+        - run_autofs == "no"
 
     - name: "Uninstalling autofs..."
       ansible.builtin.apt:
@@ -365,7 +366,7 @@
         state: absent
         purge: true
       when: 
-        require_autofs: "no" 
+        require_autofs == "no"
 
     - name: "2.1.2 Ensure avahi daemon services are not in use"
       ansible.builtin.include_tasks:
@@ -375,8 +376,8 @@
           - "avahi-daemon.service"
           - "avahi-daemon.socket"
       when:
-        - require_avahi_daemon: "yes"
-        - run_avahi_daemon: "no"
+        - require_avahi_daemon == "yes"
+        - run_avahi_daemon == "no"
 
     - name: "Uninstalling avahi-daemon..."
       ansible.builtin.apt:
@@ -384,7 +385,7 @@
         state: absent
         purge: true
       when: 
-        require_avahi_daemon: "no"
+        require_avahi_daemon == "no"
 
     - name: "2.1.3 Ensure dhcp server services are not in use"
       ansible.builtin.include_tasks:
@@ -395,8 +396,8 @@
           - "kea-dhcp4-server.service"
           - "kea-dhcp6-server.service"
       when:
-        - require_dhcp: "yes"
-        - run_dhcp: "no"
+        - require_dhcp == "yes"
+        - run_dhcp == "no"
 
     - name: "Uninstalling kea..."
       ansible.builtin.apt:
@@ -404,7 +405,7 @@
         state: absent
         purge: true
       when:
-        require_kea: "no"
+        require_dhcp == "no"
 
     - name: "2.1.4 Ensure dns server services are not in use"
       ansible.builtin.include_tasks:
@@ -412,8 +413,8 @@
       vars:
         service: "named.service"
       when:
-        - require_dns: "yes"
-        - run_dns: "no"
+        - require_dns == "yes"
+        - run_dns == "no"
 
     - name: "Uninstalling bind9..."
       ansible.builtin.apt:
@@ -421,7 +422,7 @@
         state: absent
         purge: true
       when:
-        require_dns: "no"
+        require_dns == "no"
 
     - name: "2.1.5 Ensure dnsmasq services are not in use"
       ansible.builtin.include_tasks:
@@ -429,8 +430,8 @@
       vars:
         service: "dnsmasq.service"
       when:
-        - require_dnsmasq: "yes"
-        - run_dnsmasq: "no"
+        - require_dnsmasq == "yes"
+        - run_dnsmasq == "no"
 
     - name: "Uninstalling dnsmasq..."
       ansible.builtin.apt:
@@ -438,7 +439,7 @@
         state: absent
         purge: true
       when:
-        require_dnsmasq: "no"
+        require_dnsmasq == "no"
 
     - name: "2.1.6 Ensure ftp server services are not in use"
       ansible.builtin.include_tasks:
@@ -446,8 +447,8 @@
       vars:
         service: "vsftpd.service"
       when:
-        - require_ftp: "yes"
-        - run_ftp: "no"
+        - require_ftp == "yes"
+        - run_ftp == "no"
 
     - name: "Uninstalling vsftpd..."
       ansible.builtin.apt:
@@ -455,7 +456,7 @@
         state: absent
         purge: true
       when: 
-        require_ftp: "no"
+        require_ftp == "no"
 
     - name: "2.1.7 Ensure ldap server services are not in use"
       ansible.builtin.include_tasks:
@@ -463,8 +464,8 @@
       vars:
         service: "slapd.service"
       when:
-        - require_ldap: "yes"
-        - run_ldap: "no"
+        - require_ldap == "yes"
+        - run_ldap == "no"
 
     - name: "Uninstalling slapd..."
       ansible.builtin.apt:
@@ -472,7 +473,7 @@
         state: absent
         purge: true
       when: 
-        require_ldap: "no"
+        require_ldap == "no"
 
     - name: "2.1.8 Ensure message access server services are not in use"
       ansible.builtin.include_tasks:
@@ -482,9 +483,9 @@
           - "dovecot.socket"
           - "dovecot.service"
       when:
-        - require_pop3: "yes" or require_imap: "yes"
-        - run_pop3: "no"
-        - run_imap: "no"
+        - require_pop3 == "yes"or require_imap == "yes"
+        - run_pop3 == "no"
+        - run_imap == "no"
 
     - name: "Uninstalling dovecot-imapd..."
       ansible.builtin.apt:
@@ -492,7 +493,7 @@
         state: absent
         purge: true
       when:
-        require_imap: "no"
+        require_imap == "no"
 
     - name: "Uninstalling dovecot-pop3d"
       ansible.builtin.apt:
@@ -500,7 +501,7 @@
         state: absent
         purge: true
       when:
-        require_pop3: "no"
+        require_pop3 == "no"
 
     - name: "2.1.9 Ensure network file system services are not in use"
       ansible.builtin.include_tasks:
@@ -508,8 +509,8 @@
       vars:
         service: "nfs-server.service"
       when:
-        - require_nfs: "yes"
-        - run_nfs: "no"
+        - require_nfs == "yes"
+        - run_nfs == "no"
 
     - name: "Uninstalling nfs-kernel-server..."
       ansible.builtin.apt:
@@ -517,7 +518,7 @@
         state: absent
         purge: true
       when: 
-        require_nfs: "no"
+        require_nfs == "no"
 
     - name: "2.1.10 Ensure nis server services are not in use"
       ansible.builtin.include_tasks:
@@ -525,8 +526,8 @@
       vars:
         service: "ypserv.service"
       when:
-        - require_nis: "yes"
-        - run_nis: "no"
+        - require_nis == "yes"
+        - run_nis == "no"
 
     - name: "Uninstalling ypserv..."
       ansible.builtin.apt:
@@ -534,7 +535,7 @@
         state: absent
         purge: true
       when:
-        require_nis: "no"
+        require_nis == "no"
 
     - name: "2.1.11 Ensure print server services are not in use"
       ansible.builtin.include_tasks:
@@ -544,8 +545,8 @@
           - "cups.socket"
           - "cups.service"
       when:
-        - require_cups: "yes"
-        - run_cups: "no"
+        - require_cups == "yes"
+        - run_cups == "no"
 
     - name: "Uninstalling cups..."
       ansible.builtin.apt:
@@ -553,7 +554,7 @@
         state: absent
         purge: true
       when:
-        require_cups: "no"
+        require_cups == "no"
 
     - name: "2.1.12 Ensure rpcbind services are not in use"
       ansible.builtin.include_tasks:
@@ -563,8 +564,8 @@
           - "rpcbind.socket"
           - "rpcbind.service"
       when:
-        - require_rpcbind: "yes"
-        - run_rpcbind: "no"
+        - require_rpcbind == "yes"
+        - run_rpcbind == "no"
 
     - name: "Uninstalling rpcbind..."
       ansible.builtin.apt:
@@ -572,7 +573,7 @@
         state: absent
         purge: true
       when: 
-        require_rpcbind: "no"
+        require_rpcbind == "no"
 
     - name: "2.1.13 Ensure rsync services are not in use"
       ansible.builtin.include_tasks:
@@ -580,8 +581,8 @@
       vars:
         service: "rsync.service"
       when:
-        - require_rsync: "yes"
-        - run_rsync: "no"
+        - require_rsync == "yes"
+        - run_rsync == "no"
 
     - name: "Uninstalling rsync..."
       ansible.builtin.apt:
@@ -589,7 +590,7 @@
         state: absent
         purge: true
       when:
-        require_rsync: "no"
+        require_rsync == "no"
 
     - name: "2.1.14 Ensure samba file server services are not in use"
       ansible.builtin.include_tasks:
@@ -597,8 +598,8 @@
       vars:
         service: "smbd.service"
       when:
-        - require_samba: "yes"
-        - run_samba: "no"
+        - require_samba == "yes"
+        - run_samba == "no"
 
     - name: "Uninstalling samba..."
       ansible.builtin.apt:
@@ -606,7 +607,7 @@
         state: absent
         purge: true
       when:
-        require_samba: "no"
+        require_samba == "no"
 
     - name: "2.1.15 Ensure snmp services are not in use"
       ansible.builtin.include_tasks:
@@ -614,8 +615,8 @@
       vars:
         service: "snmpd.service"
       when:
-        - require_snmp: "yes"
-        - run_snmp: "no"
+        - require_snmp == "yes"
+        - run_snmp == "no"
 
     - name: "Uninstalling snmpd..."
       ansible.builtin.apt:
@@ -623,7 +624,7 @@
         state: absent
         purge: true
       when:
-        require_snmp: "no"
+        require_snmp == "no"
 
     - name: "2.1.16 Ensure telnet-server services are not in use"
       ansible.builtin.include_tasks:
@@ -631,8 +632,8 @@
       vars:
         service: "inetutils-inetd.service"
       when:
-        - require_telnet: "yes"
-        - run_telnet: "no"
+        - require_telnet == "yes"
+        - run_telnet == "no"
 
     - name: "Uninstalling telnetd..."
       ansible.builtin.apt:
@@ -640,7 +641,7 @@
         state: absent
         purge: true
       when:
-        require_telnet: "no"
+        require_telnet == "no"
 
     - name: "2.1.17 Ensure tftp server services are not in use"
       ansible.builtin.include_tasks:
@@ -648,8 +649,8 @@
       vars:
         service: "tftpd-hpa.service"
       when:
-        - require_tftp: "yes"
-        - run_tftp: "no"
+        - require_tftp == "yes"
+        - run_tftp == "no"
 
     - name: "Uninstalling tftpd-hpa..."
       ansible.builtin.apt:
@@ -657,7 +658,7 @@
         state: absent
         purge: true
       when: 
-        require_tftp: "no"
+        require_tftp == "no"
 
     - name: "2.1.18 Ensure web proxy server services are not in use"
       ansible.builtin.include_tasks:
@@ -665,8 +666,8 @@
       vars:
         service: "squid.service"
       when:
-        - require_proxy: "yes"
-        - run_proxy: "no"
+        - require_proxy == "yes"
+        - run_proxy == "no"
 
     - name: "Uninstalling squid..."
       ansible.builtin.apt:
@@ -674,7 +675,7 @@
         state: absent
         purge: true
       when:
-        require_proxy: "no"
+        require_proxy == "no"
 
     - name: "2.1.19 Ensure web server services are not in use (Apache)"
       ansible.builtin.include_tasks:
@@ -684,8 +685,8 @@
           - "apache2.service"
           - "apache2.socket"
       when: 
-        - require_apache: "yes"
-        - run_apache: "no"
+        - require_apache == "yes"
+        - run_apache == "no"
 
     - name: "Uninstalling apache2..."
       ansible.builtin.apt:
@@ -693,7 +694,7 @@
         state: absent
         purge: true
       when: 
-        require_apache: "no"
+        require_apache == "no"
 
     - name: "2.1.19 Ensure web server services are not in use (Nginx)"
       ansible.builtin.include_tasks:
@@ -701,8 +702,8 @@
       vars:
         service: "nginx.service"
       when: 
-        - require_nginx: "yes"
-        - run_nginx: "no"
+        - require_nginx == "yes"
+        - run_nginx == "no"
 
     - name: "Uninstalling nginx..."
       ansible.builtin.apt:
@@ -710,7 +711,7 @@
         state: absent
         purge: true
       when: 
-        require_nginx: "no"
+        require_nginx == "no"
 
     - name: "2.1.20 Ensure xinetd services are not in use"
       ansible.builtin.include_tasks:
@@ -718,8 +719,8 @@
       vars:
         service: "xinetd.service"
       when:
-        - require_xinetd: "yes"
-        - run_xinetd: "no"
+        - require_xinetd == "yes"
+        - run_xinetd == "no"
 
     - name: "Uninstalling xinetd..."
       ansible.builtin.apt:
@@ -727,5 +728,14 @@
         state: absent
         purge: true
       when:
-        require_xinetd: "no"
+        require_xinetd == "no"
 
+    - name: "2.1.22 Ensure mail transfer agents are configured for local-only mode"
+      ansible.builtin.lineinfile:
+        path: "/etc/postfix/main.cf"
+        regex: ^\s*inet_interfaces\s+=.*$
+        line: "inet_interfaces = loopback-only"
+        create: false
+        state: present
+      when: 
+        require_internet_mta == "no"

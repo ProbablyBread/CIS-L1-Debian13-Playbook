@@ -2,6 +2,8 @@
 #
 # require_* - sets if a service is required. if "no", completely uninstalls the service
 # run_* - sets if a service is required to be running, only effective if require_* is set to "yes". if "no", masks and stops the service.
+# 
+# Note that there are exceptions to this for the MTA module.
 
 require_autofs: "no"
 run_autofs: "no"
@@ -76,3 +78,7 @@ run_apache: "no"
 
 require_xinetd: "no"
 run_xinetd: "no"
+
+# affects only the postfix package
+# if this is set to "no", sets inet_interfaces to loopback-only
+require_internet_mta: "no"
