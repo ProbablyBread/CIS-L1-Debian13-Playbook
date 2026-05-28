@@ -1,0 +1,5 @@
+# Configures partition options
+#
+# require_cron - controls whether cron is installed on the system
+
+require_cron: true

@@ -1,0 +1,366 @@
+- name: "2.1.1 Ensure autofs services are not in use"
+  ansible.builtin.include_tasks:
+    file: "../templates/mask_stop_service.yaml"
+  vars:
+    service: "autofs.service"
+  when:
+    - require_autofs | bool
+    - not (run_autofs | bool)
+
+- name: "Uninstalling autofs..."
+  ansible.builtin.apt:
+    name: "autofs"
+    state: absent
+    purge: true
+  when: require_autofs | lower == "no"
+
+- name: "2.1.2 Ensure avahi daemon services are not in use"
+  ansible.builtin.include_tasks:
+    file: "../templates/mask_stop_service.yaml"
+  vars:
+    service:
+      - "avahi-daemon.service"
+      - "avahi-daemon.socket"
+  when:
+    - require_avahi_daemon | bool
+    - not (run_avahi_daemon | bool)
+
+- name: "Uninstalling avahi-daemon..."
+  ansible.builtin.apt:
+    name: "avahi-daemon"
+    state: absent
+    purge: true
+  when: not (require_avahi_daemon | bool)
+
+- name: "2.1.3 Ensure dhcp server services are not in use"
+  ansible.builtin.include_tasks:
+    file: "../templates/mask_stop_service.yaml"
+  vars:
+    service:
+      - "kea-dhcp-ddns-server.service"
+      - "kea-dhcp4-server.service"
+      - "kea-dhcp6-server.service"
+  when:
+    - require_dhcp | bool
+    - not (run_dhcp | bool)
+
+- name: "Uninstalling kea..."
+  ansible.builtin.apt:
+    name: "kea"
+    state: absent
+    purge: true
+  when: not (require_dhcp | bool)
+
+- name: "2.1.4 Ensure dns server services are not in use"
+  ansible.builtin.include_tasks:
+    file: "../templates/mask_stop_service.yaml"
+  vars:
+    service: "named.service"
+  when:
+    - require_dns | bool
+    - not (run_dns | bool)
+
+- name: "Uninstalling bind9..."
+  ansible.builtin.apt:
+    name: "bind9"
+    state: absent
+    purge: true
+  when: not (require_dns | bool)
+
+- name: "2.1.5 Ensure dnsmasq services are not in use"
+  ansible.builtin.include_tasks:
+    file: "../templates/mask_stop_service.yaml"
+  vars:
+    service: "dnsmasq.service"
+  when:
+    - require_dnsmasq | bool
+    - not (run_dnsmasq | bool)
+
+- name: "Uninstalling dnsmasq..."
+  ansible.builtin.apt:
+    name: "dnsmasq"
+    state: absent
+    purge: true
+  when: not (require_dnsmasq | bool)
+
+- name: "2.1.6 Ensure ftp server services are not in use"
+  ansible.builtin.include_tasks:
+    file: "../templates/mask_stop_service.yaml"
+  vars:
+    service: "vsftpd.service"
+  when:
+    - require_ftp | bool
+    - not (run_ftp | bool)
+
+- name: "Uninstalling vsftpd..."
+  ansible.builtin.apt:
+    name: "vsftpd"
+    state: absent
+    purge: true
+  when: not (require_ftp | bool)
+
+- name: "2.1.7 Ensure ldap server services are not in use"
+  ansible.builtin.include_tasks:
+    file: "../templates/mask_stop_service.yaml"
+  vars:
+    service: "slapd.service"
+  when:
+    - require_ldap | bool
+    - not (run_ldap | bool)
+
+- name: "Uninstalling slapd..."
+  ansible.builtin.apt:
+    name: "slapd"
+    state: absent
+    purge: true
+  when: not (require_ldap | bool)
+
+- name: "2.1.8 Ensure message access server services are not in use"
+  ansible.builtin.include_tasks:
+    file: "../templates/mask_stop_service.yaml"
+  vars:
+    service:
+      - "dovecot.socket"
+      - "dovecot.service"
+  when:
+    - (require_pop3 | bool) or (require_imap | bool)
+    - not (run_pop3 | bool)
+    - not (run_imap | bool)
+
+- name: "Uninstalling dovecot-imapd..."
+  ansible.builtin.apt:
+    name: "dovecot-imapd"
+    state: absent
+    purge: true
+  when: not (require_imap | bool)
+
+- name: "Uninstalling dovecot-pop3d"
+  ansible.builtin.apt:
+    name: "dovecot-pop3d"
+    state: absent
+    purge: true
+  when: not (require_pop3 | bool)
+
+- name: "2.1.9 Ensure network file system services are not in use"
+  ansible.builtin.include_tasks:
+    file: "../templates/mask_stop_service.yaml"
+  vars:
+    service: "nfs-server.service"
+  when:
+    - require_nfs | bool
+    - not (run_nfs | bool)
+
+- name: "Uninstalling nfs-kernel-server..."
+  ansible.builtin.apt:
+    name: "nfs-kernel-server"
+    state: absent
+    purge: true
+  when: not (require_nfs | bool)
+
+- name: "2.1.10 Ensure nis server services are not in use"
+  ansible.builtin.include_tasks:
+    file: "../templates/mask_stop_service.yaml"
+  vars:
+    service: "ypserv.service"
+  when:
+    - require_nis | bool
+    - not (run_nis | bool)
+
+- name: "Uninstalling ypserv..."
+  ansible.builtin.apt:
+    name: "ypserv"
+    state: absent
+    purge: true
+  when: not (require_nis | bool)
+
+- name: "2.1.11 Ensure print server services are not in use"
+  ansible.builtin.include_tasks:
+    file: "../templates/mask_stop_service.yaml"
+  vars:
+    service:
+      - "cups.socket"
+      - "cups.service"
+  when:
+    - require_cups | bool
+    - not (run_cups | bool)
+
+- name: "Uninstalling cups..."
+  ansible.builtin.apt:
+    name: "cups"
+    state: absent
+    purge: true
+  when: not (require_cups | bool)
+
+- name: "2.1.12 Ensure rpcbind services are not in use"
+  ansible.builtin.include_tasks:
+    file: "../templates/mask_stop_service.yaml"
+  vars:
+    service:
+      - "rpcbind.socket"
+      - "rpcbind.service"
+  when:
+    - require_rpcbind | bool
+    - not (run_rpcbind | bool)
+
+- name: "Uninstalling rpcbind..."
+  ansible.builtin.apt:
+    name: "rpcbind"
+    state: absent
+    purge: true
+  when: not (require_rpcbind | bool)
+
+- name: "2.1.13 Ensure rsync services are not in use"
+  ansible.builtin.include_tasks:
+    file: "../templates/mask_stop_service.yaml"
+  vars:
+    service: "rsync.service"
+  when:
+    - require_rsync | bool
+    - not (run_rsync | bool)
+
+- name: "Uninstalling rsync..."
+  ansible.builtin.apt:
+    name: "rsync"
+    state: absent
+    purge: true
+  when: not (require_rsync | bool)
+
+- name: "2.1.14 Ensure samba file server services are not in use"
+  ansible.builtin.include_tasks:
+    file: "../templates/mask_stop_service.yaml"
+  vars:
+    service: "smbd.service"
+  when:
+    - require_samba | bool
+    - not (run_samba | bool)
+
+- name: "Uninstalling samba..."
+  ansible.builtin.apt:
+    name: "samba"
+    state: absent
+    purge: true
+  when: not (require_samba | bool)
+
+- name: "2.1.15 Ensure snmp services are not in use"
+  ansible.builtin.include_tasks:
+    file: "../templates/mask_stop_service.yaml"
+  vars:
+    service: "snmpd.service"
+  when:
+    - require_snmp | bool
+    - not (run_snmp | bool)
+
+- name: "Uninstalling snmpd..."
+  ansible.builtin.apt:
+    name: "snmpd"
+    state: absent
+    purge: true
+  when: not (require_snmp | bool)
+
+- name: "2.1.16 Ensure telnet-server services are not in use"
+  ansible.builtin.include_tasks:
+    file: "../templates/mask_stop_service.yaml"
+  vars:
+    service: "inetutils-inetd.service"
+  when:
+    - require_telnet | bool
+    - not (run_telnet | bool)
+
+- name: "Uninstalling telnetd..."
+  ansible.builtin.apt:
+    name: "telnetd"
+    state: absent
+    purge: true
+  when: not (require_telnet | bool)
+
+- name: "2.1.17 Ensure tftp server services are not in use"
+  ansible.builtin.include_tasks:
+    file: "../templates/mask_stop_service.yaml"
+  vars:
+    service: "tftpd-hpa.service"
+  when:
+    - require_tftp | bool
+    - not (run_tftp | bool)
+
+- name: "Uninstalling tftpd-hpa..."
+  ansible.builtin.apt:
+    name: "tftpd-hpa"
+    state: absent
+    purge: true
+  when: not (require_tftp | bool)
+
+- name: "2.1.18 Ensure web proxy server services are not in use"
+  ansible.builtin.include_tasks:
+    file: "../templates/mask_stop_service.yaml"
+  vars:
+    service: "squid.service"
+  when:
+    - require_proxy | bool
+    - not (run_proxy | bool)
+
+- name: "Uninstalling squid..."
+  ansible.builtin.apt:
+    name: "squid"
+    state: absent
+    purge: true
+  when: not (require_proxy | bool)
+
+- name: "2.1.19 Ensure web server services are not in use (Apache)"
+  ansible.builtin.include_tasks:
+    file: "../templates/mask_stop_service.yaml"
+  vars:
+    service:
+      - "apache2.service"
+      - "apache2.socket"
+  when:
+    - require_apache | bool
+    - not (run_apache | bool)
+
+- name: "Uninstalling apache2..."
+  ansible.builtin.apt:
+    name: "apache2"
+    state: absent
+    purge: true
+  when: not (require_apache | bool)
+
+- name: "2.1.19 Ensure web server services are not in use (Nginx)"
+  ansible.builtin.include_tasks:
+    file: "../templates/mask_stop_service.yaml"
+  vars:
+    service: "nginx.service"
+  when:
+    - require_nginx | bool
+    - not (run_nginx | bool)
+
+- name: "Uninstalling nginx..."
+  ansible.builtin.apt:
+    name: "nginx"
+    state: absent
+    purge: true
+  when: not (require_nginx | bool)
+
+- name: "2.1.20 Ensure xinetd services are not in use"
+  ansible.builtin.include_tasks:
+    file: "../templates/mask_stop_service.yaml"
+  vars:
+    service: "xinetd.service"
+  when:
+    - require_xinetd | bool
+    - not (run_xinetd | bool)
+
+- name: "Uninstalling xinetd..."
+  ansible.builtin.apt:
+    name: "xinetd"
+    state: absent
+    purge: true
+  when: not (require_xinetd | bool)
+
+- name: "2.1.22 Ensure mail transfer agents are configured for local-only mode"
+  ansible.builtin.lineinfile:
+    path: "/etc/postfix/main.cf"
+    regex: ^\s*inet_interfaces\s+=.*$
+    line: "inet_interfaces = loopback-only"
+    create: false
+    state: present
+  when: not (require_internet_mta | bool)
+

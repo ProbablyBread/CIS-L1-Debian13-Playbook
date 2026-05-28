@@ -1,0 +1,84 @@
+- name: "1.5.1 Ensure fs.protected_hardlinks is configured"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sysctl_settings.yaml"
+  vars:
+    setting: "fs.protected_hardlinks"
+    value: "1"
+
+- name: "1.5.2 Ensure fs.protected_symlinks is configured"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sysctl_settings.yaml"
+  vars:
+    setting: "fs.protected_symlinks"
+    value: "1"
+
+- name: "1.5.3 Ensure kernel.yama.ptrace_scope is configured"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sysctl_settings.yaml"
+  vars:
+    setting: "kernel.yama.ptrace_scope"
+    value: "2"
+
+- name: "1.5.4 Ensure fs.suid_dumpable is configured"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sysctl_settings.yaml"
+  vars:
+    setting: "fs.suid_dumpable"
+    value: "0"
+
+- name: "1.5.5 Ensure kernel.dmesg_restrict is configured"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sysctl_settings.yaml"
+  vars:
+    setting: "kernel.dmesg_restrict"
+    value: "1"
+
+- name: "1.5.8 Ensure kernel.kptr_restrict is configured"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sysctl_settings.yaml"
+  vars:
+    setting: "kernel.kptr_restrict"
+    value: "2"
+
+- name: "1.5.9 Ensure kernel.randomize_va_space is configured"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sysctl_settings.yaml"
+  vars:
+    setting: "kernel.randomize_va_space"
+    value: "2"
+
+- name: "Attempting to restore prelink binaries..."
+  ansible.builtin.command: prelink -ua
+  ignore_errors: true
+
+- name: "1.5.6 Ensure prelink is not installed"
+  ansible.builtin.apt:
+    name: "prelink"
+    state: absent
+    purge: true
+
+- name: "1.5.7 Ensure Automatic Error Reporting is configured"
+  ansible.builtin.apt:
+    name: "apport"
+    purge: true
+    state: absent
+
+- name: "1.5.11 Ensure core file size is configured"
+  ansible.builtin.lineinfile:
+    path: "/etc/security/limits.d/99-cis-limits.conf"
+    regex: ^\*\s+hard\s+core\s+\d$
+    line: "*  hard  core  0"
+    create: true
+    state: present
+
+- name: "Uninstalling systemd-coredump..."
+  ansible.builtin.apt:
+    name: "systemd-coredump"
+    state: absent
+    purge: true
+  when: not (require_coredump | bool)
+
+- name: "Setting coredump settings..."
+  ansible.builtin.include_tasks:
+    file: "../tasks/configure_coredump_settings.yaml"
+  when: require_coredump | bool

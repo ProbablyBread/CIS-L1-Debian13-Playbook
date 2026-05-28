@@ -70,5 +70,6 @@
       - use_chrony | bool in [true, false]
       - chrony_pools_max_sources is match("^\d+$")
       - use_systemd_timesyncd != use_chrony 
+      - require_cron | bool in [true, false]
     fail_msg:
       - "Ensure that options are correctly set in each option.yaml. See README.md and each option.yaml file."

@@ -1,0 +1,121 @@
+- name: "1.1.1.1 Ensure cramfs kernel module is not available"
+  ansible.builtin.include_tasks:
+    file: "../templates/disable_kernel_module.yaml"
+  vars:
+    kernel_module: "cramfs"
+
+- name: "1.1.1.2 Ensure freevxfs kernel module is not available"
+  ansible.builtin.include_tasks:
+    file: "../templates/disable_kernel_module.yaml"
+  vars:
+    kernel_module: "freevxfs"
+
+- name: "1.1.1.3 Ensure hfs kernel module is not available"
+  ansible.builtin.include_tasks:
+    file: "../templates/disable_kernel_module.yaml"
+  vars:
+    kernel_module: "hfs"
+
+- name: "1.1.1.4 Ensure hfsplus kernel module is not available"
+  ansible.builtin.include_tasks:
+    file: "../templates/disable_kernel_module.yaml"
+  vars:
+    kernel_module: "hfsplus"
+
+- name: "1.1.1.5 Ensure jffs2 kernel module is not available"
+  ansible.builtin.include_tasks:
+    file: "../templates/disable_kernel_module.yaml"
+  vars:
+    kernel_module: "jffs2"
+
+- name: "1.1.1.6 Ensure overlay kernel module is not available"
+  ansible.builtin.include_tasks:
+    file: "../templates/disable_kernel_module.yaml"
+  vars:
+    kernel_module: "overlay"
+  when: not (require_overlay | bool)
+
+- name: "1.1.1.7 Ensure squashfs kernel module is not available"
+  ansible.builtin.include_tasks:
+    file: "../templates/disable_kernel_module.yaml"
+  vars:
+    kernel_module: "squashfs"
+  when: not (require_squashfs | bool)
+
+- name: "1.1.1.8 Ensure udf kernel module is not available"
+  ansible.builtin.include_tasks:
+    file: "../templates/disable_kernel_module.yaml"
+  vars:
+    kernel_module: "udf"
+  when: not (require_udf | bool)
+
+- name: "1.1.1.9 Ensure firewire-core kernel module is not available"
+  ansible.builtin.include_tasks:
+    file: "../templates/disable_kernel_module.yaml"
+  vars:
+    kernel_module: "firewire_core"
+
+- name: "1.1.1.10 Ensure usb-storage kernel module is not available"
+  ansible.builtin.include_tasks:
+    file: "../templates/disable_kernel_module.yaml"
+  vars:
+    kernel_module: "usb_storage"
+
+- name: "1.1.2.1 Ensure /tmp is tmpfs or separate partition, and nodev, noexec, and nosuid is set"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_tmpfs_partition.yaml"
+  vars:
+    fs: "/tmp"
+    size: "{{ tmp_size }}"
+
+- name: "1.1.2.2 Ensure /dev/shm is tmpfs or separate partition, and nodev, noexec, and nosuid is set"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_tmpfs_partition.yaml"
+  vars:
+    fs: "/dev/shm"
+    size: "{{ shm_size }}"
+
+- name: "1.1.2.3 Ensure /home has nodev and nosuid set"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_fs_partition.yaml"
+  vars:
+    fs: "{{ home_device }}"
+    mountpoint: "{{ home_mount }}"
+    type: "{{ fs_type }}"
+  when: is_home_partition | bool
+
+- name: "1.1.2.4 Ensure /var has nodev and nosuid set"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_fs_partition.yaml"
+  vars:
+    fs: "{{ var_device }}"
+    mountpoint: "{{ var_mount }}"
+    type: "{{ fs_type }}"
+  when: is_var_partition | bool
+
+- name: "1.1.2.5 Ensure /var/tmp has nodev and nosuid set"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_fs_partition_noexec.yaml"
+  vars:
+    fs: "{{ var_tmp_device }}"
+    mountpoint: "{{ var_tmp_mount }}"
+    type: "{{ fs_type }}"
+  when: is_var_tmp_partition | bool
+
+- name: "1.1.2.6 Ensure /var/log has nodev and nosuid set"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_fs_partition_noexec.yaml"
+  vars:
+    fs: "{{ var_log_device }}"
+    mountpoint: "{{ var_log_mount }}"
+    type: "{{ fs_type }}"
+  when: is_var_log_partition | bool
+
+- name: "1.1.2.7 Ensure /var/log/audit has nodev and nosuid set"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_fs_partition_noexec.yaml"
+  vars:
+    fs: "{{ var_log_audit_device }}"
+    mountpoint: "{{ var_log_audit_mount }}"
+    type: "{{ fs_type }}"
+  when: is_var_log_audit_partition | bool

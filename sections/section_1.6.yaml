@@ -1,0 +1,30 @@
+- name: "Removing /etc/motd..."
+  ansible.builtin.file:
+    path: "/etc/motd"
+    state: absent
+  when: not (require_motd | bool)
+
+- name: "1.6.1 Ensure /etc/motd is configured"
+  ansible.builtin.copy:
+    dest: "/etc/motd"
+    content: "{{ motd }}\n"
+    owner: root
+    group: root
+    mode: '0644'
+  when: require_motd | bool
+
+- name: "1.6.2 Ensure /etc/issue is configured"
+  ansible.builtin.copy:
+    dest: "/etc/issue"
+    content: "{{ issue }}\n"
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: "1.6.3 Ensure /etc/issue.net is configured"
+  ansible.builtin.copy:
+    dest: "/etc/issue.net"
+    content: "{{ issue_net }}\n"
+    owner: root
+    group: root
+    mode: '0644'

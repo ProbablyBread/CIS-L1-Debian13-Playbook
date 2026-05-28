@@ -1,0 +1,35 @@
+- name: "1.4.1 Ensure bootloader password is set"
+  register: bootloader_pw
+  ansible.builtin.lineinfile:
+    path: "/etc/grub.d/40_custom"
+    regexp: ^set superusers=.*\npassword_pbkdf2.*$
+    line: "set superusers={{ bootloader_user }}\npassword_pbkdf2 {{ bootloader_user }} {{ bootloader_pbkdf2 }}"
+    insertafter: EOF
+    state: present
+
+- name: "Disabling bootloader password on boot..."
+  register: bootloader_pw_disabled
+  ansible.builtin.lineinfile:
+    path: "/etc/grub.d/10_linux"
+    regexp: ^CLASS="--class gnu-linux --class gnu --class os.*"$
+    line: CLASS="--class gnu-linux --class gnu --class os --unrestricted"
+  when: not (bootloader_password_required | bool)
+
+- name: "Enabling bootloader password on boot..."
+  register: bootloader_pw_enabled
+  ansible.builtin.lineinfile:
+    path: "/etc/grub.d/10_linux"
+    regexp: ^CLASS="--class gnu-linux --class gnu --class os.*"
+    line: CLASS="--class gnu-linux --class gnu --class os"
+  when: bootloader_password_required | bool
+
+- name: "Regenerating bootloader configuration..."
+  ansible.builtin.command: update-grub
+  when: aa_enabled.changed or bootloader_pw.changed or bootloader_pw_disabled.changed or bootloader_pw_enabled.changed
+
+- name: "1.4.2 Ensure access to bootloader config is configured"
+  ansible.builtin.file:
+    path: "/boot/grub/grub.cfg"
+    owner: root
+    group: root
+    mode: '0600'
