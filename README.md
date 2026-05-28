@@ -1,6 +1,6 @@
 # CIS L1 Debian 13 (Trixie) Hardening
 ## Foreword
-This playbook has only been tested on a fresh installation of Debian 13, and **may potentially break installations** that already have been customised or **may potentially break applications** that have already been installed. This playbook has also **not** been tested on desktop environments and **is not** meant for desktop environments.
+This playbook has only been tested on a fresh installation of Debian 13, and **may potentially break installations** that already have been customised or **may potentially break applications** that have already been installed. This playbook has also **not** been tested on desktop environments but *should* work for desktop environments.
 
 If this playbook is to be used on existing installations of Debian 13, **make a backup before applying**. 
 
