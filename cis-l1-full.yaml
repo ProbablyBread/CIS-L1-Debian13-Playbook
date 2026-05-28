@@ -51,7 +51,7 @@
       vars:
         kernel_module: "overlay"
       when:
-        - require_overlay | lower == "no"
+        - not (require_overlay | bool)
 
     - name: "1.1.1.7 Ensure squashfs kernel module is not available"
       ansible.builtin.include_tasks:
@@ -59,7 +59,7 @@
       vars:
         kernel_module: "squashfs"
       when:
-        - require_squashfs | lower == "no"
+        - not (require_squashfs | bool)
 
     - name: "1.1.1.8 Ensure udf kernel module is not available"
       ansible.builtin.include_tasks:
@@ -67,7 +67,7 @@
       vars:
         kernel_module: "udf"
       when:
-        - require_udf | lower == "no"
+        - not (require_udf | bool)
 
     - name: "1.1.1.9 Ensure firewire-core kernel module is not available"
       ansible.builtin.include_tasks:
@@ -103,7 +103,7 @@
         mountpoint: "{{ home_mount }}"
         type: "{{ fs_type }}"
       when:
-        - is_home_partition | lower == "yes"
+        - is_home_partition | bool
 
     - name: "1.1.2.4 Ensure /var has nodev and nosuid set"
       ansible.builtin.include_tasks:
@@ -113,7 +113,7 @@
         mountpoint: "{{ var_mount }}"
         type: "{{ fs_type }}"
       when:
-        - is_var_partition | lower == "yes"
+        - is_var_partition | bool
 
     - name: "1.1.2.5 Ensure /var/tmp has nodev and nosuid set"
       ansible.builtin.include_tasks:
@@ -123,7 +123,7 @@
         mountpoint: "{{ var_tmp_mount }}"
         type: "{{ fs_type }}"
       when:
-        - is_var_tmp_partition | lower == "yes"
+        - is_var_tmp_partition | bool
 
     - name: "1.1.2.6 Ensure /var/log has nodev and nosuid set"
       ansible.builtin.include_tasks:
@@ -133,7 +133,7 @@
         mountpoint: "{{ var_log_mount }}"
         type: "{{ fs_type }}"
       when:
-        - is_var_log_partition | lower == "yes"
+        - is_var_log_partition | bool
 
     - name: "1.1.2.7 Ensure /var/log/audit has nodev and nosuid set"
       ansible.builtin.include_tasks:
@@ -143,7 +143,7 @@
         mountpoint: "{{ var_log_audit_mount }}"
         type: "{{ fs_type }}"
       when:
-        - is_var_log_audit_partition | lower == "yes"
+        - is_var_log_audit_partition | bool
     
     - name: "1.2.1.4/1.2.1.3 Ensure access to /etc/apt/trusted.gpg.d is configured"
       ansible.builtin.file:
@@ -209,7 +209,7 @@
         path: "/etc/grub.d/10_linux"
         regexp: ^CLASS="--class gnu-linux --class gnu --class os.*"$
         line: CLASS="--class gnu-linux --class gnu --class os --unrestricted"
-      when: bootloader_password_required == false
+      when: not (bootloader_password_required | bool)
 
     - name: "Enabling bootloader password on boot..."
       register: bootloader_pw_enabled
@@ -217,7 +217,7 @@
         path: "/etc/grub.d/10_linux"
         regexp: ^CLASS="--class gnu-linux --class gnu --class os.*"
         line: CLASS="--class gnu-linux --class gnu --class os"
-      when: bootloader_password_required == true
+      when: bootloader_password_required | bool
         
     - name: "Regenerating bootloader configuration..."
       ansible.builtin.command: update-grub
@@ -315,18 +315,18 @@
         name: "systemd-coredump"
         state: absent
         purge: true
-      when: require_coredump | lower == "no"
+      when: not (require_coredump | bool)
 
     - name: "Setting coredump settings..."
       ansible.builtin.include_tasks:
         file: "./tasks/configure_coredump_settings.yaml"
-      when: require_coredump | lower == "yes"
+      when: require_coredump | bool
 
     - name: "Removing /etc/motd..."
       ansible.builtin.file:
         path: "/etc/motd"
         state: absent
-      when: require_motd | lower == "no"
+      when: not (require_motd | bool)
 
     - name: "1.6.1 Ensure /etc/motd is configured"
       ansible.builtin.copy:
@@ -335,7 +335,7 @@
         owner: root
         group: root
         mode: '0644'
-      when: require_motd | lower == "yes"
+      when: require_motd | bool
 
     - name: "1.6.2 Ensure /etc/issue is configured"
       ansible.builtin.copy:
@@ -359,16 +359,15 @@
       vars:
         service: "autofs.service"
       when:
-        - require_autofs | lower == "yes"
-        - run_autofs | lower == "no"
+        - require_autofs | bool
+        - not (run_autofs | bool)
 
     - name: "Uninstalling autofs..."
       ansible.builtin.apt:
         name: "autofs"
         state: absent
         purge: true
-      when: 
-        require_autofs | lower == "no"
+      when: require_autofs | lower == "no"
 
     - name: "2.1.2 Ensure avahi daemon services are not in use"
       ansible.builtin.include_tasks:
@@ -378,16 +377,15 @@
           - "avahi-daemon.service"
           - "avahi-daemon.socket"
       when:
-        - require_avahi_daemon | lower == "yes"
-        - run_avahi_daemon | lower == "no"
+        - require_avahi_daemon | bool
+        - not (run_avahi_daemon | bool)
 
     - name: "Uninstalling avahi-daemon..."
       ansible.builtin.apt:
         name: "avahi-daemon"
         state: absent
         purge: true
-      when: 
-        require_avahi_daemon | lower == "no"
+      when: not (require_avahi_daemon | bool)
 
     - name: "2.1.3 Ensure dhcp server services are not in use"
       ansible.builtin.include_tasks:
@@ -398,16 +396,15 @@
           - "kea-dhcp4-server.service"
           - "kea-dhcp6-server.service"
       when:
-        - require_dhcp | lower == "yes"
-        - run_dhcp | lower == "no"
+        - require_dhcp | bool
+        - not (run_dhcp | bool)
 
     - name: "Uninstalling kea..."
       ansible.builtin.apt:
         name: "kea"
         state: absent
         purge: true
-      when:
-        require_dhcp | lower == "no"
+      when: not (require_dhcp | bool)
 
     - name: "2.1.4 Ensure dns server services are not in use"
       ansible.builtin.include_tasks:
@@ -415,16 +412,15 @@
       vars:
         service: "named.service"
       when:
-        - require_dns | lower == "yes"
-        - run_dns | lower == "no"
+        - require_dns | bool
+        - not (run_dns | bool)
 
     - name: "Uninstalling bind9..."
       ansible.builtin.apt:
         name: "bind9"
         state: absent
         purge: true
-      when:
-        require_dns | lower == "no"
+      when: not (require_dns | bool)
 
     - name: "2.1.5 Ensure dnsmasq services are not in use"
       ansible.builtin.include_tasks:
@@ -432,16 +428,15 @@
       vars:
         service: "dnsmasq.service"
       when:
-        - require_dnsmasq | lower == "yes"
-        - run_dnsmasq | lower == "no"
+        - require_dnsmasq | bool
+        - not (run_dnsmasq | bool)
 
     - name: "Uninstalling dnsmasq..."
       ansible.builtin.apt:
         name: "dnsmasq"
         state: absent
         purge: true
-      when:
-        require_dnsmasq | lower == "no"
+      when: not (require_dnsmasq | bool)
 
     - name: "2.1.6 Ensure ftp server services are not in use"
       ansible.builtin.include_tasks:
@@ -449,16 +444,15 @@
       vars:
         service: "vsftpd.service"
       when:
-        - require_ftp | lower == "yes"
-        - run_ftp | lower == "no"
+        - require_ftp | bool
+        - not (run_ftp | bool)
 
     - name: "Uninstalling vsftpd..."
       ansible.builtin.apt:
         name: "vsftpd"
         state: absent
         purge: true
-      when: 
-        require_ftp | lower == "no"
+      when: not (require_ftp | bool) 
 
     - name: "2.1.7 Ensure ldap server services are not in use"
       ansible.builtin.include_tasks:
@@ -466,16 +460,15 @@
       vars:
         service: "slapd.service"
       when:
-        - require_ldap | lower == "yes"
-        - run_ldap | lower == "no"
+        - require_ldap | bool
+        - not (run_ldap | bool)
 
     - name: "Uninstalling slapd..."
       ansible.builtin.apt:
         name: "slapd"
         state: absent
         purge: true
-      when: 
-        require_ldap | lower == "no"
+      when: not (require_ldap | bool)
 
     - name: "2.1.8 Ensure message access server services are not in use"
       ansible.builtin.include_tasks:
@@ -485,25 +478,23 @@
           - "dovecot.socket"
           - "dovecot.service"
       when:
-        - require_pop3 | lower == "yes"or require_imap | lower == "yes"
-        - run_pop3 | lower == "no"
-        - run_imap | lower == "no"
+        - (require_pop3 | bool) or (require_imap | bool)
+        - not (run_pop3 | bool)
+        - not (run_imap | bool)
 
     - name: "Uninstalling dovecot-imapd..."
       ansible.builtin.apt:
         name: "dovecot-imapd"
         state: absent
         purge: true
-      when:
-        require_imap | lower == "no"
+      when: not (require_imap | bool)
 
     - name: "Uninstalling dovecot-pop3d"
       ansible.builtin.apt:
         name: "dovecot-pop3d"
         state: absent
         purge: true
-      when:
-        require_pop3 | lower == "no"
+      when: not (require_pop3 | bool)
 
     - name: "2.1.9 Ensure network file system services are not in use"
       ansible.builtin.include_tasks:
@@ -511,16 +502,15 @@
       vars:
         service: "nfs-server.service"
       when:
-        - require_nfs | lower == "yes"
-        - run_nfs | lower == "no"
+        - require_nfs | bool
+        - not (run_nfs | bool)
 
     - name: "Uninstalling nfs-kernel-server..."
       ansible.builtin.apt:
         name: "nfs-kernel-server"
         state: absent
         purge: true
-      when: 
-        require_nfs | lower == "no"
+      when: not (require_nfs | bool)
 
     - name: "2.1.10 Ensure nis server services are not in use"
       ansible.builtin.include_tasks:
@@ -528,16 +518,15 @@
       vars:
         service: "ypserv.service"
       when:
-        - require_nis | lower == "yes"
-        - run_nis | lower == "no"
+        - require_nis | bool
+        - not (run_nis | bool)
 
     - name: "Uninstalling ypserv..."
       ansible.builtin.apt:
         name: "ypserv"
         state: absent
         purge: true
-      when:
-        require_nis | lower == "no"
+      when: not (require_nis | bool)
 
     - name: "2.1.11 Ensure print server services are not in use"
       ansible.builtin.include_tasks:
@@ -547,16 +536,15 @@
           - "cups.socket"
           - "cups.service"
       when:
-        - require_cups | lower == "yes"
-        - run_cups | lower == "no"
+        - require_cups | bool
+        - not (run_cups | bool)
 
     - name: "Uninstalling cups..."
       ansible.builtin.apt:
         name: "cups"
         state: absent
         purge: true
-      when:
-        require_cups | lower == "no"
+      when: not (require_cups | bool)
 
     - name: "2.1.12 Ensure rpcbind services are not in use"
       ansible.builtin.include_tasks:
@@ -566,16 +554,15 @@
           - "rpcbind.socket"
           - "rpcbind.service"
       when:
-        - require_rpcbind | lower == "yes"
-        - run_rpcbind | lower == "no"
+        - require_rpcbind | bool
+        - not (run_rpcbind | bool)
 
     - name: "Uninstalling rpcbind..."
       ansible.builtin.apt:
         name: "rpcbind"
         state: absent
         purge: true
-      when: 
-        require_rpcbind | lower == "no"
+      when: not (require_rpcbind | bool)
 
     - name: "2.1.13 Ensure rsync services are not in use"
       ansible.builtin.include_tasks:
@@ -583,16 +570,15 @@
       vars:
         service: "rsync.service"
       when:
-        - require_rsync | lower == "yes"
-        - run_rsync | lower == "no"
+        - require_rsync | bool
+        - not (run_rsync | bool)
 
     - name: "Uninstalling rsync..."
       ansible.builtin.apt:
         name: "rsync"
         state: absent
         purge: true
-      when:
-        require_rsync | lower == "no"
+      when: not (require_rsync | bool)
 
     - name: "2.1.14 Ensure samba file server services are not in use"
       ansible.builtin.include_tasks:
@@ -600,16 +586,15 @@
       vars:
         service: "smbd.service"
       when:
-        - require_samba | lower == "yes"
-        - run_samba | lower == "no"
+        - require_samba | bool
+        - not (run_samba | bool)
 
     - name: "Uninstalling samba..."
       ansible.builtin.apt:
         name: "samba"
         state: absent
         purge: true
-      when:
-        require_samba | lower == "no"
+      when: not (require_samba | bool)
 
     - name: "2.1.15 Ensure snmp services are not in use"
       ansible.builtin.include_tasks:
@@ -617,16 +602,15 @@
       vars:
         service: "snmpd.service"
       when:
-        - require_snmp | lower == "yes"
-        - run_snmp | lower == "no"
+        - require_snmp | bool
+        - not (run_snmp | bool)
 
     - name: "Uninstalling snmpd..."
       ansible.builtin.apt:
         name: "snmpd"
         state: absent
         purge: true
-      when:
-        require_snmp | lower == "no"
+      when: not (require_snmp | bool)
 
     - name: "2.1.16 Ensure telnet-server services are not in use"
       ansible.builtin.include_tasks:
@@ -634,16 +618,15 @@
       vars:
         service: "inetutils-inetd.service"
       when:
-        - require_telnet | lower == "yes"
-        - run_telnet | lower == "no"
+        - require_telnet | bool
+        - not (run_telnet | bool)
 
     - name: "Uninstalling telnetd..."
       ansible.builtin.apt:
         name: "telnetd"
         state: absent
         purge: true
-      when:
-        require_telnet | lower == "no"
+      when: not (require_telnet | bool)
 
     - name: "2.1.17 Ensure tftp server services are not in use"
       ansible.builtin.include_tasks:
@@ -651,16 +634,15 @@
       vars:
         service: "tftpd-hpa.service"
       when:
-        - require_tftp | lower == "yes"
-        - run_tftp | lower == "no"
+        - require_tftp | bool
+        - not (run_tftp | bool)
 
     - name: "Uninstalling tftpd-hpa..."
       ansible.builtin.apt:
         name: "tftpd-hpa"
         state: absent
         purge: true
-      when: 
-        require_tftp | lower == "no"
+      when: not (require_tftp | bool)
 
     - name: "2.1.18 Ensure web proxy server services are not in use"
       ansible.builtin.include_tasks:
@@ -668,16 +650,15 @@
       vars:
         service: "squid.service"
       when:
-        - require_proxy | lower == "yes"
-        - run_proxy | lower == "no"
+        - require_proxy | bool
+        - not (run_proxy | bool)
 
     - name: "Uninstalling squid..."
       ansible.builtin.apt:
         name: "squid"
         state: absent
         purge: true
-      when:
-        require_proxy | lower == "no"
+      when: not (require_proxy | bool)
 
     - name: "2.1.19 Ensure web server services are not in use (Apache)"
       ansible.builtin.include_tasks:
@@ -687,16 +668,15 @@
           - "apache2.service"
           - "apache2.socket"
       when: 
-        - require_apache | lower == "yes"
-        - run_apache | lower == "no"
+        - require_apache | bool
+        - not (run_apache | bool)
 
     - name: "Uninstalling apache2..."
       ansible.builtin.apt:
         name: "apache2"
         state: absent
         purge: true
-      when: 
-        require_apache | lower == "no"
+      when: not (require_apache | bool) 
 
     - name: "2.1.19 Ensure web server services are not in use (Nginx)"
       ansible.builtin.include_tasks:
@@ -704,16 +684,15 @@
       vars:
         service: "nginx.service"
       when: 
-        - require_nginx | lower == "yes"
-        - run_nginx | lower == "no"
+        - require_nginx | bool
+        - not (run_nginx | bool)
 
     - name: "Uninstalling nginx..."
       ansible.builtin.apt:
         name: "nginx"
         state: absent
         purge: true
-      when: 
-        require_nginx | lower == "no"
+      when: not (require_nginx | bool) 
 
     - name: "2.1.20 Ensure xinetd services are not in use"
       ansible.builtin.include_tasks:
@@ -721,16 +700,15 @@
       vars:
         service: "xinetd.service"
       when:
-        - require_xinetd | lower == "yes"
-        - run_xinetd | lower == "no"
+        - require_xinetd | bool
+        - not (run_xinetd | bool)
 
     - name: "Uninstalling xinetd..."
       ansible.builtin.apt:
         name: "xinetd"
         state: absent
         purge: true
-      when:
-        require_xinetd | lower == "no"
+      when: not (require_xinetd | bool)
 
     - name: "2.1.22 Ensure mail transfer agents are configured for local-only mode"
       ansible.builtin.lineinfile:
@@ -739,40 +717,35 @@
         line: "inet_interfaces = loopback-only"
         create: false
         state: present
-      when: 
-        require_internet_mta | lower == "no"
+      when: not (require_internet_mta | bool)
 
     - name: "2.2.1 Ensure nis client is not installed"
       ansible.builtin.apt:
         name: "nis"
         state: absent
         purge: true
-      when: 
-        require_client_nis | lower == "no"
+      when: not (require_client_nis | bool) 
 
     - name: "2.2.2 Ensure rsh client is not installed"
       ansible.builtin.apt:
         name: "rsh" 
         state: absent
         purge: true
-      when:
-        require_client_rsh | lower == "no"
+      when: not (require_client_rsh | bool)
 
     - name: "2.2.3 Ensure talk client is not installed"
       ansible.builtin.apt:
         name: "talk"
         state: absent
         purge: true
-      when:
-        require_client_talk | lower == "no"
+      when: not (require_client_talk | bool)
 
     - name: "2.2.4 Ensure telnet client is not installed"
       ansible.builtin.apt:
         name: "{{ client_service }}"
         state: absent
         purge: true
-      when: 
-        require_client_telnet | lower == "no"
+      when: not (require_client_telnet | bool) 
       vars:
         client_service:
           - "telnet"
@@ -783,16 +756,14 @@
         name: "ldap-util"
         state: absent
         purge: true
-      when:
-        require_client_ldap | lower == "no"
+      when: not (require_client_ldap | bool)
 
     - name: "2.2.6 Ensure ftp client is not installed"
       ansible.builtin.apt:
         name: "{{ client_service }}"
         state: absent
         purge: true
-      when:
-        require_client_ftp | lower == "no"
+      when: not (require_client_ftp | bool)
       vars:
         client_service:
           - "tnftp"
@@ -801,11 +772,9 @@
     - name: "2.3.2 Configure systemd-timesyncd"
       ansible.builtin.include_tasks:
         file: "./tasks/configure_timesyncd.yaml"
-      when:
-        use_systemd_timesyncd | lower == "yes"
+      when: use_systemd_timesyncd | bool
 
     - name: "2.3.3 Configure chrony"
       ansible.builtin.include_tasks:
         file: "./tasks/configure_chrony.yaml"
-      when:
-        use_chrony | lower == "yes"
+      when: use_chrony | bool

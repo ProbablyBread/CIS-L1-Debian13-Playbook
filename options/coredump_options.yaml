@@ -1,5 +1,5 @@
 # Configures whether coredump is required on the system
 # 
-# require_coredump - if set to no, uninstalls systemd-coredump from the server, otherwise applies 1.5.12 and 1.5.13
+# require_coredump - if set to false, uninstalls systemd-coredump from the server, otherwise applies 1.5.12 and 1.5.13
 
-require_coredump: "no"
+require_coredump: false

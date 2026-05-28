@@ -5,7 +5,7 @@
 # shm_size - sets the size of the /dev/shm partition.
 #
 # fs_type - sets the filesystem type for all the following partitions, assumes all partitions are the same filesystem
-# is_*_partition - set this to yes if it is a partition
+# is_*_partition - set this to true if it is a partition
 # *_device - if it is a partition, use the <file system> in /etc/fstab as the device
 # *_mount - if it is a partition, set this to the <mount point> as per /etc/fstab 
 
@@ -15,22 +15,22 @@ shm_size: "1G"
 # partitioning options
 fs_type: "ext4" 
 
-is_home_partition: "yes"  
+is_home_partition: true  
 home_device: "/dev/mapper/debian--vg-home"  
 home_mount: "/home" 
 
-is_var_partition: "no"  
+is_var_partition: false  
 var_device: "/dev/mapper/"  
 var_mount: "/var" 
 
-is_var_tmp_partition: "yes" 
+is_var_tmp_partition: true 
 var_tmp_device: "/dev/mapper/debian--vg-var--tmp" 
 var_tmp_mount: "/var/tmp" 
 
-is_var_log_partition: "yes" 
+is_var_log_partition: true 
 var_log_device: "/dev/mapper/debian--vg-var--log" 
 var_log_mount: "/var/log" 
 
-is_var_log_audit_partition: "yes" 
+is_var_log_audit_partition: true 
 var_log_audit_device: "/dev/mapper/debian--vg-var--log--audit"  
 var_log_audit_mount: "/var/log/audit" 

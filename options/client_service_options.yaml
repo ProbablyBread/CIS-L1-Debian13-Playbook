@@ -1,10 +1,10 @@
 # Configures whether clients for certain services are required on the system
 #
-# require_client_* - sets if a client is required. if "no", completely uninstalls the client
+# require_client_* - sets if a client is required. if false, completely uninstalls the client
 
-require_client_nis: "no"
-require_client_rsh: "no" # affects the rsh_client_client package
-require_client_talk: "no" 
-require_client_telnet: "no" # affects the telnet and inetutils-telnet packages
-require_client_ldap: "no" # affects the ldap-util package
-require_client_ftp: "no" # affects the tnftp and ftp packages
+require_client_nis: false
+require_client_rsh: false # affects the rsh_client_client package
+require_client_talk: false 
+require_client_telnet: false # affects the telnet and inetutils-telnet packages
+require_client_ldap: false # affects the ldap-util package
+require_client_ftp: false # affects the tnftp and ftp packages

@@ -4,12 +4,10 @@
     state: present
 
 - name: "Ensuring systemd-timesyncd is masked..."
-  ignore_errors: true
-  ansible.builtin.systemd_service:
-    name: "systemd-timesyncd.service"
-    state: stopped
-    enabled: false
-    masked: true
+  ansible.builtin.include_tasks:
+    file: "./mask_stop_service.yaml"
+  vars:
+    service: "systemd-timesyncd"
 
 - name: "Ensuring chrony is active..."
   ansible.builtin.systemd_service:
@@ -18,21 +16,33 @@
     enabled: true
     masked: false
 
-- name: "Removing default chrony pools..."
+- name: "Removing default chrony pools and servers..."
   ansible.builtin.replace:
     path: "/etc/chrony/chrony.conf"
-    regex: "{{ chrony_regex }}" 
-    replace: # \1
-  vars:
-    chrony_regex:
-      - ^(pool.*)$
-      - ^(server.*)$
+    regexp: '^(pool|server)(.*)$'
+    replace: '# \1\2'
 
-# figure out how to structure the variables and configure chronyd here
+- name: "Configuring chrony pools..."
+  register: chrony_pools_changed
+  ansible.builtin.copy:
+    dest: "/etc/chrony/sources.d/99-pools.conf"
+    content: |
+      {% for pool in chrony_pools | split(' ') %}
+      pool {{ pool }} iburst maxsources {{ chrony_pools_max_sources }}
+      {% endfor %}
+
+- name: "Configuring chrony servers..."
+  register: chrony_servers_changed
+  ansible.builtin.copy:
+    dest: "/etc/chrony/sources.d/99-servers.conf"
+    content: |
+      {% for server in chrony_servers | split(' ') %}
+      server {{ server }} iburst
+      {% endfor %}
 
 - name: "Restarting chrony..."
   ansible.builtin.systemd_service:
-    name: "systemd-timesyncd.service"
+    name: "chrony.service"
     state: restarted
     enabled: true
     daemon-reload: true

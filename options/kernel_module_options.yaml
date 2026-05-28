@@ -1,10 +1,10 @@
 # Configures the file systems (kernel modules) to be excluded from blacklist
 #
-# For each of the following options, if set to "yes", will **exclude** the specified filesystem from being blacklisted
+# For each of the following options, if set to true, will **exclude** the specified filesystem from being blacklisted
 # require_overlay - typically used for containerisation such as Docker, K8s, etc 
 # require_squashfs - typically used in environments where Snap is required
-# require_udf - please set this to "yes" if you are running in Azure
+# require_udf - please set this to true if you are running in Azure
 
-require_overlay: "no" 
-require_squashfs: "no" 
-require_udf: "no" 
+require_overlay: false 
+require_squashfs: false 
+require_udf: false 
