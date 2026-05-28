@@ -1,9 +1,28 @@
+- name: "Installing cron..."
+  ansible.builtin.apt:
+    name: "cron"
+    state: present
+  when: require_cron | bool
+
+- name: "Installing at..."
+  ansible.builtin.apt:
+    name: "at"
+    state: present
+  when: require_at | bool
+
 - name: "Uninstalling cron..."
   ansible.builtin.apt:
     name: "cron"
     state: absent
     purge: true
   when: not (require_cron | bool)
+
+- name: "Uninstalling at..."
+  ansible.builtin.apt:
+    name: "at"
+    state: absent
+    purge: true
+  when: not (require_at | bool)
 
 - block: 
   - name: "2.4.1.1 Ensure cron daemon is enabled and active"
@@ -111,3 +130,42 @@
     when: is_cron_deny | bool
 
   when: require_cron | bool
+
+- block: 
+  - name: "2.4.2.1 Ensure access to at is configured (at.allow)"
+    ansible.builtin.copy:
+      dest: "/etc/at.allow"
+      owner: root
+      group: daemon
+      mode: '0640'
+      content: |
+        {% for user in at_allow | split(' ') %}
+        {{ user }}
+        {% endfor %}
+    when: not (is_at_deny | bool)
+
+  - name: "Deleting /etc/at.deny..."
+    ansible.builtin.file:
+      path: "/etc/at.deny"
+      state: absent
+    when: not (is_at_deny | bool)
+
+  - name: "2.4.2.1 Ensure access to at is configured (at.deny)"
+    ansible.builtin.copy:
+      dest: "/etc/at.deny"
+      owner: root
+      group: daemon
+      mode: '0640'
+      content: |
+        {% for user in at_deny | split(' ') %}
+        {{ user }}
+        {% endfor %}
+    when: is_at_deny | bool
+
+  - name: "Deleting /etc/at.allow..."
+    ansible.builtin.file:
+      path: "/etc/at.allow"
+      state: absent
+    when: is_at_deny | bool
+  
+  when: require_at | bool

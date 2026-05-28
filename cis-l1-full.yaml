@@ -10,6 +10,7 @@
     - "./options/client_service_options.yaml"
     - "./options/timesync_options.yaml"
     - "./options/cron_options.yaml"
+    - "./options/at_options.yaml"
 
   tasks:
     - name: "Asserting Options..."
