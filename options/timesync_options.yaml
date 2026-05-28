@@ -15,11 +15,11 @@
 #   server  <ntp-server-1> iburst
 #   server  <ntp-server-2> iburst
 #   etc
-use_systemd_timesyncd: false
+use_systemd_timesyncd: true
 timesyncd_primary: "0.asia.pool.ntp.org 1.asia.pool.ntp.org 2.asia.pool.ntp.org 3.asia.pool.ntp.org"
 timesyncd_fallback: ""
 
-use_chrony: true
+use_chrony: false
 chrony_pools: "asia.pool.ntp.org pool.ntp.org"
 chrony_pools_max_sources: 4
 chrony_servers: "0.asia.pool.ntp.org 1.asia.pool.ntp.org"
