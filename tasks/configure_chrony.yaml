@@ -4,7 +4,7 @@
     state: present
 
 - name: "Ensuring systemd-timesyncd is masked..."
-  ansible.builtin.import_tasks:
+  ansible.builtin.include_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
     service: "systemd-timesyncd"

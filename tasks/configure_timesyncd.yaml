@@ -4,7 +4,7 @@
     state: present
 
 - name: "Ensuring chrony is masked..."
-  ansible.builtin.import_tasks:
+  ansible.builtin.include_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
     service: "chrony"
