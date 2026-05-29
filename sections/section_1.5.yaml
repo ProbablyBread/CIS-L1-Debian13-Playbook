@@ -1,47 +1,47 @@
 - name: "1.5.1 Ensure fs.protected_hardlinks is configured"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/configure_sysctl_settings.yaml"
   vars:
     setting: "fs.protected_hardlinks"
     value: "1"
 
 - name: "1.5.2 Ensure fs.protected_symlinks is configured"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/configure_sysctl_settings.yaml"
   vars:
     setting: "fs.protected_symlinks"
     value: "1"
 
 - name: "1.5.3 Ensure kernel.yama.ptrace_scope is configured"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/configure_sysctl_settings.yaml"
   vars:
     setting: "kernel.yama.ptrace_scope"
     value: "2"
 
 - name: "1.5.4 Ensure fs.suid_dumpable is configured"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/configure_sysctl_settings.yaml"
   vars:
     setting: "fs.suid_dumpable"
     value: "0"
 
 - name: "1.5.5 Ensure kernel.dmesg_restrict is configured"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/configure_sysctl_settings.yaml"
   vars:
     setting: "kernel.dmesg_restrict"
     value: "1"
 
 - name: "1.5.8 Ensure kernel.kptr_restrict is configured"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/configure_sysctl_settings.yaml"
   vars:
     setting: "kernel.kptr_restrict"
     value: "2"
 
 - name: "1.5.9 Ensure kernel.randomize_va_space is configured"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/configure_sysctl_settings.yaml"
   vars:
     setting: "kernel.randomize_va_space"

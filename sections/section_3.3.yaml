@@ -1,0 +1,197 @@
+- block:
+  - name: "3.3.1.1 Ensure net.ipv4.ip_forward is configured"
+    ansible.builtin.import_tasks:
+      file: "../templates/configure_sysctl_settings.yaml"
+    vars:
+      setting: "net.ipv4.ip_forward"
+      value: "0"
+
+  - name: "3.3.1.2 Ensure net.ipv4.conf.all.forwarding is configured"
+    ansible.builtin.import_tasks:
+      file: "../templates/configure_sysctl_settings.yaml"
+    vars:
+      setting: "net.ipv4.conf.all.forwarding"
+      value: "0"
+
+  - name: "3.3.1.3 Ensure net.ipv4.conf.default.forwarding is configured"
+    ansible.builtin.import_tasks:
+      file: "../templates/configure_sysctl_settings.yaml"
+    vars:
+      setting: "net.ipv4.conf.default.forwarding"
+      value: "0"
+
+  - name: "3.3.1.4 Ensure net.ipv4.conf.all.send_redirects is configured"
+    ansible.builtin.import_tasks:
+      file: "../templates/configure_sysctl_settings.yaml"
+    vars:
+      setting: "net.ipv4.conf.all.send_redirects"
+      value: "0"
+
+  - name: "3.3.1.5 Ensure net.ipv4.conf.default.send_redirects is configured"
+    ansible.builtin.import_tasks:
+      file: "../templates/configure_sysctl_settings.yaml"
+    vars:
+      setting: "net.ipv4.conf.default.send_redirects"
+      value: "0"
+
+  when: not (require_ipv4_forwarding | bool)
+
+- name: "3.3.1.6 Ensure net.ipv4.icmp_ignore_bogus_error_responses is configured"
+  ansible.builtin.import_tasks:
+    file: "../templates/configure_sysctl_settings.yaml"
+  vars:
+    setting: "net.ipv4.icmp_ignore_bogus_error_responses"
+    value: "1"
+
+- name: "3.3.1.7 Ensure net.ipv4.icmp_echo_ignore_broadcasts is configured"
+  ansible.builtin.import_tasks:
+    file: "../templates/configure_sysctl_settings.yaml"
+  vars:
+    setting: "net.ipv4.icmp_echo_ignore_broadcasts"
+    value: "1"
+    
+- name: "3.3.1.8 Ensure net.ipv4.conf.all.accept_redirects is configured"
+  ansible.builtin.import_tasks:
+    file: "../templates/configure_sysctl_settings.yaml"
+  vars:
+    setting: "net.ipv4.conf.all.accept_redirects"
+    value: "0"
+
+- name: "3.3.1.9 Ensure net.ipv4.conf.default.accept_redirects is configured"
+  ansible.builtin.import_tasks:
+    file: "../templates/configure_sysctl_settings.yaml"
+  vars:
+    setting: "net.ipv4.conf.default.accept_redirects"
+    value: "0"
+
+- name: "3.3.1.10 Ensure net.ipv4.conf.all.secure_redirects is configured"
+  ansible.builtin.import_tasks:
+    file: "../templates/configure_sysctl_settings.yaml"
+  vars:
+    setting: "net.ipv4.conf.all.secure_redirects"
+    value: "0"
+
+- name: "3.3.1.11 Ensure net.ipv4.conf.default.secure_redirects is configured"
+  ansible.builtin.import_tasks:
+    file: "../templates/configure_sysctl_settings.yaml"
+  vars:
+    setting: "net.ipv4.conf.default.secure_redirects"
+    value: "0"
+
+- block: 
+  - name: "3.3.1.12 Ensure net.ipv4.conf.all.rp_filter is configured"
+    ansible.builtin.import_tasks:
+      file: "../templates/configure_sysctl_settings.yaml"
+    vars:
+      setting: "net.ipv4.conf.all.rp_filter"
+      value: "1"
+
+  - name: "3.3.1.13 Ensure net.ipv4.conf.default.rp_filter is configured"
+    ansible.builtin.import_tasks:
+      file: "../templates/configure_sysctl_settings.yaml"
+    vars:
+      setting: "net.ipv4.conf.default.rp_filter"
+      value: "1"
+
+  when:
+    - not (require_ipv4_forwarding | bool)
+    - not (require_ipv4_asym_routing | bool)
+
+- name: "3.3.1.14 Ensure net.ipv4.conf.all.accept_source_route is configured"
+  ansible.builtin.import_tasks:
+    file: "../templates/configure_sysctl_settings.yaml"
+  vars:
+    setting: "net.ipv4.conf.all.accept_source_route"
+    value: "0"
+
+- name: "3.3.1.15 Ensure net.ipv4.conf.default.accept_source_route is configured"
+  ansible.builtin.import_tasks:
+    file: "../templates/configure_sysctl_settings.yaml"
+  vars:
+    setting: "net.ipv4.conf.default.accept_source_route"
+    value: "0"
+
+- name: "3.3.1.16 Ensure net.ipv4.conf.all.log_martians is configured"
+  ansible.builtin.import_tasks:
+    file: "../templates/configure_sysctl_settings.yaml"
+  vars:
+    setting: "net.ipv4.conf.all.log_martians"
+    value: "1"
+
+- name: "3.3.1.17 Ensure net.ipv4.conf.default.log_martians is configured"
+  ansible.builtin.import_tasks:
+    file: "../templates/configure_sysctl_settings.yaml"
+  vars:
+    setting: "net.ipv4.conf.default.log_martians"
+    value: "1"
+
+- name: "3.3.1.18 Ensure net.ipv4.tcp_syncookies is configured"
+  ansible.builtin.import_tasks:
+    file: "../templates/configure_sysctl_settings.yaml"
+  vars:
+    setting: "net.ipv4.tcp_syncookies"
+    value: "1"
+
+- block: 
+  - name: "3.3.2.1 Ensure net.ipv6.conf.all.forwarding is configured"
+    ansible.builtin.import_tasks:
+      file: "../templates/configure_sysctl_settings.yaml"
+    vars:
+      setting: "net.ipv6.conf.all.forwarding"
+      value: "0"
+
+  - name: "3.3.2.2 Ensure net.ipv6.conf.default.forwarding is configured"
+    ansible.builtin.import_tasks:
+      file: "../templates/configure_sysctl_settings.yaml"
+    vars:
+      setting: "net.ipv6.conf.default.forwarding"
+      value: "0"
+
+  - name: "3.3.2.3 Ensure net.ipv6.conf.all.accept_redirects is configured"
+    ansible.builtin.import_tasks:
+      file: "../templates/configure_sysctl_settings.yaml"
+    vars:
+      setting: "net.ipv6.conf.all.accept_redirects"
+      value: "0"
+
+  - name: "3.3.2.4 Ensure net.ipv6.conf.default.accept_redirects is configured"
+    ansible.builtin.import_tasks:
+      file: "../templates/configure_sysctl_settings.yaml"
+    vars:
+      setting: "net.ipv6.conf.default.accept_redirects"
+      value: "0"
+
+  when: 
+    - require_ipv6 | bool
+    - not (require_ipv6_forwarding | bool) 
+
+- block:
+  - name: "3.3.2.5 Ensure net.ipv6.conf.all.accept_source_route is configured"
+    ansible.builtin.import_tasks:
+      file: "../templates/configure_sysctl_settings.yaml"
+    vars:
+      setting: "net.ipv6.conf.all.accept_source_route"
+      value: "0"
+
+  - name: "3.3.2.6 Ensure net.ipv6.conf.default.accept_source_route is configured"
+    ansible.builtin.import_tasks:
+      file: "../templates/configure_sysctl_settings.yaml"
+    vars:
+      setting: "net.ipv6.conf.default.accept_source_route"
+      value: "0"
+
+  - name: "3.3.2.7 Ensure net.ipv6.conf.all.accept_ra is configured"
+    ansible.builtin.import_tasks:
+      file: "../templates/configure_sysctl_settings.yaml"
+    vars:
+      setting: "net.ipv6.conf.all.accept_ra"
+      value: "0"
+
+  - name: "3.3.2.8 Ensure net.ipv6.conf.default.accept_ra is configured"
+    ansible.builtin.import_tasks:
+      file: "../templates/configure_sysctl_settings.yaml"
+    vars:
+      setting: "net.ipv6.conf.default.accept_ra"
+      value: "0"
+
+  when: require_ipv6 | bool

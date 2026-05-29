@@ -91,5 +91,8 @@
       - require_rds | bool in [true, false]
       - require_sctp | bool in [true, false]
       - require_tipc | bool in [true, false]
+      - require_ipv4_forwarding | bool in [true, false]
+      - require_ipv4_asym_routing | bool in [true, false]
+      - require_ipv6_forwarding | bool in [true, false]
     fail_msg:
       - "Ensure that options are correctly set in each option.yaml. See README.md and each option.yaml file."

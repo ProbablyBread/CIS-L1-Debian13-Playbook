@@ -1,0 +1,7 @@
+# Configures the options pertaining to IPv6 sysctl settings, including forwarding/redirect settings
+# 
+# require_ipv6_forwarding - if set to true, will skip 3.3.2.1, 3.3.2.2, 3.3.2.3, 3.3.2.4 (only set to true if system is a router)
+#
+# NOTE: these settings are only valid if require_ipv6 is set to true in ./options/3.1_network_options.yaml
+
+require_ipv6_forwarding: false

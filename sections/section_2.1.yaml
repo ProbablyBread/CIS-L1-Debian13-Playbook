@@ -1,5 +1,5 @@
 - name: "2.1.1 Ensure autofs services are not in use"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
     service: "autofs.service"
@@ -15,7 +15,7 @@
   when: require_autofs | lower == "no"
 
 - name: "2.1.2 Ensure avahi daemon services are not in use"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
     service:
@@ -33,7 +33,7 @@
   when: not (require_avahi_daemon | bool)
 
 - name: "2.1.3 Ensure dhcp server services are not in use"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
     service:
@@ -52,7 +52,7 @@
   when: not (require_dhcp | bool)
 
 - name: "2.1.4 Ensure dns server services are not in use"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
     service: "named.service"
@@ -68,7 +68,7 @@
   when: not (require_dns | bool)
 
 - name: "2.1.5 Ensure dnsmasq services are not in use"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
     service: "dnsmasq.service"
@@ -84,7 +84,7 @@
   when: not (require_dnsmasq | bool)
 
 - name: "2.1.6 Ensure ftp server services are not in use"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
     service: "vsftpd.service"
@@ -100,7 +100,7 @@
   when: not (require_ftp | bool)
 
 - name: "2.1.7 Ensure ldap server services are not in use"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
     service: "slapd.service"
@@ -116,7 +116,7 @@
   when: not (require_ldap | bool)
 
 - name: "2.1.8 Ensure message access server services are not in use"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
     service:
@@ -142,7 +142,7 @@
   when: not (require_pop3 | bool)
 
 - name: "2.1.9 Ensure network file system services are not in use"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
     service: "nfs-server.service"
@@ -158,7 +158,7 @@
   when: not (require_nfs | bool)
 
 - name: "2.1.10 Ensure nis server services are not in use"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
     service: "ypserv.service"
@@ -174,7 +174,7 @@
   when: not (require_nis | bool)
 
 - name: "2.1.11 Ensure print server services are not in use"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
     service:
@@ -192,7 +192,7 @@
   when: not (require_cups | bool)
 
 - name: "2.1.12 Ensure rpcbind services are not in use"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
     service:
@@ -210,7 +210,7 @@
   when: not (require_rpcbind | bool)
 
 - name: "2.1.13 Ensure rsync services are not in use"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
     service: "rsync.service"
@@ -226,7 +226,7 @@
   when: not (require_rsync | bool)
 
 - name: "2.1.14 Ensure samba file server services are not in use"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
     service: "smbd.service"
@@ -242,7 +242,7 @@
   when: not (require_samba | bool)
 
 - name: "2.1.15 Ensure snmp services are not in use"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
     service: "snmpd.service"
@@ -258,7 +258,7 @@
   when: not (require_snmp | bool)
 
 - name: "2.1.16 Ensure telnet-server services are not in use"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
     service: "inetutils-inetd.service"
@@ -274,7 +274,7 @@
   when: not (require_telnet | bool)
 
 - name: "2.1.17 Ensure tftp server services are not in use"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
     service: "tftpd-hpa.service"
@@ -290,7 +290,7 @@
   when: not (require_tftp | bool)
 
 - name: "2.1.18 Ensure web proxy server services are not in use"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
     service: "squid.service"
@@ -306,7 +306,7 @@
   when: not (require_proxy | bool)
 
 - name: "2.1.19 Ensure web server services are not in use (Apache)"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
     service:
@@ -324,7 +324,7 @@
   when: not (require_apache | bool)
 
 - name: "2.1.19 Ensure web server services are not in use (Nginx)"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
     service: "nginx.service"
@@ -340,7 +340,7 @@
   when: not (require_nginx | bool)
 
 - name: "2.1.20 Ensure xinetd services are not in use"
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
     service: "xinetd.service"

@@ -1,11 +1,11 @@
 # Configures network options
 #
-# require_ipv6 - configures if ipv6 is in use on the system, if false, skips the ipv6 recommendations
+# require_ipv6 - configures if ipv6 is in use on the system, if false, disables ipv6 and skips the ipv6 recommendations
 # require_wlan - configures if the system requires the use of wireless LAN, if false, disables all WLAN related modules
 # require_bluetooth - configures if the system requires the use of bluetooth, if false, uninstalls the bluez package
 # run_bluetooth - configures if the bluetooth service runs. only applicable if require_bluetooth is true
 
-require_ipv6: true
+require_ipv6: false
 require_wlan: false
 
 # only affects the bluez package
