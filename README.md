@@ -1,4 +1,10 @@
 # CIS L1 Debian 13 (Trixie) Hardening
+## Warning
+This is a work in progress playbook, which means:
+1. Your system is quite likely to break
+2. Things will definitely be changing
+3. You use this at your own risk
+
 ## Foreword
 This playbook has only been tested on a fresh installation of Debian 13, and **may potentially break installations** that already have been customised or **may potentially break applications** that have already been installed. This playbook has also **not** been tested on desktop environments but *should* work for desktop environments.
 
