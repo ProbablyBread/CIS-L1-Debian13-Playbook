@@ -1,0 +1,11 @@
+# Configures at options
+#
+# require_at - controls whether at is installed on the system
+# is_at_deny - if set to false, uses /etc/at.allow, otherwise uses /etc/at.deny
+# at_allow - list of space separated usernames which are allowed to use the at command
+# at_deny - list of space separated usernames which are denied from using the at command
+
+require_at: false
+is_at_deny: false
+at_allow: "debian"
+at_deny: ""
