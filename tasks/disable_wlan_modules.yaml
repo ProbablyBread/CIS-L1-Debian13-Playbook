@@ -1,0 +1,19 @@
+- name: "Collecting WLAN modules..."
+  register: wlan_modules
+  ansible.builtin.find:
+    path: "/lib/modules/{{ ansible_kernel }}/kernel/drivers/net/wireless"
+    pattern: "*.ko"
+    use_regex: false
+    recurse: true
+
+- name: "Disabling collected modules..."
+  ansible.builtin.copy:
+    dest: "/etc/modprobe.d/99-wireless-disable.conf"
+    content: |
+      {% for module in wlan_modules['files'] %}
+      blacklist {{ (module['path'] | split('/'))[-1] | replace('.ko', '') }}
+      install {{ (module['path'] | split('/'))[-1] | replace('.ko', '') }} /bin/false
+
+      {% endfor %}
+  when: wlan_modules['files'] | length > 0
+

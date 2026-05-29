@@ -1,7 +1,7 @@
 - name: CIS Debian Linux 13 (Trixie) Benchmark v1.0 Server L1
   hosts: localhost
   vars_files:
-    - "./options/1.1_kernel_module_options.yaml"
+    - "./options/1.1_fs_kernel_module_options.yaml"
     - "./options/1.1_fs_options.yaml"
     - "./options/1.4_bootloader_options.yaml"
     - "./options/1.5_coredump_options.yaml"
@@ -11,6 +11,7 @@
     - "./options/2.3_timesync_options.yaml"
     - "./options/2.4_cron_options.yaml"
     - "./options/2.4_at_options.yaml"
+    - "./options/3.1_network_options.yaml"
 
   tasks:
     - name: "Asserting Options..."
@@ -76,3 +77,9 @@
         file: "./sections/section_2.4.yaml"
       tags:
         - "2.4"
+
+    - name: "Section 3.1"
+      ansible.builtin.import_tasks:
+        file: "./sections/section_3.1.yaml"
+      tags:
+        - "3.1"

@@ -2,6 +2,7 @@
   ansible.builtin.shell: "modprobe --showconfig | egrep -i \"(^blacklist {{ kernel_module }}$|^install {{ kernel_module }} /bin/false$)\""
   register: status
   ignore_errors: true
+  changed_when: false
 
 - block:
   - name: "Disabling {{ kernel_module }}..."
