@@ -12,6 +12,7 @@
     - "./options/2.4_cron_options.yaml"
     - "./options/2.4_at_options.yaml"
     - "./options/3.1_network_options.yaml"
+    - "./options/3.2_network_kernel_module_options.yaml"
 
   tasks:
     - name: "Asserting Options..."
@@ -83,3 +84,9 @@
         file: "./sections/section_3.1.yaml"
       tags:
         - "3.1"
+
+    - name: "Section 3.2"
+      ansible.builtin.import_tasks:
+        file: "./sections/section_3.2.yaml"
+      tags:
+        - "3.2"

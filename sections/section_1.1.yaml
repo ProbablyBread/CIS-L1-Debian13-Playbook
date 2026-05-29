@@ -3,30 +3,35 @@
     file: "../templates/disable_kernel_module.yaml"
   vars:
     kernel_module: "cramfs"
+  when: not (require_cramfs | bool)
 
 - name: "1.1.1.2 Ensure freevxfs kernel module is not available"
   ansible.builtin.include_tasks:
     file: "../templates/disable_kernel_module.yaml"
   vars:
     kernel_module: "freevxfs"
+  when: not (require_freevxfs | bool)
 
 - name: "1.1.1.3 Ensure hfs kernel module is not available"
   ansible.builtin.include_tasks:
     file: "../templates/disable_kernel_module.yaml"
   vars:
     kernel_module: "hfs"
+  when: not (require_hfs | bool)
 
 - name: "1.1.1.4 Ensure hfsplus kernel module is not available"
   ansible.builtin.include_tasks:
     file: "../templates/disable_kernel_module.yaml"
   vars:
     kernel_module: "hfsplus"
+  when: not (require_hfsplus | bool)
 
 - name: "1.1.1.5 Ensure jffs2 kernel module is not available"
   ansible.builtin.include_tasks:
     file: "../templates/disable_kernel_module.yaml"
   vars:
     kernel_module: "jffs2"
+  when: not (require_jffs2 | bool)
 
 - name: "1.1.1.6 Ensure overlay kernel module is not available"
   ansible.builtin.include_tasks:
@@ -54,12 +59,14 @@
     file: "../templates/disable_kernel_module.yaml"
   vars:
     kernel_module: "firewire_core"
+  when: not (require_firewire_core | bool)
 
 - name: "1.1.1.10 Ensure usb-storage kernel module is not available"
   ansible.builtin.include_tasks:
     file: "../templates/disable_kernel_module.yaml"
   vars:
     kernel_module: "usb_storage"
+  when: not (require_usb_storage | bool)
 
 - name: "1.1.2.1 Ensure /tmp is tmpfs or separate partition, and nodev, noexec, and nosuid is set"
   ansible.builtin.include_tasks:

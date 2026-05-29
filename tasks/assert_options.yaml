@@ -5,6 +5,13 @@
       - require_overlay | bool in [true, false]
       - require_squashfs | bool in [true, false]
       - require_udf | bool in [true, false]
+      - require_cramfs | bool in [true, false]
+      - require_freevxfs | bool in [true, false]
+      - require_hfs | bool in [true, false]
+      - require_hfsplus | bool in [true, false]
+      - require_jffs2 | bool in [true, false]
+      - require_firewire_core | bool in [true, false]
+      - require_usb_storage | bool in [true, false] 
       - tmp_size | lower is match("^\d{1,}[gmk]$")
       - shm_size | lower is match("^\d{1,}[gmk]$")
       - is_home_partition | bool in [true, false]
@@ -74,5 +81,15 @@
       - is_cron_deny | bool in [true, false]
       - require_at | bool in [true, false]
       - is_at_deny | bool in [true, false]
+      - require_ipv6 | bool in [true, false]
+      - require_wlan | bool in [true, false]
+      - require_bluetooth | bool in [true, false]
+      - run_bluetooth | bool in [true, false]
+      - require_atm | bool in [true, false]
+      - require_can | bool in [true, false]
+      - require_dccp | bool in [true, false]
+      - require_rds | bool in [true, false]
+      - require_sctp | bool in [true, false]
+      - require_tipc | bool in [true, false]
     fail_msg:
       - "Ensure that options are correctly set in each option.yaml. See README.md and each option.yaml file."

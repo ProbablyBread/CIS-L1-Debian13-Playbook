@@ -1,0 +1,10 @@
+# Configures the network services (kernel modules) to be excluded from blacklist
+#
+# For each of the following options, if set to true, will **exclude** the specified filesystem from being blacklisted
+
+require_atm: false
+require_can: false
+require_dccp: false
+require_rds: false
+require_sctp: false
+require_tipc: false

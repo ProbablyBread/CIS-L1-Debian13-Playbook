@@ -1,0 +1,41 @@
+- name: "3.2.1 Ensure atm kernel module is not available"
+  ansible.builtin.import_tasks:
+    file: "../templates/disable_kernel_module.yaml"
+  vars:
+    kernel_module: "atm"
+  when: not (require_atm | bool)
+
+- name: "3.2.2 Ensure can kernel module is not available"
+  ansible.builtin.import_tasks:
+    file: "../templates/disable_kernel_module.yaml"
+  vars:
+    kernel_module: "can"
+  when: not (require_can | bool)
+
+- name: "3.2.3 Ensure dccp kernel module is not available"
+  ansible.builtin.import_tasks:
+    file: "../templates/disable_kernel_module.yaml"
+  vars:
+    kernel_module: "dccp"
+  when: not (require_dccp | bool)
+
+- name: "3.2.4 Ensure rds kernel module is not available"
+  ansible.builtin.import_tasks:
+    file: "../templates/disable_kernel_module.yaml"
+  vars:
+    kernel_module: "rds"
+  when: not (require_rds | bool)
+
+- name: "3.2.5 Ensure sctp kernel module is not available"
+  ansible.builtin.import_tasks:
+    file: "../templates/disable_kernel_module.yaml"
+  vars:
+    kernel_module: "sctp"
+  when: not (require_sctp | bool)
+
+- name: "3.2.6 Ensure tipc kernel module is not available"
+  ansible.builtin.import_tasks:
+    file: "../templates/disable_kernel_module.yaml"
+  vars:
+    kernel_module: "tipc"
+  when: not (require_tipc | bool)
