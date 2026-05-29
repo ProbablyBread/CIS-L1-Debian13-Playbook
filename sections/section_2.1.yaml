@@ -356,6 +356,7 @@
   when: not (require_xinetd | bool)
 
 - name: "2.1.22 Ensure mail transfer agents are configured for local-only mode"
+  ignore_errors: true
   ansible.builtin.lineinfile:
     path: "/etc/postfix/main.cf"
     regex: ^\s*inet_interfaces\s+=.*$
@@ -363,4 +364,3 @@
     create: false
     state: present
   when: not (require_internet_mta | bool)
-
