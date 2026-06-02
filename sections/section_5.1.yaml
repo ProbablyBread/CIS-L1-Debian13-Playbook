@@ -2,7 +2,7 @@
   ansible.builtin.file:
     path: "/etc/ssh/sshd_config"
     mode: '0600'
-    user: root
+    owner: root
     group: root
 
 - name: "5.1.1 Ensure access to /etc/ssh/sshd_config.d is configured"
@@ -11,27 +11,27 @@
     state: directory
     mode: "u=rwX,g=,o="
     recurse: yes
-    user: root
+    owner: root
     group: root
 
 - name: "5.1.2 Ensure access to SSH private host key files is configured"
   ansible.builtin.file:
     path: "{{ item }}"
     mode: '0600'
-    user: root
+    owner: root
     group: root
   loop:
-    - ssh_host_ecdsa_key
-    - ssh_host_ed25519_key
-    - ssh_host_rsa_key
+    - "/etc/ssh/ssh_host_ecdsa_key"
+    - "/etc/ssh/ssh_host_ed25519_key"
+    - "/etc/ssh/ssh_host_rsa_key"
 
 - name: "5.1.3 Ensure access to SSH public host key files is configured"
   ansible.builtin.file:
     path: "{{ item }}"
     mode: '0644'
-    user: root
+    owner: root
     group: root
   loop:
-    - ssh_host_ecdsa_key.pub
-    - ssh_host_ed25519_key
-    - ssh_host_rsa_key
+    - "/etc/ssh/ssh_host_ecdsa_key.pub"
+    - "/etc/ssh/ssh_host_ed25519_key.pub"
+    - "/etc/ssh/ssh_host_rsa_key.pub"
