@@ -16,7 +16,7 @@ shm_size: "1G"
 fs_type: "ext4" 
 
 is_tmp_partition: false
-home_device: "/dev/mapper/debian--vg-tmp"
+tmp_device: "/dev/mapper/debian--vg-tmp"
 tmp_mount: "/tmp"
 
 is_home_partition: true  
