@@ -93,3 +93,9 @@
         file: "./sections/section_3.3.yaml"
       tags:
         - "3.3"
+
+    - name: "Section 4.1"
+      ansible.builtin.import_tasks:
+        file: "./sections/section_4.1.yaml"
+      tags:
+        - "4.1"
