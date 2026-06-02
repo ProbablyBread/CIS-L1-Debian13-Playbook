@@ -15,6 +15,7 @@
       - tmp_size | lower is match("^\d{1,}[gmk]$")
       - shm_size | lower is match("^\d{1,}[gmk]$")
       - is_home_partition | bool in [true, false]
+      - is_tmp_partition | bool in [true, false]
       - is_var_tmp_partition | bool in [true, false]
       - is_var_log_partition | bool in [true, false]
       - is_var_log_audit_partition | bool in [true, false]

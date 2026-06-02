@@ -68,12 +68,22 @@
     kernel_module: "usb_storage"
   when: not (require_usb_storage | bool)
 
-- name: "1.1.2.1 Ensure /tmp is tmpfs or separate partition, and nodev, noexec, and nosuid is set"
+- name: "1.1.2.1 Ensure /tmp is tmpfs, and nodev, noexec, and nosuid is set"
   ansible.builtin.include_tasks:
     file: "../templates/configure_tmpfs_partition.yaml"
   vars:
     fs: "/tmp"
     size: "{{ tmp_size }}"
+  when: not (is_tmp_partition | bool)
+
+- name: "1.1.2.1 Ensure /tmp is separate partition, and nodev, noexec, and nosuid is set"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_fs_partition_noexec.yaml"
+  vars:
+    fs: "{{ tmp_device }}"
+    mountpoint: "{{ tmp_mount }}"
+    type: "{{ fs_type }}"
+  when: is_tmp_partition | bool
 
 - name: "1.1.2.2 Ensure /dev/shm is tmpfs or separate partition, and nodev, noexec, and nosuid is set"
   ansible.builtin.include_tasks:
