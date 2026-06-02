@@ -1,2 +1,1 @@
 - Ensure that /tmp is flexible enough to handle RAM (tmpfs) and partitioned storage (LVM/ext4) 
-- Ensure that /etc/grub.d/40_custom isn't being flooeded with set superusers and password_pdkdf2

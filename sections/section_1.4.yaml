@@ -2,10 +2,12 @@
   register: bootloader_pw
   ansible.builtin.lineinfile:
     path: "/etc/grub.d/40_custom"
-    regexp: ^set superusers=.*\npassword_pbkdf2.*$
-    line: "set superusers={{ bootloader_user }}\npassword_pbkdf2 {{ bootloader_user }} {{ bootloader_pbkdf2 }}"
-    insertafter: EOF
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
     state: present
+  loop:
+    - { regexp: '^set superusers=.*$', line: "set superusers={{ bootloader_user }}" }
+    - { regexp: '^password_pbkdf2.*$', line: "password_pbkdf2 {{ bootloader_user }} {{ bootloader_pbkdf2 }}" }
 
 - name: "Disabling bootloader password on boot..."
   register: bootloader_pw_disabled
