@@ -18,9 +18,10 @@
   ansible.builtin.include_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
-    service:
-      - "avahi-daemon.service"
-      - "avahi-daemon.socket"
+    service: "{{ item }}"
+  loop:
+    - "avahi-daemon.service"
+    - "avahi-daemon.socket"
   when:
     - require_avahi_daemon | bool
     - not (run_avahi_daemon | bool)
@@ -36,10 +37,11 @@
   ansible.builtin.include_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
-    service:
-      - "kea-dhcp-ddns-server.service"
-      - "kea-dhcp4-server.service"
-      - "kea-dhcp6-server.service"
+    service: "{{ item }}"
+  loop: 
+    - "kea-dhcp-ddns-server.service"
+    - "kea-dhcp4-server.service"
+    - "kea-dhcp6-server.service"
   when:
     - require_dhcp | bool
     - not (run_dhcp | bool)
@@ -119,9 +121,10 @@
   ansible.builtin.include_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
-    service:
-      - "dovecot.socket"
-      - "dovecot.service"
+    service: "{{ item }}"
+  loop:
+    - "dovecot.socket"
+    - "dovecot.service"
   when:
     - (require_pop3 | bool) or (require_imap | bool)
     - not (run_pop3 | bool)
@@ -177,9 +180,10 @@
   ansible.builtin.include_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
-    service:
-      - "cups.socket"
-      - "cups.service"
+    service: "{{ item }}"
+  loop:
+    - "cups.socket"
+    - "cups.service"
   when:
     - require_cups | bool
     - not (run_cups | bool)
@@ -195,9 +199,10 @@
   ansible.builtin.include_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
-    service:
-      - "rpcbind.socket"
-      - "rpcbind.service"
+    service: "{{ item }}"
+  loop:
+    - "rpcbind.socket"
+    - "rpcbind.service"
   when:
     - require_rpcbind | bool
     - not (run_rpcbind | bool)
@@ -309,9 +314,10 @@
   ansible.builtin.include_tasks:
     file: "../templates/mask_stop_service.yaml"
   vars:
-    service:
-      - "apache2.service"
-      - "apache2.socket"
+    service: "{{ item }}"
+  loop:
+    - "apache2.service"
+    - "apache2.socket"
   when:
     - require_apache | bool
     - not (run_apache | bool)

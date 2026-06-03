@@ -21,14 +21,13 @@
 
 - name: "2.2.4 Ensure telnet client is not installed"
   ansible.builtin.apt:
-    name: "{{ client_service }}"
+    name: "{{ item }}"
     state: absent
     purge: true
   when: not (require_client_telnet | bool)
-  vars:
-    client_service:
-      - "telnet"
-      - "inetutils-telnet"
+  loop:
+    - "telnet"
+    - "inetutils-telnet"
 
 - name: "2.2.5 Ensure ldap client is not installed"
   ansible.builtin.apt:
@@ -39,11 +38,10 @@
 
 - name: "2.2.6 Ensure ftp client is not installed"
   ansible.builtin.apt:
-    name: "{{ client_service }}"
+    name: "{{ item }}"
     state: absent
     purge: true
   when: not (require_client_ftp | bool)
-  vars:
-    client_service:
-      - "tnftp"
-      - "ftp"
+  loop:
+    - "tnftp"
+    - "ftp"
