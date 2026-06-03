@@ -1,0 +1,10 @@
+- name: "Configuring {{ setting }}..."
+  ansible.builtin.lineinfile:
+    path: "/etc/ssh/sshd_config.d/99-cis.conf"
+    mode: '0600'
+    create: true
+    state: present
+    owner: root
+    group: root
+    regexp: "{{ regexp }}"
+    line: "{{ setting }} {{ value }}"

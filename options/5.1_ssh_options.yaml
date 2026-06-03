@@ -1,0 +1,24 @@
+# Configures options pertaining SSH access. Note that groups are not created. This playbook only performs group assignments. 
+#
+# ssh_allow_users - a space separated list of users to be given access to the server over SSH
+# ssh_allow_groups - a space separated list of groups to be given access to the server over SSH
+# ssh_deny_users - a space separated list of users to be denied access to the server over SSH
+# ssh_deny_groups - a space separated list of groups to be denied access to the server over SSH
+#
+# If any of the above settings are left blank, it will not be configured
+#
+# ssh_client_alive_interval - controls the timeout interval between alive requests sent by the SSH server
+# ssh_client_alive_count_max - controls the max number of alive requests sent by the SSH server before disconnecting the user
+# ssh_log_level - controls the SSH server logging level, only accepts INFO or VERBOSE
+# ssh_max_auth_tries - controls the number of authentication attempts per connection
+# ssh_max_sessions - controls the maximum number of open sessions per connection
+
+ssh_allow_users: "debian"
+ssh_allow_groups: ""
+ssh_deny_users: ""
+ssh_deny_groups: ""
+ssh_client_alive_interval: 15
+ssh_client_alive_count_max: 3
+ssh_log_level: "INFO"
+ssh_max_auth_tries: 4
+ssh_max_sessions: 10

@@ -35,3 +35,183 @@
     - "/etc/ssh/ssh_host_ecdsa_key.pub"
     - "/etc/ssh/ssh_host_ed25519_key.pub"
     - "/etc/ssh/ssh_host_rsa_key.pub"
+
+- name: "5.1.4 Ensure sshd access is configured (AllowUsers)"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sshd.yaml"
+  vars:
+    setting: "AllowUsers"
+    regexp: "^AllowUsers.*$"
+    value: "{{ ssh_allow_users }}"
+  when: ssh_allow_users | length > 0
+
+- name: "5.1.4 Ensure sshd access is configured (AllowGroups)"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sshd.yaml"
+  vars:
+    setting: "AllowGroups"
+    regexp: "^AllowGroups.*$"
+    value: "{{ ssh_allow_groups }}"
+  when: ssh_allow_groups | length > 0
+
+- name: "5.1.4 Ensure sshd access is configured (DenyUsers)"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sshd.yaml"
+  vars:
+    setting: "DenyUsers"
+    regexp: "^DenyUsers.*$"
+    value: "{{ ssh_deny_users }}"
+  when: ssh_deny_users | length > 0
+
+- name: "5.1.4 Ensure sshd access is configured (DenyGroups)"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sshd.yaml"
+  vars:
+    setting: "DenyGroups"
+    regexp: "^DenyGroups.*$"
+    value: "{{ ssh_deny_groups }}"
+  when: ssh_deny_groups | length > 0
+
+- name: "5.1.5 Ensure sshd Banner is configured"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sshd.yaml"
+  vars:
+    setting: "banner"
+    regexp: "^banner.*$"
+    value: "/etc/issue.net"
+
+- name: "5.1.6 Ensure sshd Ciphers are configured"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sshd.yaml"
+  vars:
+    setting: "ciphers"
+    regexp: "^ciphers.*$"
+    value: "aes128-gcm@openssh.com,aes256-gcm@openssh.com,aes128-ctr,aes192-ctr,aes256-ctr"
+
+- name: "5.1.7 Ensure sshd ClientAliveInterval and ClientAliveCountMax are configured"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sshd.yaml"
+  vars:
+    setting: "{{ item.setting }}"
+    regexp: "{{ item.regexp }}"
+    value: "{{ item.value }}"
+  loop:
+    - { setting: "ClientAliveInterval", regexp: "^ClientAliveInterval.*$", value: "{{ ssh_client_alive_interval }}" }
+    - { setting: "ClientAliveCountMax", regexp: "^ClientAliveCountMax.*$", value: "{{ ssh_client_alive_count_max }}" }
+
+- name: "5.1.10 Ensure sshd HostbasedAuthentication is disabled"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sshd.yaml"
+  vars:
+    setting: "HostbasedAuthentication"
+    regexp: "^HostbasedAuthentication.*$"
+    value: "no"
+
+- name: "5.1.11 Ensure sshd IgnoreRhosts is enabled"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sshd.yaml"
+  vars:
+    setting: "IgnoreRhosts"
+    regexp: "^IgnoreRhosts.*$"
+    value: "yes"
+
+- name: "5.1.12 Ensure sshd KexAlgorithms is configured"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sshd.yaml"
+  vars:
+    setting: "KexAlgorithms"
+    regexp: ^KexAlgorithms\s-.*$
+    value: "-diffie-hellman-group1-sha1,diffie-hellman-group14-sha1,diffiehellman-group-exchange-sha1"
+
+- name: "5.1.13 Ensure sshd post-quantum cryptography key exchange algorithms are configured"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sshd.yaml"
+  vars:
+    setting: "KexAlgorithms"
+    regexp: ^KexAlgorithms\s[^-].*$
+    value: "mlkem768x25519-sha256,sntrup761x25519-sha512,sntrup761x25519-sha512@openssh.com,curve25519-sha256,curve25519-sha256@libssh.org,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521"
+
+- name: "5.1.14 Ensure sshd LoginGraceTime is configured"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sshd.yaml"
+  vars:
+    setting: "LoginGraceTime"
+    regexp: "^LoginGraceTime.*$"
+    value: "60"
+
+- name: "5.1.15 Ensure sshd LogLevel is configured"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sshd.yaml"
+  vars:
+    setting: "LogLevel"
+    regexp: "^LogLevel.*$"
+    value: "{{ ssh_log_level }}"
+
+- name: "5.1.16 Ensure sshd MACs are configured"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sshd.yaml"
+  vars:
+    setting: "MACs"
+    regexp: "^MACs.*$"
+    value: "-hmac-md5,hmac-md5-96,hmac-ripemd160,hmac-sha1-96,umac64@openssh.com,hmac-md5-etm@openssh.com,hmac-md5-96-etm@openssh.com,hmacripemd160-etm@openssh.com,hmac-sha1-96-etm@openssh.com,umac-64-etm@openssh.com,umac-128-etm@openssh.com"
+
+- name: "5.1.17 Ensure sshd MaxAuthTries is configured"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sshd.yaml"
+  vars:
+    setting: "MaxAuthTries"
+    regexp: "^MaxAuthTries.*$"
+    value: "{{ ssh_max_auth_tries }}"
+
+- name: "5.1.18 Ensure sshd MaxSessions is configured"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sshd.yaml"
+  vars:
+    setting: "MaxSessions"
+    regexp: "^MaxSessions.*$"
+    value: "{{ ssh_max_sessions }}"
+
+- name: "5.1.19 Ensure sshd MaxStartups is configured"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sshd.yaml"
+  vars:
+    setting: "MaxStartups"
+    regexp: "^MaxStartups.*$"
+    value: "10:30:60"
+
+- name: "5.1.20 Ensure sshd PermitEmptyPasswords is disabled"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sshd.yaml"
+  vars:
+    setting: "PermitEmptyPasswords"
+    regexp: "^PermitEmptyPasswords.*$"
+    value: "no"
+
+- name: "5.1.21 Ensure sshd PermitRootLogin is disabled"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sshd.yaml"
+  vars:
+    setting: "PermitRootLogin"
+    regexp: "^PermitRootLogin.*$"
+    value: "no"
+
+- name: "5.1.22 Ensure sshd PermitUserEnvironment is disabled"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sshd.yaml"
+  vars:
+    setting: "PermitUserEnvironment"
+    regexp: "^PermitUserEnvironment.*$"
+    value: "no"
+
+- name: "5.1.23 Ensure sshd UsePAM is disabled"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sshd.yaml"
+  vars:
+    setting: "UsePAM"
+    regexp: "^UsePAM.*$"
+    value: "yes"
+
+- name: "Restarting sshd.service..."
+  ansible.builtin.systemd_service:
+    name: "sshd.service"
+    state: restarted

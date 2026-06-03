@@ -99,5 +99,10 @@
       - require_ufw_ssh | bool in [true, false]
       - ufw_ssh_ip is match("(any|(\d{1,3}\.){3}\d{1,3}(\/\d{1,2})?)")
       - require_ufw_routing | bool in [true, false]
+      - ssh_client_alive_interval is match("^\d+$")
+      - ssh_client_alive_count_max is match("^\d+$")
+      - ssh_log_level | lower in ["info", "verbose"]
+      - ssh_max_auth_tries is match("^\d$")
+      - ssh_max_sessions is match("^\d+$")
     fail_msg:
       - "Ensure that options are correctly set in each option.yaml. See README.md and each option.yaml file."
