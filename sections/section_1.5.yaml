@@ -48,8 +48,7 @@
     value: "2"
 
 - name: "Attempting to restore prelink binaries..."
-  ansible.builtin.command: prelink -ua
-  ignore_errors: true
+  ansible.builtin.command: prelink -ua || /bin/true
 
 - name: "1.5.6 Ensure prelink is not installed"
   ansible.builtin.apt:
@@ -69,6 +68,9 @@
     regex: ^\*\s+hard\s+core\s+\d$
     line: "*  hard  core  0"
     create: true
+    owner: root
+    group: root
+    mode: '0644'
     state: present
 
 - name: "Uninstalling systemd-coredump..."
@@ -86,6 +88,9 @@
       option: ProcessSizeMax
       value: 0
       state: present
+      owner: root
+      group: root
+      mode: '0644'
 
   - name: "1.5.13 Ensure systemd-coredump Storage is configured"
     community.general.ini_file:
@@ -94,5 +99,8 @@
       option: Storage
       value: none
       state: present
+      owner: root
+      group: root
+      mode: '0644'
 
   when: require_coredump | bool

@@ -49,7 +49,7 @@
   vars:
     setting: "net.ipv4.icmp_echo_ignore_broadcasts"
     value: "1"
-    
+
 - name: "3.3.1.8 Ensure net.ipv4.conf.all.accept_redirects is configured"
   ansible.builtin.include_tasks:
     file: "../templates/configure_sysctl_settings.yaml"
@@ -78,7 +78,7 @@
     setting: "net.ipv4.conf.default.secure_redirects"
     value: "0"
 
-- block: 
+- block:
   - name: "3.3.1.12 Ensure net.ipv4.conf.all.rp_filter is configured"
     ansible.builtin.include_tasks:
       file: "../templates/configure_sysctl_settings.yaml"

@@ -24,7 +24,7 @@
     purge: true
   when: not (require_at | bool)
 
-- block: 
+- block:
   - name: "2.4.1.1 Ensure cron daemon is enabled and active"
     ansible.builtin.systemd_service:
       name: "cron"
@@ -65,7 +65,7 @@
       owner: root
       group: root
       mode: u=rwX,o=,g=
- 
+
   - name: "2.4.1.6 Ensure access to /etc/cron.monthly is configured"
     ansible.builtin.file:
       path: "/etc/cron.monthly"
@@ -74,7 +74,7 @@
       owner: root
       group: root
       mode: u=rwX,o=,g=
- 
+
   - name: "2.4.1.7 Ensure access to /etc/cron.yearly is configured"
     ansible.builtin.file:
       path: "/etc/cron.yearly"
@@ -83,7 +83,7 @@
       owner: root
       group: root
       mode: u=rwX,o=,g=
- 
+
   - name: "2.4.1.8 Ensure access to /etc/cron.d is configured"
     ansible.builtin.file:
       path: "/etc/cron.d"

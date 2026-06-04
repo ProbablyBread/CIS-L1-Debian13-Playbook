@@ -9,6 +9,9 @@
 - name: "Disabling collected modules..."
   ansible.builtin.copy:
     dest: "/etc/modprobe.d/99-wireless-disable.conf"
+    owner: root
+    group: root
+    mode: '0644'
     content: |
       {% for module in wlan_modules['files'] %}
       blacklist {{ (module['path'] | split('/'))[-1] | replace('.ko', '') }}
@@ -16,4 +19,3 @@
 
       {% endfor %}
   when: wlan_modules['files'] | length > 0
-

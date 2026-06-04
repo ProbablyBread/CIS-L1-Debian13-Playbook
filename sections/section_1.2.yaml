@@ -2,7 +2,7 @@
   ansible.builtin.file:
     path: "/etc/apt/trusted.gpg.d"
     state: directory
-    recurse: yes
+    recurse: true
     owner: root
     group: root
     mode: "u=rwX,g=rX,o=rX"
@@ -11,7 +11,7 @@
   ansible.builtin.file:
     path: "/etc/apt/auth.conf.d"
     state: directory
-    recurse: yes
+    recurse: true
     owner: root
     group: root
     mode: "u=rwX,g=rX,o="
@@ -20,7 +20,7 @@
   ansible.builtin.file:
     path: "/usr/share/keyrings"
     state: directory
-    recurse: yes
+    recurse: true
     owner: root
     group: root
     mode: "u=rwX,g=rX,o=rX"
@@ -29,7 +29,7 @@
   ansible.builtin.file:
     path: "/etc/apt/sources.list.d"
     state: directory
-    recurse: yes
+    recurse: true
     owner: root
     group: root
     mode: "u=rwX,g=rX,o=rX"

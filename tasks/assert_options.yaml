@@ -11,7 +11,7 @@
       - require_hfsplus | bool in [true, false]
       - require_jffs2 | bool in [true, false]
       - require_firewire_core | bool in [true, false]
-      - require_usb_storage | bool in [true, false] 
+      - require_usb_storage | bool in [true, false]
       - tmp_size | lower is match("^\d{1,}[gmk]$")
       - shm_size | lower is match("^\d{1,}[gmk]$")
       - is_home_partition | bool in [true, false]
@@ -77,7 +77,7 @@
       - use_systemd_timesyncd | bool in [true, false]
       - use_chrony | bool in [true, false]
       - chrony_pools_max_sources is match("^\d+$")
-      - use_systemd_timesyncd != use_chrony 
+      - use_systemd_timesyncd != use_chrony
       - require_cron | bool in [true, false]
       - is_cron_deny | bool in [true, false]
       - require_at | bool in [true, false]

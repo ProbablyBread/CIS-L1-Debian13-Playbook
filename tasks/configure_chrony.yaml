@@ -26,6 +26,9 @@
   register: chrony_pools_changed
   ansible.builtin.copy:
     dest: "/etc/chrony/sources.d/99-pools.conf"
+    owner: root
+    group: root
+    mode: '0644'
     content: |
       {% for pool in chrony_pools | split(' ') %}
       pool {{ pool }} iburst maxsources {{ chrony_pools_max_sources }}
@@ -35,6 +38,9 @@
   register: chrony_servers_changed
   ansible.builtin.copy:
     dest: "/etc/chrony/sources.d/99-servers.conf"
+    owner: root
+    group: root
+    mode: '0644'
     content: |
       {% for server in chrony_servers | split(' ') %}
       server {{ server }} iburst

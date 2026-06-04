@@ -21,7 +21,7 @@
       tags:
         - "1.1"
 
-    - name: "Section 1.2"    
+    - name: "Section 1.2"
       ansible.builtin.import_tasks:
         file: "./sections/section_1.2.yaml"
       tags:
@@ -39,7 +39,7 @@
         file: "./sections/section_1.4.yaml"
       tags:
         - "1.4"
-    
+
     - name: "Section 1.5"
       ansible.builtin.import_tasks:
         file: "./sections/section_1.5.yaml"
@@ -67,7 +67,7 @@
     - name: "Section 2.3"
       ansible.builtin.import_tasks:
         file: "./sections/section_2.3.yaml"
-      tags: 
+      tags:
         - "2.3"
 
     - name: "Section 2.4"

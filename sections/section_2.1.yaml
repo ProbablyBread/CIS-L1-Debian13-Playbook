@@ -38,7 +38,7 @@
     file: "../templates/mask_stop_service.yaml"
   vars:
     service: "{{ item }}"
-  loop: 
+  loop:
     - "kea-dhcp-ddns-server.service"
     - "kea-dhcp4-server.service"
     - "kea-dhcp6-server.service"
@@ -361,12 +361,19 @@
     purge: true
   when: not (require_xinetd | bool)
 
-- name: "2.1.22 Ensure mail transfer agents are configured for local-only mode"
-  ignore_errors: true
-  ansible.builtin.lineinfile:
-    path: "/etc/postfix/main.cf"
-    regex: ^\s*inet_interfaces\s+=.*$
-    line: "inet_interfaces = loopback-only"
-    create: false
-    state: present
-  when: not (require_internet_mta | bool)
+- block:
+  - name: "Checking if postfix main.cf exists..."
+    register: is_postfix
+    ansible.builtin.stat:
+      path: /etc/postfix/main.cf
+
+  - name: "2.1.22 Ensure mail transfer agents are configured for local-only mode"
+    ansible.builtin.lineinfile:
+      path: "/etc/postfix/main.cf"
+      regex: ^\s*inet_interfaces\s+=.*$
+      line: "inet_interfaces = loopback-only"
+      create: false
+      state: present
+    when: 
+      - not (require_internet_mta | bool)
+      - is_postfix.stat.exists

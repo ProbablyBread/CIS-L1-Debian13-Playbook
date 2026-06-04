@@ -10,7 +10,7 @@
     path: "/etc/ssh/sshd_config.d"
     state: directory
     mode: "u=rwX,g=,o="
-    recurse: yes
+    recurse: true
     owner: root
     group: root
 

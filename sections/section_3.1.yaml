@@ -1,4 +1,4 @@
-- block: 
+- block:
   - name: "Disabling IPv6 (net.ipv6.conf.all.disable_ipv6)..."
     ansible.builtin.include_tasks:
       file: "../templates/configure_sysctl_settings.yaml"
@@ -25,7 +25,7 @@
     file: "../templates/mask_stop_service.yaml"
   vars:
     service: "bluetooth.service"
-  when: 
+  when:
     - require_bluetooth | bool
     - not (run_bluetooth | bool)
 
