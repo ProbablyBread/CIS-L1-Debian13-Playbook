@@ -48,7 +48,9 @@
     value: "2"
 
 - name: "Attempting to restore prelink binaries..."
-  ansible.builtin.command: prelink -ua || /bin/true
+  ansible.builtin.command: 
+    cmd: /usr/sbin/prelink -ua
+    removes: /usr/sbin/prelink
 
 - name: "1.5.6 Ensure prelink is not installed"
   ansible.builtin.apt:
