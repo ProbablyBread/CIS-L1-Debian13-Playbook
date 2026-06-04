@@ -117,3 +117,9 @@
         file: "./sections/section_5.2.yaml"
       tags:
         - "5.2"
+
+    - name: "Section 5.3"
+      ansible.builtin.import_tasks:
+        file: "./sections/section_5.3.yaml"
+      tags:
+        - "5.3"
