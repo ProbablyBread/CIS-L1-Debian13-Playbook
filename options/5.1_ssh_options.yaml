@@ -1,4 +1,4 @@
-# Configures options pertaining SSH access. Note that groups are not created. This playbook only performs group assignments. 
+# Configures options pertaining SSH access. Note that groups are not created - this playbook only performs group assignments. 
 #
 # ssh_allow_users - a space separated list of users to be given access to the server over SSH
 # ssh_allow_groups - a space separated list of groups to be given access to the server over SSH
