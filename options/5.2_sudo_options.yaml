@@ -1,0 +1,11 @@
+# Configures options pertaining to sudo. This does not configure who is granted sudo access. 
+#
+# require_sudo_ldap - if set to true, installs sssd and libsss-sudo
+# sudo_log_file - sets the location of the sudo log file
+# sudo_timestamp_timeout - sets the sudo authentication timeout in minutes
+# su_group_name - sets the group name that is allowed to perform su. will be created if it doesn't exist. group is recommended to be empty.
+
+require_sudo_ldap: false
+sudo_log_file: "/var/log/sudo.log"
+sudo_timestamp_timeout: 15
+su_group_name: "sugroup"

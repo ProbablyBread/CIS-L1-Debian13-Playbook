@@ -1,0 +1,54 @@
+- name: "5.2.1 Ensure sudo is installed"
+  ansible.builtin.apt:
+    name: "sudo"
+    state: present
+
+- block:
+  - name: "5.2.1 Ensure libsss-sudo and sssd are installed"
+    ansible.builtin.apt:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - "libsss-sudo"
+      - "sssd"
+  when: require_sudo_ldap | bool
+
+- name: "5.2.2 Ensure sudo commands use pty"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sudo_settings.yaml"
+  vars:
+    regexp: ^Defaults\s+!?use_pty$
+    setting: "Allocate pty"
+    line: "Defaults use_pty"
+
+- name: "5.2.3 Ensure sudo log file exists"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sudo_settings.yaml"
+  vars:
+    regexp: ^Defaults\s+logfile=.*
+    setting: "Logfile"
+    line: "Defaults logfile=\"{{ sudo_log_file }}\""
+
+- name: "5.2.6 Ensure sudo timestamp_timeout is configured"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_sudo_settings.yaml"
+  vars:
+    regexp: ^Default\s+(env_reset,\s+)?timestamp_timeout=\d+
+    setting: "Authentication Timeout"
+    line: "Defaults env_reset, timestamp_timeout={{ sudo_timestamp_timeout }}"
+
+- name: "Creating {{ su_group_name }}..."
+  ansible.builtin.group:
+    name: "{{ su_group_name }}"
+    state: present
+
+- name: "5.2.7 Ensure access to the su command is restricted"
+  ansible.builtin.lineinfile:
+    path: "/etc/pam.d/su"
+    regexp: ^(#\s+)?auth\s+required\s+pam_wheel\.so(\s+use_uid.*)?$
+    line: "auth\trequired\tpam_wheel.so\tuse_uid\tgroup={{ su_group_name }}"
+    owner: root
+    group: root
+    mode: '0644'
+    create: false
+    state: present

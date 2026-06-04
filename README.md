@@ -11,9 +11,13 @@ This playbook has only been tested on a fresh installation of Debian 13, and **m
 If this playbook is to be used on existing installations of Debian 13, **make a backup before applying**. 
 
 ## Excluded Sections
-This playbook includes all the Automated compliance settings as much as possible. All Manual compliance settings have to be done, well, manually. This playbook also **does not** apply Level 2 compliance settings.
+This playbook includes all the Automated compliance settings as much as possible. Most if not all Manual compliance settings have to be done, well, manually. This playbook also **does not** apply Level 2 compliance settings.
 
+### Section 1.7
 The entire 1.7 section is skipped as this playbook has only been tested in a headless environment. If desktop compliance settings are desired, **apply them by hand**.
+
+### Section 5.2.5
+`/etc/sudoers` and the `/etc/sudoers/99-cis` file provided by this playbook doesn't include !authenticate by default. This section is skipped due to the difficulty in conforming to the correct sudoers file syntax using Ansible.
 
 ## Before Using This Playbook
 - **Carefully review the options in ./options/\*.yaml** before running this playbook.

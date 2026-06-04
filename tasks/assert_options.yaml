@@ -104,5 +104,9 @@
       - ssh_log_level | lower in ["info", "verbose"]
       - ssh_max_auth_tries is match("^\d$")
       - ssh_max_sessions is match("^\d+$")
+      - require_sudo_ldap | bool in [true, false]
+      - sudo_log_file | length > 0
+      - su_group_name | length > 0
+      - sudo_timestamp_timeout is match("^\d+$")
     fail_msg:
       - "Ensure that options are correctly set in each option.yaml. See README.md and each option.yaml file."

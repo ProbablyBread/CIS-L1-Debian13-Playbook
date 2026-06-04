@@ -1,0 +1,10 @@
+- name: "Configuring {{ setting }}..."
+  ansible.builtin.lineinfile:
+    path: "/etc/sudoers.d/99-cis"
+    create: true
+    state: present
+    owner: root
+    group: root
+    mode: '0440'
+    regexp: "{{ regexp }}"
+    line: "{{ line }}"
