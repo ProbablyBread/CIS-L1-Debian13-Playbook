@@ -1,0 +1,41 @@
+# Configures options pertaining to PAM arguments such as password complexity, password length, unsuccessful login attempts before lockout, etc.
+#
+# faillock_deny - Configures the amount of unsuccessful login attempts before lockout
+# faillock_unlock_time - Configures how long a locked account is automatically unlocked (in seconds)
+#
+# pwquality_difok - Configures the number of characters in a new password that must not be present in the old password
+# pwquality_minlen - Configures the minimum number of characters in a password
+# pwquality_minclass - Configures the mandatory minimum number of classes of characters that must be present in a password
+# pwquality_dcredit - Configures whether digits (numbers) are required in the password, -1 means at least 1
+# pwquality_ucredit - Configures whether uppercase characters are required in the password, -1 means at least 1
+# pwquality_ocredit - Configures whether other characters (i.e. symbols) are required in the password, -1 means at least 1
+# pwquality_lcredit - Configures whether lowercase characters are required in the password, -1 means at least 1
+# pwquality_maxrepeat - Configures the maximum number of consecutive characters allowed in the password, disabled if 0
+# pwquality_maxsequence - Configures the maximum number of sequential characters allowed in the password, disabled if 0
+# pwquality_dictcheck - Configures whether passwords are checked using the cracklib dictionary, disabled if 0
+# pwquality_enforcing - Configures whether all the above options are enforced, disabled if 0
+# pwquality_enforcing_for_root - Configures whether all the above options are enforced for the root user as well, disabled if 0
+#
+# pwhistory_remember - Configures the password history
+# pwhistory_enforce_for_root - Configures whether password history is also enforced for the root user, disabled if 0
+# pwhistory_use_authtok - Configures whether multiple password modules are used to confirm the new password, disabled if 0
+
+faillock_deny: 5
+faillock_unlock_time: 900
+
+pwquality_difok: 2
+pwquality_minlen: 14
+pwquality_minclass: 4
+pwquality_dcredit: -1
+pwquality_ucredit: -1
+pwquality_ocredit: -1
+pwquality_lcredit: -1
+pwquality_maxrepeat: 3
+pwquality_maxsequence: 3 
+pwquality_dictcheck: 1 
+pwquality_enforcing: 1
+pwquality_enforcing_for_root: 1
+
+pwhistory_remember: 24
+pwhistory_enforce_for_root: 1
+pwhistory_use_authtok: 1

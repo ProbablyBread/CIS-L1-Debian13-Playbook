@@ -1,0 +1,13 @@
+- name: "Configuring {{ config_file }}..."
+  register: pam_config
+  ansible.builtin.copy:
+    dest: "/usr/share/pam-configs/{{ config_file }}"
+    owner: root
+    group: root
+    mode: '0644'
+    content: "{{ file_contents }}"
+
+- name: "Enabling {{ config_file }}..."
+  ansible.builtin.shell:
+    cmd: "pam-auth-update --enable {{ config_file }}"
+  when: pam_config.changed

@@ -12,3 +12,116 @@
   ansible.builtin.apt:
     name: "libpam-pwquality"
     state: latest
+
+- name: "5.3.2.1/5.3.3.4 Ensure pam_unix module is enabled"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_pam_config.yaml"
+  vars:
+    config_file: "cis_unix"
+    file_contents: |
+      Name: CIS L1 - Unix authentication
+      Default: yes
+      Priority: 256
+      Auth-Type: Primary
+      Auth: 
+        [success=end default=ignore]  pam_unix.so try_first_pass
+      Auth-Initial:
+        [success=end default=ignore]  pam_unix.so
+      Account-Type: Primary
+      Account:
+        [success=end new_authtok_reqd=done default=ignore] pam_unix.so
+      Account-Initial:
+        [success=end new_authtok_reqd=done default=ignore] pam_unix.so
+      Session-Type: Additional
+      Session:
+        required  pam_unix.so
+      Session-Initial:
+        required  pam_unix.so
+      Password-Type: Primary
+      Password:
+        [success=end default=ignore]  pam_unix.so obscure use_authtok try_first_pass  yescrypt
+      Password-Initial:
+        [success=end default=ignore]  pam_unix.so obscure yescrypt
+
+- name: "Disabling default /usr/share/pam-configs/unix..."
+  ansible.builtin.include_tasks:
+    file: "../templates/disable_pam_config.yaml"
+  vars:
+    config_file: "unix"
+
+- name: "5.3.2.2 Ensure pam_faillock module is enabled"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_pam_config.yaml"
+  vars:
+    config_file: "cis_faillock"
+    file_contents: |
+      Name: CIS L1 - Enable pam_faillock
+      Default: yes
+      Priority: 0
+      Auth-Type: Primary
+      Auth:
+        [default=die] pam_faillock.so authfail
+
+- name: "5.3.2.2 Ensure pam_faillock module is enabled"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_pam_config.yaml"
+  vars:
+    config_file: "cis_faillock_notify"
+    file_contents: |
+      Name: CIS L1 - Notify for failed logins and reset fail counter on login success
+      Default: yes
+      Priority: 1024
+      Auth-Type: Primary
+      Auth:
+        requisite pam_faillock.so preauth
+      Account-Type: Primary
+      Account:
+        required  pam_faillock.so
+
+- name: "5.3.2.3 Ensure pam_pwquality module is enabled"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_pam_config.yaml"
+  vars:
+    config_file: "cis_pwquality"
+    file_contents: |
+      Name: CIS L1 - Password strength checking
+      Default: yes
+      Priority: 1024
+      Conflicts: cracklib
+      Password-Type: Primary
+      Password:
+        requisite pam_pwquality.so  retry=3
+      Password-Initial:
+        requisite pam_pwquality.so  retry=3
+
+- name: "Disabling default /usr/share/pam-configs/pwquality..."
+  ansible.builtin.include_tasks:
+    file: "../templates/disable_pam_config.yaml"
+  vars:
+    config_file: "pwquality"
+
+- name: "5.3.2.4 Ensure pam_pwhistory module is enabled"
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_pam_config.yaml"
+  vars:
+    config_file: "cis_pwhistory"
+    file_contents: |
+      Name: CIS L1 - Password history checking
+      Default: yes
+      Priority: 1024
+      Password-Type: Primary
+      Password: 
+        requisite pam_pwhistory.so 
+
+- name: "5.3.3.1 Configure pam_faillock module"
+  ansible.builtin.lineinfile:
+    file: "/etc/security/faillock.conf"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    owner: root
+    group: root
+    mode: '0644'
+    state: present
+  loop:
+    - { line: "deny={{ faillock_deny }}", regex: ^deny=\d+$ }
+    - { line: "unlock_time={{ faillock_unlock_time }}", regex: ^unlock_time=\d+$ }

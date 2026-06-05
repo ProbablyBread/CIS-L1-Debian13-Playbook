@@ -1,0 +1,3 @@
+- name: "Disabling {{ config_file }}..."
+  ansible.builtin.shell:
+    cmd: "pam-auth-update --disable {{ config_file }}"
