@@ -1,6 +1,7 @@
-- name: "Updating {{ fs }} in /etc/fstab..."
-  ansible.builtin.lineinfile:
-    path: /etc/fstab
-    regexp: '^{{ fs | regex_escape }}\s+{{ mountpoint | regex_escape }}\s+{{ type | regex_escape }}.*\s+\d\s+\d$'
-    state: present
-    line: "{{ fs }} {{ mountpoint }} {{ type }} errors=remount-ro,nosuid,nodev,noexec 0 1"
+- name: "Configuring {{ fs }}..."
+  ansible.posix.mount:
+    path: "{{ mountpoint }}"
+    src: "{{ fs }}"
+    fstype: "{{ fs_type }}"
+    opts: errors=remount-ro,nosuid,nodev,noexec
+    state: mounted

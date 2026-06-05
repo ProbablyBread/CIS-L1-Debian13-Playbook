@@ -1,6 +1,7 @@
-- name: "Updating {{ fs }} in /etc/fstab..."
-  ansible.builtin.lineinfile:
-    path: /etc/fstab
-    regexp: '^tmpfs\s+{{ fs | regex_escape }}\s+tmpfs\s+.*\s+\d\s+\d$'
-    state: present
-    line: "tmpfs {{ fs }} tmpfs defaults,rw,nosuid,nodev,noexec,relatime,size={{ size }}  0 0"
+- name: "Configuring {{ fs }}..."
+  ansible.posix.mount:
+    src: "tmpfs"
+    path: "{{ fs }}"
+    fstype: "tmpfs"
+    opts: "defaults,rw,nosuid,nodev,noexec,relatime,size={{ size }}"
+    state: mounted
