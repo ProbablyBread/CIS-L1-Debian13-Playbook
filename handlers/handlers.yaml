@@ -1,0 +1,14 @@
+- name: "Restart sshd.service"
+  ansible.builtin.systemd_service:
+    name: "sshd.service"
+    state: restarted
+
+- name: "Restart chrony.service"
+  ansible.builtin.systemd_service:
+    name: "chrony.service"
+    state: restarted
+
+- name: "Restart systemd-timesyncd.service"
+  ansible.builtin.systemd_service:
+    name: "systemd-timesyncd.service"
+    state: restarted

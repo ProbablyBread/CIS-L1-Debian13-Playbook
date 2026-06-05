@@ -16,35 +16,27 @@
     enabled: true
     masked: false
 
-- name: "Configuring systemd-timesyncd primary NTP..."
-  register: timesyncd_primary
-  community.general.ini_file:
-    path: "/etc/systemd/timesyncd.conf.d/99-timesyncd.conf"
-    owner: root
-    group: root
-    mode: '0644'
-    section: Time
-    option: NTP
-    value: "{{ timesyncd_primary }}"
-    state: present
+- block:
+  - name: "Configuring systemd-timesyncd primary NTP..."
+    community.general.ini_file:
+      path: "/etc/systemd/timesyncd.conf.d/99-timesyncd.conf"
+      owner: root
+      group: root
+      mode: '0644'
+      section: Time
+      option: NTP
+      value: "{{ timesyncd_primary }}"
+      state: present
 
-- name: "Configuring systemd-timesyncd fallback NTP..."
-  register: timesyncd_fallback
-  community.general.ini_file:
-    path: "/usr/lib/systemd/timesyncd.conf.d/99-timesyncd.conf"
-    owner: root
-    group: root
-    mode: '0644'
-    section: Time
-    option: FallbackNTP
-    value: "{{ timesyncd_fallback }}"
-    state: present
+  - name: "Configuring systemd-timesyncd fallback NTP..."
+    community.general.ini_file:
+      path: "/usr/lib/systemd/timesyncd.conf.d/99-timesyncd.conf"
+      owner: root
+      group: root
+      mode: '0644'
+      section: Time
+      option: FallbackNTP
+      value: "{{ timesyncd_fallback }}"
+      state: present
 
-- name: "Restarting systemd-timesyncd..."
-  ansible.builtin.systemd_service:
-    name: "systemd-timesyncd.service"
-    state: restarted
-    enabled: true
-    daemon-reload: true
-    masked: false
-  when: timesyncd_primary.changed or timesyncd_fallback.changed
+  notify: Restart systemd-timesyncd.service
