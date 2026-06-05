@@ -17,3 +17,20 @@
   ansible.builtin.systemd_service:
     name: "postfix.service"
     state: restarted
+
+- name: "Reload systemd daemon"
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+
+- name: "Apply fstab"
+  ansible.posix.mount:
+    name: "{{ item.mountpoint }}"
+    state: remounted
+  loop:
+    - { mountpoint: "{{ tmp_mount }}", required: "{{ is_tmp_partition }}" }
+    - { mountpoint: "{{ home_mount }}", required: "{{ is_home_partition }}" }
+    - { mountpoint: "{{ var_mount }}", required: "{{ is_var_partition }}"}
+    - { mountpoint: "{{ var_tmp_mount }}", required: "{{ is_var_tmp_partition }}"}
+    - { mountpoint: "{{ var_log_mount }}", required: "{{ is_var_log_partition }}" }
+    - { mountpoint: "{{ var_log_audit_mount }}", required: "{{ is_var_log_audit_partition }}" }
+  when: item.required | bool

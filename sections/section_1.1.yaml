@@ -68,71 +68,76 @@
     kernel_module: "usb_storage"
   when: not (require_usb_storage | bool)
 
-- name: "1.1.2.1 Ensure /tmp is tmpfs, and nodev, noexec, and nosuid is set"
-  ansible.builtin.include_tasks:
-    file: "../templates/configure_tmpfs_partition.yaml"
-  vars:
-    fs: "/tmp"
-    size: "{{ tmp_size }}"
-  when: not (is_tmp_partition | bool)
+- block:
+  - name: "1.1.2.1 Ensure /tmp is tmpfs, and nodev, noexec, and nosuid is set"
+    ansible.builtin.include_tasks:
+      file: "../templates/configure_tmpfs_partition.yaml"
+    vars:
+      fs: "/tmp"
+      size: "{{ tmp_size }}"
+    when: not (is_tmp_partition | bool)
 
-- name: "1.1.2.1 Ensure /tmp is separate partition, and nodev, noexec, and nosuid is set"
-  ansible.builtin.include_tasks:
-    file: "../templates/configure_fs_partition_noexec.yaml"
-  vars:
-    fs: "{{ tmp_device }}"
-    mountpoint: "{{ tmp_mount }}"
-    type: "{{ fs_type }}"
-  when: is_tmp_partition | bool
+  - name: "1.1.2.1 Ensure /tmp is separate partition, and nodev, noexec, and nosuid is set"
+    ansible.builtin.include_tasks:
+      file: "../templates/configure_fs_partition_noexec.yaml"
+    vars:
+      fs: "{{ tmp_device }}"
+      mountpoint: "{{ tmp_mount }}"
+      type: "{{ fs_type }}"
+    when: is_tmp_partition | bool
 
-- name: "1.1.2.2 Ensure /dev/shm is tmpfs or separate partition, and nodev, noexec, and nosuid is set"
-  ansible.builtin.include_tasks:
-    file: "../templates/configure_tmpfs_partition.yaml"
-  vars:
-    fs: "/dev/shm"
-    size: "{{ shm_size }}"
+  - name: "1.1.2.2 Ensure /dev/shm is tmpfs or separate partition, and nodev, noexec, and nosuid is set"
+    ansible.builtin.include_tasks:
+      file: "../templates/configure_tmpfs_partition.yaml"
+    vars:
+      fs: "/dev/shm"
+      size: "{{ shm_size }}"
 
-- name: "1.1.2.3 Ensure /home has nodev and nosuid set"
-  ansible.builtin.include_tasks:
-    file: "../templates/configure_fs_partition.yaml"
-  vars:
-    fs: "{{ home_device }}"
-    mountpoint: "{{ home_mount }}"
-    type: "{{ fs_type }}"
-  when: is_home_partition | bool
+  - name: "1.1.2.3 Ensure /home has nodev and nosuid set"
+    ansible.builtin.include_tasks:
+      file: "../templates/configure_fs_partition.yaml"
+    vars:
+      fs: "{{ home_device }}"
+      mountpoint: "{{ home_mount }}"
+      type: "{{ fs_type }}"
+    when: is_home_partition | bool
 
-- name: "1.1.2.4 Ensure /var has nodev and nosuid set"
-  ansible.builtin.include_tasks:
-    file: "../templates/configure_fs_partition.yaml"
-  vars:
-    fs: "{{ var_device }}"
-    mountpoint: "{{ var_mount }}"
-    type: "{{ fs_type }}"
-  when: is_var_partition | bool
+  - name: "1.1.2.4 Ensure /var has nodev and nosuid set"
+    ansible.builtin.include_tasks:
+      file: "../templates/configure_fs_partition.yaml"
+    vars:
+      fs: "{{ var_device }}"
+      mountpoint: "{{ var_mount }}"
+      type: "{{ fs_type }}"
+    when: is_var_partition | bool
 
-- name: "1.1.2.5 Ensure /var/tmp has nodev and nosuid set"
-  ansible.builtin.include_tasks:
-    file: "../templates/configure_fs_partition_noexec.yaml"
-  vars:
-    fs: "{{ var_tmp_device }}"
-    mountpoint: "{{ var_tmp_mount }}"
-    type: "{{ fs_type }}"
-  when: is_var_tmp_partition | bool
+  - name: "1.1.2.5 Ensure /var/tmp has nodev and nosuid set"
+    ansible.builtin.include_tasks:
+      file: "../templates/configure_fs_partition_noexec.yaml"
+    vars:
+      fs: "{{ var_tmp_device }}"
+      mountpoint: "{{ var_tmp_mount }}"
+      type: "{{ fs_type }}"
+    when: is_var_tmp_partition | bool
 
-- name: "1.1.2.6 Ensure /var/log has nodev and nosuid set"
-  ansible.builtin.include_tasks:
-    file: "../templates/configure_fs_partition_noexec.yaml"
-  vars:
-    fs: "{{ var_log_device }}"
-    mountpoint: "{{ var_log_mount }}"
-    type: "{{ fs_type }}"
-  when: is_var_log_partition | bool
+  - name: "1.1.2.6 Ensure /var/log has nodev and nosuid set"
+    ansible.builtin.include_tasks:
+      file: "../templates/configure_fs_partition_noexec.yaml"
+    vars:
+      fs: "{{ var_log_device }}"
+      mountpoint: "{{ var_log_mount }}"
+      type: "{{ fs_type }}"
+    when: is_var_log_partition | bool
 
-- name: "1.1.2.7 Ensure /var/log/audit has nodev and nosuid set"
-  ansible.builtin.include_tasks:
-    file: "../templates/configure_fs_partition_noexec.yaml"
-  vars:
-    fs: "{{ var_log_audit_device }}"
-    mountpoint: "{{ var_log_audit_mount }}"
-    type: "{{ fs_type }}"
-  when: is_var_log_audit_partition | bool
+  - name: "1.1.2.7 Ensure /var/log/audit has nodev and nosuid set"
+    ansible.builtin.include_tasks:
+      file: "../templates/configure_fs_partition_noexec.yaml"
+    vars:
+      fs: "{{ var_log_audit_device }}"
+      mountpoint: "{{ var_log_audit_mount }}"
+      type: "{{ fs_type }}"
+    when: is_var_log_audit_partition | bool
+
+  notify: 
+    - Reload systemd daemon
+    - Apply fstab
