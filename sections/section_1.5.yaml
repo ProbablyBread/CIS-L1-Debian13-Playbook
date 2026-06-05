@@ -105,4 +105,8 @@
       group: root
       mode: '0644'
 
+  notify: 
+    - Reload systemd daemon
+    - Restart systemd-coredump.socket
+
   when: require_coredump | bool

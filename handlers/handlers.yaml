@@ -18,6 +18,11 @@
     name: "postfix.service"
     state: restarted
 
+- name: "Restart systemd-coredump.socket"
+  ansible.builtin.systemd_service:
+    name: "systemd-coredump.socket"
+    state: restarted
+
 - name: "Reload systemd daemon"
   ansible.builtin.systemd_service:
     daemon_reload: true
