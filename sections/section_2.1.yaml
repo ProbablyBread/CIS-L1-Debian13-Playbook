@@ -367,6 +367,17 @@
     ansible.builtin.stat:
       path: /etc/postfix/main.cf
 
+  - name: "Ensuring /var/lib/postfix is owned by postfix..."
+    ansible.builtin.file:
+      path: "/var/lib/postfix"
+      owner: postfix
+      group: postfix
+      state: directory
+      recurse: true
+      mode: "u=rwX,g=rX,o=rX"
+    when: 
+      - is_postfix.stat.exists
+
   - name: "2.1.22 Ensure mail transfer agents are configured for local-only mode"
     ansible.builtin.lineinfile:
       path: "/etc/postfix/main.cf"
@@ -377,3 +388,5 @@
     when: 
       - not (require_internet_mta | bool)
       - is_postfix.stat.exists
+
+  notify: Restart postfix.service
