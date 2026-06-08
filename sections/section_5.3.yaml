@@ -124,8 +124,8 @@
     mode: '0644'
     state: present
   loop:
-    - { line: "deny={{ faillock_deny }}", regex: ^deny\s?+=\s?+\d+$ }
-    - { line: "unlock_time={{ faillock_unlock_time }}", regex: ^unlock_time\s?+=\s?+\d+$ }
+    - { line: "deny={{ faillock_deny }}", regex: ^deny\s*=\s*\d+$ }
+    - { line: "unlock_time={{ faillock_unlock_time }}", regex: ^unlock_time\s*=\s*\d+$ }
 
 - name: "5.3.3.2 Configure pam_pwquality module"
   ansible.builtin.lineinfile:
@@ -139,17 +139,17 @@
     state: present
   when: item.condition | default(true)
   loop:
-    - { line: "difok={{ pwquality_difok }}", regex: ^difok\s?+=\s?+\d+$ }
-    - { line: "minlen={{ pwquality_minlen }}", regex: ^minlen\s?+=\s?+\d+$ }
-    - { line: "minclass={{ pwquality_minclass }}", regex: ^minclass\s?+=\s?+\d+$ }
-    - { line: "dcredit={{ pwquality_dcredit }}", regex: ^dcredit\s?+=\s?+\d+$ }
-    - { line: "ucredit={{ pwquality_ucredit }}", regex: ^ucredit\s?+=\s?+\d+$ }
-    - { line: "ocredit={{ pwquality_ocredit }}", regex: ^ocredit\s?+=\s?+\d+$ }
-    - { line: "lcredit={{ pwquality_lcredit }}", regex: ^lcredit\s?+=\s?+\d+$ }
-    - { line: "maxrepeat={{ pwquality_maxrepeat }}", regex: ^maxrepeat\s?+=\s?+\d+$ }
-    - { line: "maxsequence={{ pwquality_maxsequence }}", regex: ^maxsequence\s?+=\s?+\d+$ }
-    - { line: "dictcheck={{ pwquality_dictcheck }}", regex: ^dictcheck\s?+=\s?+\d+$ }
-    - { line: "enforcing_for_root_for_root_for_root={{ pwquality_enforcing }}", regex: ^enforcing\s?+=\s?+\d+$ }
+    - { line: "difok={{ pwquality_difok }}", regex: ^difok\s*=\s*\d+$ }
+    - { line: "minlen={{ pwquality_minlen }}", regex: ^minlen\s*=\s*\d+$ }
+    - { line: "minclass={{ pwquality_minclass }}", regex: ^minclass\s*=\s*\d+$ }
+    - { line: "dcredit={{ pwquality_dcredit }}", regex: ^dcredit\s*=\s*\d+$ }
+    - { line: "ucredit={{ pwquality_ucredit }}", regex: ^ucredit\s*=\s*\d+$ }
+    - { line: "ocredit={{ pwquality_ocredit }}", regex: ^ocredit\s*=\s*\d+$ }
+    - { line: "lcredit={{ pwquality_lcredit }}", regex: ^lcredit\s*=\s*\d+$ }
+    - { line: "maxrepeat={{ pwquality_maxrepeat }}", regex: ^maxrepeat\s*=\s*\d+$ }
+    - { line: "maxsequence={{ pwquality_maxsequence }}", regex: ^maxsequence\s*=\s*\d+$ }
+    - { line: "dictcheck={{ pwquality_dictcheck }}", regex: ^dictcheck\s*=\s*\d+$ }
+    - { line: "enforcing_for_root_for_root_for_root={{ pwquality_enforcing }}", regex: ^enforcing\s*=\s*\d+$ }
     - { line: "enforce_for_root", regex: ^enforce_for_root$, condition: "{{ pwquality_enforce_for_root == 1 }}" }
 
 - name: "5.3.3.3 Configure pam_pwhistory module"
@@ -164,6 +164,6 @@
     state: present
   when: item.condition | default(true)
   loop: 
-    - { line: "remember={{ pwhistory_remember }}", regex: ^remember\s?+=\s?+\d+$ }
+    - { line: "remember={{ pwhistory_remember }}", regex: ^remember\s*=\s*\d+$ }
     - { line: "enforce_for_root", regex: ^enforce_for_root$, condition: "{{ pwhistory_enforce_for_root == 1 }}" }
     - { line: "use_authtok", regex: ^use_authtok$, condition: "{{ pwhistory_use_authtok == 1 }}" }
