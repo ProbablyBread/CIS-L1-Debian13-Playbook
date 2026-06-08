@@ -117,7 +117,7 @@
   ansible.builtin.lineinfile:
     file: "/etc/security/faillock.conf"
     create: true
-    regexp: "{{ item.regexp }}"
+    regexp: "{{ item.regex }}"
     line: "{{ item.line }}"
     owner: root
     group: root
@@ -131,7 +131,7 @@
   ansible.builtin.lineinfile:
     file: "/etc/security/pwquality.conf"
     create: true
-    regex: "{{ item.regexp }}"
+    regex: "{{ item.regex }}"
     line: "{{ item.line }}"
     owner: root
     group: root
