@@ -150,4 +150,4 @@
     - { line: "maxsequence={{ pwquality_maxsequence }}", regex: ^maxsequence\s+?=\s+?\d+$ }
     - { line: "dictcheck={{ pwquality_dictcheck }}", regex: ^dictcheck\s+?=\s+?\d+$ }
     - { line: "enforcing={{ pwquality_enforcing }}", regex: ^enforcing\s+?=\s+?\d+$ }
-    - { line: "enforce_for_root", regex: ^enforce_for_root$, condition: "{{ pwquality_enforce_for_root == 1 }}"
+    - { line: "enforce_for_root", regex: ^enforce_for_root$, condition: "{{ pwquality_enforce_for_root == 1 }}" }
