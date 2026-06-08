@@ -14,7 +14,7 @@
 # pwquality_maxsequence - Configures the maximum number of sequential characters allowed in the password, disabled if 0
 # pwquality_dictcheck - Configures whether passwords are checked using the cracklib dictionary, disabled if 0
 # pwquality_enforcing - Configures whether all the above options are enforced, disabled if 0
-# pwquality_enforcing_for_root - Configures whether all the above options are enforced for the root user as well, disabled if 0
+# pwquality_enforce_for_root - Configures whether all the above options are enforced for the root user as well, disabled if 0
 #
 # pwhistory_remember - Configures the password history
 # pwhistory_enforce_for_root - Configures whether password history is also enforced for the root user, disabled if 0
@@ -34,7 +34,7 @@ pwquality_maxrepeat: 3
 pwquality_maxsequence: 3 
 pwquality_dictcheck: 1 
 pwquality_enforcing: 1
-pwquality_enforcing_for_root: 1
+pwquality_enforce_for_root: 1
 
 pwhistory_remember: 24
 pwhistory_enforce_for_root: 1
