@@ -151,3 +151,19 @@
     - { line: "dictcheck={{ pwquality_dictcheck }}", regex: ^dictcheck\s+?=\s+?\d+$ }
     - { line: "enforcing={{ pwquality_enforcing }}", regex: ^enforcing\s+?=\s+?\d+$ }
     - { line: "enforce_for_root", regex: ^enforce_for_root$, condition: "{{ pwquality_enforce_for_root == 1 }}" }
+
+- name: "5.3.3.3 Configure pam_pwhistory module"
+  ansible.builtin.lineinfile:
+    path: "/etc/security/pwhistory.conf"
+    create: true
+    regex: "{{ item.regex }}"
+    line: "{{ item.line }}"
+    owner: root
+    group: root
+    mode: '0644'
+    state: present
+  when: item.condition | default(true)
+  loop: 
+    - { line: "remember={{ pwhistory_remember }}", regex: ^remember\s+=\s+\d+$ }
+    - { line: "enforce_for_root", regex: ^enforce_for_root$, condition: "{{ pwhistory_enforce_for_root == 1 }}" }
+    - { line: "use_authtok", regex: ^use_authtok$, condition: "{{ pwhistory_use_authtok == 1 }}" }
