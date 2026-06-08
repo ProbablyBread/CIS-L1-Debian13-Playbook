@@ -13,12 +13,16 @@
         extensions:
           - "yml"
           - "yaml"
-      tags: always
+      tags: 
+        - always
+        - options
 
     - name: "Asserting options..."
       ansible.builtin.import_tasks:
         file: "./tasks/assert_options.yaml"
-      tags: always
+      tags: 
+        - always
+        - assert
 
     - name: "Section 1.1"
       ansible.builtin.import_tasks:

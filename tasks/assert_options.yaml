@@ -1,4 +1,4 @@
-- name: "..."
+- name: "Asserting options..."
   register: assertions
   ansible.builtin.assert:
     that:
@@ -108,5 +108,27 @@
       - sudo_log_file | length > 0
       - su_group_name | length > 0
       - sudo_timestamp_timeout is match("^\d+$")
+      - faillock_deny is match ("^\d+$")
+      - faillock_unlock_time is match ("\d+$")
+      - pwquality_difok is match ("\d+$")
+      - pwquality_minlen is match ("\d+$")
+      - pwquality_minclass is match ("\d+$")
+      - pwquality_dcredit is match ("-?\d+$")
+      - pwquality_ucredit is match ("-?\d+$")
+      - pwquality_ocredit is match ("-?\d+$")
+      - pwquality_lcredit is match ("-?\d+$")
+      - pwquality_maxrepeat is match ("\d+$")
+      - pwquality_maxsequence is match ("\d+$")
+      - pwquality_dictcheck is match ("\d+$")
+      - pwquality_enforcing is match ("\d+$")
+      - pwquality_enforce_for_root is match ("\d+$")
+      - pwhistory_remember is match ("\d+$")
+      - pwhistory_enforce_for_root is match ("\d+$")
+      - pwhistory_use_authtok is match ("\d+$")
+      - shadow_pass_max_days is match ("\d+$")
+      - shadow_pass_min_days is match ("\d+$")
+      - shadow_pass_warn_age is match ("\d+$")
+      - shadow_inactive is match ("\d+$")
+ 
     fail_msg:
       - "Ensure that options are correctly set in each option.yaml. See README.md and each option.yaml file."

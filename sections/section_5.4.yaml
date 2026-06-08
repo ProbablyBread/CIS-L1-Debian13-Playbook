@@ -2,23 +2,23 @@
   ansible.builtin.lineinfile:
     path: "/etc/login.defs"
     create: true
-    user: root
+    owner: root
     group: root
     mode: '0644'
     line: "{{ item.line }}"
     regex: "{{ item.regex }}"
   loop:
-    - { line: "PASS_MAX_DAYS  {{ shadow_pass_max_days }}", ^PASS_MAX_DAYS\s+\d+$ }
-    - { line: "PASS_MIN_DAYS  {{ shadow_pass_min_days }}", ^PASS_MIN_DAYS\s+\d+$ }
-    - { line: "PASS_WARN_AGE  {{ shadow_pass_warn_age }}", ^PASS_WARN_AGE\s+\d+$ }
-    - { line: "ENCRYPT_METHOD YESCRYPT", ^ENCRYPT_METHOD\s+.*$ }
+    - { line: "PASS_MAX_DAYS  {{ shadow_pass_max_days }}", regex: ^PASS_MAX_DAYS\s+\d+$ }
+    - { line: "PASS_MIN_DAYS  {{ shadow_pass_min_days }}", regex: ^PASS_MIN_DAYS\s+\d+$ }
+    - { line: "PASS_WARN_AGE  {{ shadow_pass_warn_age }}", regex: ^PASS_WARN_AGE\s+\d+$ }
+    - { line: "ENCRYPT_METHOD YESCRYPT", regex: ^ENCRYPT_METHOD\s+.*$ }
 
 - name: "5.4.1.5 Ensure inactive password lock is configured"
   ansible.builtin.lineinfile:
-    path: "/etc/default/useradd"
+    path: "/etc/default/owneradd"
     create: true
-    user: root
+    owner: root
     group: root
     mode: '0644'
     line: "INACTIVE=45"
-    regex: "^INACTIVE\s*=\s*-?\d+$"
+    regex: ^INACTIVE\s*=\s*-?\d+$
