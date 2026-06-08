@@ -22,7 +22,6 @@
     mode: '0644'
     line: "INACTIVE={{ shadow_inactive }}"
     regex: ^INACTIVE\s*=\s*-?\d+$
-  tags: test
 
 - name: "Ensuring users conform to password expiration policy..."
   ansible.builtin.lineinfile:
@@ -34,7 +33,6 @@
     line: "{{ item.line }}"
     regex: "{{ item.regex }}"
     backrefs: true
-  tags: test
   when: item.condition | default(true)
   loop: 
     - { line: '\g<1>{{ shadow_pass_min_days }}:{{ shadow_pass_max_days }}:{{ shadow_pass_warn_age }}:{{ shadow_inactive }}\g<2>', regex: '^((?!root)\w+:[^!*:]+:\d*:)\d*:\d*:\d*:\d*(.*)' }
