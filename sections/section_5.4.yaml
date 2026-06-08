@@ -37,3 +37,27 @@
   loop: 
     - { line: '\g<1>{{ shadow_pass_min_days }}:{{ shadow_pass_max_days }}:{{ shadow_pass_warn_age }}:{{ shadow_inactive }}\g<2>', regex: '^((?!root)\w+:[^!*:]+:\d*:)\d*:\d*:\d*:\d*(.*)' }
     - { line: '\g<1>{{ shadow_pass_min_days }}:{{ shadow_pass_max_days }}:{{ shadow_pass_warn_age }}:{{ shadow_inactive }}\g<2>', regex: '^(root:[^!*:]+:\d*:)\d*:\d*:\d*:\d*(.*)', condition: "{{ not(is_root_breakglass | bool) }}" }
+
+- name: "5.4.2.6 Ensure root user umask is configured"
+  ansible.builtin.lineinfile:
+    path: "{{ item }}"
+    create: true
+    owner: root
+    group: root
+    mode: '0644'
+    line: "umask 0027"
+    regex: ^umask\s+\d{3,4}$
+  loop:
+    - "/root/.profile"
+    - "/root/.bashrc"
+
+- name: "5.4.2.7 Ensure system accounts do not have a valid login shell"
+  ansible.builtin.lineinfile:
+    path: "/etc/passwd"
+    create: false
+    owner: root
+    group: root
+    mode: '0644'
+    line: "\g<1>/usr/sbin/nologin"
+    regex: '^([^:]+:x:(10\d|1[1-9]\d|[2-9]\d{2}):\d*:(\w* ?){1,}:.*:).*$'
+

@@ -23,11 +23,13 @@ Both the default `/etc/sudoers` and the `/etc/sudoers.d/99-cis` file provided by
 Even if this section is marked Automated, it is better to leave this as a manual check. The remediation entails locking, expiring, or resetting the passwords of any user accounts that have their last password change dates set to the future, which would require manual intervention anyway.
 
 ### Section 5.4.2
-Sections 5.4.2.1 to 5.4.2.4 are not implemented. Only sections 5.4.2.5 to 5.4.2.8 are implemented.
+Sections 5.4.2.1 to 5.4.2.5 are not implemented. Only sections 5.4.2.6 to 5.4.2.8 are implemented.
 
 The compliance settings from 5.4.2.1 to 5.4.2.3 states that any other accounts other than `root` are not supposed to have a UID or GID of 0. Remediating such accounts if they exist would require manual configuration. 
 
 The compliance setting for 5.4.2.4 states that the `root` account must have a password or is locked. Locking or setting a password for the root account needs to be done manually.
+
+The compliance setting for 5.4.2.5 states that the `root` account's `PATH` must not include unsafe directories such as non-`root` owned directories or invalid directories etc. By default, the `PATH` for root only contains `/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin`. Since overriding `PATH` requires editing `.bashrc` or `.profile`, or manually using `export PATH`, this setting should be manually checked.
 
 ## Before Using This Playbook
 - **Carefully review the options in ./options/\*.yaml** before running this playbook.
