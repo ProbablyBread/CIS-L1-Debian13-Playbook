@@ -129,7 +129,7 @@
       - shadow_pass_min_days is match ("\d+$")
       - shadow_pass_warn_age is match ("\d+$")
       - shadow_inactive is match ("\d+$")
-      - is_root_breakglass | bool in ['true', 'false']
+      - is_root_breakglass | bool in [true, false]
  
     fail_msg:
       - "Ensure that options are correctly set in each option.yaml. See README.md and each option.yaml file."
