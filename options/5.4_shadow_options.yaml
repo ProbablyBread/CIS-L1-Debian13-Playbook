@@ -1,0 +1,11 @@
+# Configures options pertaining to the shadow password suite at /etc/login.defs 
+#
+# shadow_pass_max_days - controls the maximum password age
+# shadow_pass_min_days - controls the minimum password age
+# shadow_pass_warn_age - controls the number of days a warning is displayed to a user before their password expires
+# shadow_inactive - controls how long can a user account be inactive for before it is disabled automatically
+
+shadow_pass_max_days: 365
+shadow_pass_min_days: 1
+shadow_pass_warn_age: 14
+shadow_inactive: 45
