@@ -24,19 +24,15 @@
     regex: ^INACTIVE\s*=\s*-?\d+$
 
 - name: "Ensuring users conform to password expiration policy..."
-  ansible.builtin.lineinfile:
+  ansible.builtin.replace:
     path: "/etc/shadow"
-    create: false
-    owner: root
-    group: root
-    mode: '0640'
-    line: "{{ item.line }}"
-    regex: "{{ item.regex }}"
-    backrefs: true
+    replace: "{{ item.replace }}"
+    regexp: "{{ item.regex }}"
   when: item.condition | default(true)
   loop: 
-    - { line: '\g<1>{{ shadow_pass_min_days }}:{{ shadow_pass_max_days }}:{{ shadow_pass_warn_age }}:{{ shadow_inactive }}\g<2>', regex: '^((?!root)\w+:[^!*:]+:\d*:)\d*:\d*:\d*:\d*(.*)' }
-    - { line: '\g<1>{{ shadow_pass_min_days }}:{{ shadow_pass_max_days }}:{{ shadow_pass_warn_age }}:{{ shadow_inactive }}\g<2>', regex: '^(root:[^!*:]+:\d*:)\d*:\d*:\d*:\d*(.*)', condition: "{{ not(is_root_breakglass | bool) }}" }
+    - { replace: '\g<1>{{ shadow_pass_min_days }}:{{ shadow_pass_max_days }}:{{ shadow_pass_warn_age }}:{{ shadow_inactive }}\g<2>', regex: '^((?!root)\w+:[^!*:]+:\d*:)\d*:\d*:\d*:\d*(.*)' }
+    - { replace: '\g<1>{{ shadow_pass_min_days }}:{{ shadow_pass_max_days }}:{{ shadow_pass_warn_age }}:{{ shadow_inactive }}\g<2>', regex: '^(root:[^!*:]+:\d*:)\d*:\d*:\d*:\d*(.*)', condition: "{{ not(is_root_breakglass | bool) }}" }
+  tags: test
 
 - name: "5.4.2.6 Ensure root user umask is configured"
   ansible.builtin.lineinfile:
@@ -52,12 +48,9 @@
     - "/root/.bashrc"
 
 - name: "5.4.2.7 Ensure system accounts do not have a valid login shell"
-  ansible.builtin.lineinfile:
+  ansible.builtin.replace:
     path: "/etc/passwd"
-    create: false
-    owner: root
-    group: root
-    mode: '0644'
-    line: "\g<1>/usr/sbin/nologin"
-    regex: '^([^:]+:x:(10\d|1[1-9]\d|[2-9]\d{2}):\d*:(\w* ?){1,}:.*:).*$'
+    replace: '\g<1>/usr/sbin/nologin'
+    regexp: '^([^:]+:x:(10\d|1[1-9]\d|[2-9]\d{2}):\d*:(\w* ?){1,}:.*:).*$'
+  tags: test
 
