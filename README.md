@@ -17,7 +17,7 @@ This playbook includes all the Automated compliance settings as much as possible
 The entire 1.7 section is skipped as this playbook has only been tested in a headless environment. If desktop compliance settings are desired, **apply them by hand**.
 
 ### Section 5.2.5
-`/etc/sudoers` and the `/etc/sudoers/99-cis` file provided by this playbook doesn't include !authenticate by default. This section is skipped due to the difficulty in conforming to the correct sudoers file syntax using Ansible.
+Both the default `/etc/sudoers` and the `/etc/sudoers.d/99-cis` file provided by this playbook doesn't include !authenticate by default. This section is skipped due to the difficulty in conforming to the correct sudoers file syntax using Ansible.
 
 ### Section 5.4.1.6
 Even if this section is marked Automated, it is better to leave this as a manual check since the remediation is manually performed. 
