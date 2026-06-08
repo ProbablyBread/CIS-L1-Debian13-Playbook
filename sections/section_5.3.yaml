@@ -115,7 +115,7 @@
 
 - name: "5.3.3.1 Configure pam_faillock module"
   ansible.builtin.lineinfile:
-    file: "/etc/security/faillock.conf"
+    path: "/etc/security/faillock.conf"
     create: true
     regexp: "{{ item.regex }}"
     line: "{{ item.line }}"
@@ -129,7 +129,7 @@
 
 - name: "5.3.3.2 Configure pam_pwquality module"
   ansible.builtin.lineinfile:
-    file: "/etc/security/pwquality.conf"
+    path: "/etc/security/pwquality.conf"
     create: true
     regex: "{{ item.regex }}"
     line: "{{ item.line }}"
@@ -137,7 +137,7 @@
     group: root
     mode: '0644'
     state: present
-  when: "{{ item.condition | default(true) }}"
+  when: item.condition | default(true)
   loop:
     - { line: "difok={{ pwquality_difok }}", regex: ^difok\s+?=\s+?\d+$ }
     - { line: "minlen={{ pwquality_minlen }}", regex: ^minlen\s+?=\s+?\d+$ }
