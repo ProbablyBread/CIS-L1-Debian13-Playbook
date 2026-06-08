@@ -32,7 +32,6 @@
   loop: 
     - { replace: '\g<1>{{ shadow_pass_min_days }}:{{ shadow_pass_max_days }}:{{ shadow_pass_warn_age }}:{{ shadow_inactive }}\g<2>', regex: '^((?!root)\w+:[^!*:]+:\d*:)\d*:\d*:\d*:\d*(.*)' }
     - { replace: '\g<1>{{ shadow_pass_min_days }}:{{ shadow_pass_max_days }}:{{ shadow_pass_warn_age }}:{{ shadow_inactive }}\g<2>', regex: '^(root:[^!*:]+:\d*:)\d*:\d*:\d*:\d*(.*)', condition: "{{ not(is_root_breakglass | bool) }}" }
-  tags: test
 
 - name: "5.4.2.6 Ensure root user umask is configured"
   ansible.builtin.lineinfile:
@@ -52,5 +51,3 @@
     path: "/etc/passwd"
     replace: '\g<1>/usr/sbin/nologin'
     regexp: '^([^:]+:x:(10\d|1[1-9]\d|[2-9]\d{2}):\d*:(\w* ?){1,}:.*:).*$'
-  tags: test
-
