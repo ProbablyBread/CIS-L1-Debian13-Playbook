@@ -57,9 +57,11 @@
     file: "../tasks/lock_nologin_accounts.yaml"
 
 - name: "5.4.3 Configure user default environment"
-  ansible.builtin.template:
-    src: "../templates/user_profile.j2"
+  ansible.builtin.copy:
     dest: "/etc/profile.d/99-cis.sh"
     owner: root
     group: root
     mode: '0644'
+    content: |
+      readonly TMOUT={{ user_env_timeout }}; export TMOUT
+      umask 0027
