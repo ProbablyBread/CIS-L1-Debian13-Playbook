@@ -55,3 +55,11 @@
 - name: "5.4.2.8 Ensure accounts without a valid login shell are locked"
   ansible.builtin.include_tasks:
     file: "../tasks/lock_nologin_accounts.yaml"
+
+- name: "5.4.3 Configure user default environment"
+  ansible.builtin.template:
+    src: "../templates/user_profile.j2"
+    dest: "/etc/profile.d/99-cis.sh"
+    owner: root
+    group: root
+    mode: '0644'

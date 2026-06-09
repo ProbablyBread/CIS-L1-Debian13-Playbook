@@ -20,7 +20,7 @@ The entire 1.7 section is skipped as this playbook is meant for use in a headles
 Both the default `/etc/sudoers` and the `/etc/sudoers.d/99-cis` file provided by this playbook doesn't include !authenticate by default. This section is skipped due to the difficulty in conforming to the correct sudoers file syntax using Ansible.
 
 ### Section 5.4.1.6
-Even if this section is marked Automated, it is better to leave this as a manual check. The remediation entails locking, expiring, or resetting the passwords of any user accounts that have their last password change dates set to the future, which would require manual intervention anyway.
+Although this section is marked Automated, it is better to leave this as a manual check. The remediation entails locking, expiring, or resetting the passwords of any user accounts that have their last password change dates set to the future, which would require manual intervention anyway.
 
 ### Section 5.4.2
 Sections 5.4.2.1 to 5.4.2.5 are not implemented. Only sections 5.4.2.6 to 5.4.2.8 are implemented.
