@@ -27,7 +27,7 @@ Sections 5.4.2.1 to 5.4.2.5 are not implemented. Only sections 5.4.2.6 to 5.4.2.
 
 The compliance settings from 5.4.2.1 to 5.4.2.3 states that any other accounts other than `root` are not supposed to have a UID or GID of 0. Remediating such accounts if they exist would require manual configuration.
 
-The compliance setting for 5.4.2.4 states that the `root` account must have a password or is locked. Locking or setting a password for the root account should to be done manually. 
+The compliance setting for 5.4.2.4 states that the `root` account must have a password or is locked. Locking or setting a password for the root account should be done manually. 
 
 The compliance setting for 5.4.2.5 states that the `root` account's `PATH` must not include unsafe directories such as non-`root` owned directories or invalid directories etc. By default, the `PATH` for root only contains `/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin`. Since overriding `PATH` requires editing `.bashrc` or `.profile`, or manually using `export PATH`, this setting should be manually checked.
 
