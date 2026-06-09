@@ -1,0 +1,5 @@
+# Configures options pertaining to the user environment options at /etc/profile.d/99-cis.sh 
+#
+# user_env_timeout - controls the timeout of a user's interactive session
+
+user_env_timeout: 900
