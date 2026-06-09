@@ -1,0 +1,3 @@
+- Redo all individual line copies to discrete files with jinja2 templates instead
+	- Ability to collapse multiple tasks into one task
+	- Much easier to change if required
