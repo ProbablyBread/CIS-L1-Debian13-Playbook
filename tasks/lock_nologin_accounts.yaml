@@ -1,0 +1,15 @@
+- name: "Reading /etc/passwd..."
+  ansible.builtin.slurp:
+    src: /etc/passwd
+  register: etc_passwd
+
+- name: "Decoding content..."
+  ansible.builtin.set_fact:
+    userlist: "{{ (etc_passwd.content | b64decode) | regex_findall('^([^:]+):.*\/usr\/sbin\/nologin$', multiline=True) }}"
+
+- name: "Locking users..."
+  ansible.builtin.replace:
+    path: "/etc/shadow"
+    replace: '{{ item | regex_escape }}:!\g<1>\g<2>'
+    regexp: '^{{ item | regex_escape }}:([^!*:]+)(.*)$' 
+  loop: "{{ userlist }}"
