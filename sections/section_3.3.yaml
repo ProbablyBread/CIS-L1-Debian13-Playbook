@@ -1,11 +1,4 @@
 - block:
-  - name: "3.3.1.1 Ensure net.ipv4.ip_forward is configured"
-    ansible.builtin.include_tasks:
-      file: "../templates/configure_sysctl_settings.yaml"
-    vars:
-      setting: "net.ipv4.ip_forward"
-      value: "0"
-
   - name: "3.3.1.2 Ensure net.ipv4.conf.all.forwarding is configured"
     ansible.builtin.include_tasks:
       file: "../templates/configure_sysctl_settings.yaml"

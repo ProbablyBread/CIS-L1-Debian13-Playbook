@@ -5,13 +5,6 @@
     setting: "fs.protected_hardlinks"
     value: "1"
 
-- name: "1.5.2 Ensure fs.protected_symlinks is configured"
-  ansible.builtin.include_tasks:
-    file: "../templates/configure_sysctl_settings.yaml"
-  vars:
-    setting: "fs.protected_symlinks"
-    value: "1"
-
 - name: "1.5.3 Ensure kernel.yama.ptrace_scope is configured"
   ansible.builtin.include_tasks:
     file: "../templates/configure_sysctl_settings.yaml"

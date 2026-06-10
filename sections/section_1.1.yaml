@@ -33,27 +33,6 @@
     kernel_module: "jffs2"
   when: not (require_jffs2 | bool)
 
-- name: "1.1.1.6 Ensure overlay kernel module is not available"
-  ansible.builtin.include_tasks:
-    file: "../templates/disable_kernel_module.yaml"
-  vars:
-    kernel_module: "overlay"
-  when: not (require_overlay | bool)
-
-- name: "1.1.1.7 Ensure squashfs kernel module is not available"
-  ansible.builtin.include_tasks:
-    file: "../templates/disable_kernel_module.yaml"
-  vars:
-    kernel_module: "squashfs"
-  when: not (require_squashfs | bool)
-
-- name: "1.1.1.8 Ensure udf kernel module is not available"
-  ansible.builtin.include_tasks:
-    file: "../templates/disable_kernel_module.yaml"
-  vars:
-    kernel_module: "udf"
-  when: not (require_udf | bool)
-
 - name: "1.1.1.9 Ensure firewire-core kernel module is not available"
   ansible.builtin.include_tasks:
     file: "../templates/disable_kernel_module.yaml"

@@ -2,9 +2,6 @@
   register: assertions
   ansible.builtin.assert:
     that:
-      - require_overlay | bool in [true, false]
-      - require_squashfs | bool in [true, false]
-      - require_udf | bool in [true, false]
       - require_cramfs | bool in [true, false]
       - require_freevxfs | bool in [true, false]
       - require_hfs | bool in [true, false]
