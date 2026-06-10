@@ -11,15 +11,18 @@ This playbook has only been tested on a fresh installation of Debian 13, and **m
 If this playbook is to be used on existing installations of Debian 13, **make a backup before applying**. 
 
 ## What is Included/Excluded
-This playbook includes all the Automated compliance settings as much as possible, with the exclusions documented below. Most if not all of the Manual compliance settings have to be done manually, with the included settings documented below as well. This playbook also **does not** apply compliance settings for Server Level 2 with the exception of 5.4.1.2 (Ensure minimum password days).
+This playbook includes all the Automated compliance settings as much as possible. Most of the Manual compliance settings have to be done manually. This playbook also **does not** include compliance settings for Server Level 2 with a few exceptions, with options provided to either enable or disable them. All inclusions/exclusions to this are documented as follows.
 
 ### Excluded Automated Settings
 
 #### Section 1.7
 The entire 1.7 section is skipped as this playbook is meant for use in a headless environment. If compliance settings for the desktop environment are desired, please apply them manually.
 
+#### Section 2.3
+All `chronyd` settings are excluded. This playbook specifically uses `systemd-timesyncd` for clock synchronisation since it's the default clock synchronisation service on Debian. If necessary/desired, please configure another timesync service manually.
+
 #### Section 5.2.5
-Both the default `/etc/sudoers` and the `/etc/sudoers.d/99-cis` file provided by this playbook doesn't include !authenticate by default. This section is skipped due to the difficulty in conforming to the correct sudoers file syntax using Ansible.
+Both the default `/etc/sudoers` and the `/etc/sudoers.d/99-cis` file provided by this playbook doesn't include `!authenticate` by default. This section is skipped due to the difficulty in conforming to the correct sudoers file syntax using Ansible.
 
 #### Section 5.4.1.6
 Although this section is marked Automated, it is better to leave this as a manual check. The remediation entails locking, expiring, or resetting the passwords of any user accounts that have their last password change dates set to the future, which would require manual intervention anyway.
@@ -33,13 +36,17 @@ The compliance setting for 5.4.2.4 states that the `root` account must have a pa
 
 The compliance setting for 5.4.2.5 states that the `root` account's `PATH` must not include unsafe directories such as non-`root` owned directories or invalid directories etc. By default, the `PATH` for root only contains `/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin`. Since overriding `PATH` requires editing `.bashrc` or `.profile`, or manually using `export PATH`, this setting should be manually checked.
 
-### Included Manual Settings
-- Section 3.1.1 - Enables or disables IPv6 (see ./options/3.1\_network\_options.yaml)
-- Section 5.3.3.2.3 - Configures password complexity requirements (see ./options/5.3\_pam\_options.yaml)
-- Section 5.4.1.2 - Configures how long in days before a user can reset their password (see ./options/5.4\_shadow\_options.yaml)
+#### Section 6.1.1.2/6.1.2
+All remote syslog configurations are excluded. With configurations varying widely across different systems with different syslogging needs, remote syslogging options would be better controlled using a separate playbook that defines what is to be forwarded. However, this playbook also provides a convenience option to enable or disable the forwarding of `journald` logs.
+
+### Included L2/Manual Settings
+- Section 3.1.1 - Enables or disables IPv6 (see `./options/3.1_network_options.yaml`)
+- Section 5.3.3.2.3 - Configures password complexity requirements (see `./options/5.3_pam_options.yaml`)
+- Section 5.4.1.2 - Configures how long in days before a user can reset their password (see `./options/5.4_shadow_options.yaml`)
+- Section 6.1.1.1.3 - Configures `journald` log rotation (see `./options/6.1_logging_options.yaml`)
 
 ## Before Using This Playbook
-- **Carefully review the options in ./options/\*.yaml** before running this playbook.
+- **Carefully review the options in `./options/\*.yaml`** before running this playbook.
 - Explanations and appropriate values for each option is in each of the .yaml files for easy reference.
 
 ## Using This Playbook

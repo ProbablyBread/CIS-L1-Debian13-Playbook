@@ -1,0 +1,11 @@
+- name: "Configuring journald setting {{ option }}..."
+  community.general.ini_file:
+    path: "/etc/systemd/journald.conf.d/99-cis.conf"
+    create: true
+    owner: root
+    group: root
+    mode: '0644'
+    state: present
+    section: "{{ section }}"
+    option: "{{ option }}"
+    value: "{{ value }}"

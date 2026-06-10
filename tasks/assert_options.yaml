@@ -72,9 +72,6 @@
       - require_client_ldap | bool in [true, false]
       - require_client_ftp | bool in [true, false]
       - use_systemd_timesyncd | bool in [true, false]
-      - use_chrony | bool in [true, false]
-      - chrony_pools_max_sources is match("^\d+$")
-      - use_systemd_timesyncd != use_chrony
       - require_cron | bool in [true, false]
       - is_cron_deny | bool in [true, false]
       - require_at | bool in [true, false]
@@ -127,6 +124,12 @@
       - shadow_pass_warn_age is match ("\d+$")
       - shadow_inactive is match ("\d+$")
       - is_root_breakglass | bool in [true, false]
- 
+      - require_remote_syslog | bool in [true, false]
+      - journald_system_max_use | lower is match("^\d{1,}[gmk]$")
+      - journald_system_keep_free | lower is match("^\d{1,}[gmk]$")
+      - journald_runtime_max_use | lower is match("^\d{1,}[gmk]$")
+      - journald_runtime_keep_free | lower is match("^\d{1,}[gmk]$")
+      - journald_max_file_sec | lower is match("^\d+(year|month|week|day|h|m)?$") 
+
     fail_msg:
       - "Ensure that options are correctly set in each option.yaml. See README.md and each option.yaml file."

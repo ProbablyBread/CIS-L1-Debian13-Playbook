@@ -12,7 +12,7 @@
     name: "autofs"
     state: absent
     purge: true
-  when: require_autofs | lower == "no"
+  when: not (require_autofs | bool) 
 
 - name: "2.1.2 Ensure avahi daemon services are not in use"
   ansible.builtin.include_tasks:

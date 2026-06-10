@@ -3,11 +3,6 @@
     name: "sshd.service"
     state: restarted
 
-- name: "Restart chrony.service"
-  ansible.builtin.systemd_service:
-    name: "chrony.service"
-    state: restarted
-
 - name: "Restart systemd-timesyncd.service"
   ansible.builtin.systemd_service:
     name: "systemd-timesyncd.service"
@@ -21,6 +16,11 @@
 - name: "Restart systemd-coredump.socket"
   ansible.builtin.systemd_service:
     name: "systemd-coredump.socket"
+    state: restarted
+
+- name: "Restart systemd-journald.service"
+  ansible.builtin.systemd_service:
+    name: "systemd-journald.service"
     state: restarted
 
 - name: "Reload systemd daemon"

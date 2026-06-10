@@ -1,0 +1,18 @@
+# Configures journald logging options
+#
+# require_remote_syslog - Configures whether logs can be forwarded to a syslog service 
+#
+# journald_system_max_use - Configures the maximum amount of non-volatile memory taken up by journald
+# journald_system_keep_free - Configures the minimum amount of non-volatile memory to be kept free
+# journald_runtime_max_use - Configures the maximum amount of volatile memory taken up by journald
+# journald_runtime_keep_free - Configures the minimum amount of volatile memory to be kept free
+# journald_max_file_sec - Configures the maximum time period where entries are stored in a single journal file before rotating to the next file
+#
+
+require_remote_syslog: false
+
+journald_system_max_use: "1G"
+journald_system_keep_free: "500M"
+journald_runtime_max_use: "200M"
+journald_runtime_keep_free: "50M"
+journald_max_file_sec: "1month"

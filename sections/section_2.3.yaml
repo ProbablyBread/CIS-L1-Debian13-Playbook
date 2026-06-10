@@ -2,8 +2,3 @@
   ansible.builtin.include_tasks:
     file: "../tasks/configure_timesyncd.yaml"
   when: use_systemd_timesyncd | bool
-
-- name: "2.3.3 Configure chrony"
-  ansible.builtin.include_tasks:
-    file: "../tasks/configure_chrony.yaml"
-  when: use_chrony | bool
