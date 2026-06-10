@@ -10,8 +10,8 @@ This playbook has only been tested on a fresh installation of Debian 13, and **m
 
 If this playbook is to be used on existing installations of Debian 13, **make a backup before applying**. 
 
-## What is Implemented/Excluded
-This playbook includes all the Automated compliance settings as much as possible, with the exclusions documented below. Most if not all of the Manual compliance settings have to be done manually. This playbook also **does not** apply compliance settings for Server Level 2 with the exception of 5.4.1.2 (Ensure minimum password days).
+## What is Included/Excluded
+This playbook includes all the Automated compliance settings as much as possible, with the exclusions documented below. Most if not all of the Manual compliance settings have to be done manually, with the included settings documented below as well. This playbook also **does not** apply compliance settings for Server Level 2 with the exception of 5.4.1.2 (Ensure minimum password days).
 
 ### Excluded Automated Settings
 
@@ -34,7 +34,9 @@ The compliance setting for 5.4.2.4 states that the `root` account must have a pa
 The compliance setting for 5.4.2.5 states that the `root` account's `PATH` must not include unsafe directories such as non-`root` owned directories or invalid directories etc. By default, the `PATH` for root only contains `/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin`. Since overriding `PATH` requires editing `.bashrc` or `.profile`, or manually using `export PATH`, this setting should be manually checked.
 
 ### Included Manual Settings
-Update this part...
+- Section 3.1.1 - Enables or disables IPv6 (see ./options/3.1\_network\_options.yaml)
+- Section 5.3.3.2.3 - Configures password complexity requirements (see ./options/5.3\_pam\_options.yaml)
+- Section 5.4.1.2 - Configures how long in days before a user can reset their password (see ./options/5.4\_shadow\_options.yaml)
 
 ## Before Using This Playbook
 - **Carefully review the options in ./options/\*.yaml** before running this playbook.
