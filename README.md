@@ -39,6 +39,9 @@ The compliance setting for 5.4.2.5 states that the `root` account's `PATH` must 
 #### Section 6.1.1.2/6.1.2
 All remote syslog configurations are excluded. With configurations varying widely across different systems with different syslogging needs, remote syslogging options would be better controlled using a separate playbook that defines what is to be forwarded. However, this playbook also provides a convenience option to enable or disable the forwarding of `journald` logs.
 
+#### Section 7.1.11/7.1.12
+World writable files and directories would be better secured manually to reduce the risk of majorly breaking a system. Orphaned files and directories should also be removed manually to prevent potential data loss from removing directories/files that may still be required even though they are orphaned.
+
 ### Included L2/Manual Settings
 - Section 3.1.1 - Enables or disables IPv6 (see `./options/3.1_network_options.yaml`)
 - Section 5.3.3.2.3 - Configures password complexity requirements (see `./options/5.3_pam_options.yaml`)
