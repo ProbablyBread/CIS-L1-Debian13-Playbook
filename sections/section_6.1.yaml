@@ -26,7 +26,6 @@
   notify: Restart systemd-journald.service
 
 - name: "6.1.3 Ensure access to all logfiles has been configured"
-  tags: test
   ansible.builtin.include_tasks:
     file: "../templates/configure_log_perms.yaml"
   vars: 

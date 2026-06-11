@@ -5,7 +5,6 @@
     paths: "{{ path }}"
     patterns: "{{ regex }}"
     use_regex: true
-  tags: test
 
 - block:
   - name: "Correcting log ownership..."
@@ -15,7 +14,9 @@
     loop: "{{ file_list.files }}"
     loop_control: 
       label: "{{ item.path }}: {{ item.pw_name }}"
-    when: item.pw_name is not match(owner)
+    when: 
+      - item.pw_name is not match(owner)
+      - owner | length > 0
 
   - name: "Correcting log group ownership..."
     ansible.builtin.file:
@@ -24,7 +25,9 @@
     loop: "{{ file_list.files }}"
     loop_control:
       label: "{{ item.path }}: {{ item.gr_name }}"
-    when: item.gr_name is not match(group) 
+    when: 
+      - item.gr_name is not match(group) 
+      - group | length > 0
 
   - name: "Correcting log permissions..."
     ansible.builtin.file:
@@ -37,19 +40,3 @@
 
   when: 
     - file_list.matched > 0
-    - owner | length > 0
-    - group | length > 0
-  tags: test
-
-- name: "Correcting file permissions for the remaining..."
-  ansible.builtin.file:
-    path: "{{ item.path }}"
-    mode: '0640'
-  loop: "{{ file_list.files }}"
-  loop_control:
-    label: "{{ item.path }}: {{ item.mode }}"
-  when: 
-    - (item.mode | int(base=8)) > (mode | int(base=8))
-    - owner | length == 0
-    - group | length == 0
-  tags: test
