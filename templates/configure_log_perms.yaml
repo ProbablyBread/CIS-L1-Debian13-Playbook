@@ -1,0 +1,33 @@
+- name: "Getting logs under {{ path }}..."
+  register: file_list
+  ansible.builtin.find:
+    recurse: true
+    paths: "{{ path }}"
+    patterns: "{{ regex }}"
+    use_regex: true
+  tags: test
+
+- block:
+  - name: "Correcting log ownership..."
+    ansible.builtin.file:
+      path: "{{ item.path }}"
+      owner: "root"
+    loop: "{{ file_list.files }}"
+    when: item.pw_name is not match(owner) ((item.mode | int()) > (mode | int()))
+
+  - name: "Correcting log group ownership..."
+    ansible.builtin.file:
+      path: "{{ item.path }}"
+      group: "root"
+    loop: "{{ file_list.files }}"
+    when: item.gr_name is not match(group) 
+
+  - name: "Correcting log permissions..."
+    ansible.builtin.file:
+      path: "{{ item.path }}"
+      mode: "{{ mode }}"
+    loop: "{{ file_list.files }}"
+    when: (item.mode | int()) > (mode | int())
+
+  when: file_list.matched > 0
+  tags: test

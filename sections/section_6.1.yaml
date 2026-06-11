@@ -24,3 +24,22 @@
       - { option: "ForwardToSyslog", value: "{{ 'yes' if (require_remote_syslog | bool) else 'no' }}" }
 
   notify: Restart systemd-journald.service
+
+- name: "6.1.3 Ensure access to all logfiles has been configured"
+  tags: test
+  ansible.builtin.include_tasks:
+    file: "../templates/configure_log_perms.yaml"
+  vars: 
+    path: "{{ param.path | default('/var/log/') }}"
+    regex: "{{ param.regex }}"
+    owner: "{{ param.owner }}"
+    group: "{{ param.group }}"
+    mode: "{{ param.mode }}"
+  loop:
+    - { path: "/var/log/apt", regex: .*, owner: root, group: (root|adm), mode: 0640 }
+    - { regex: (lastlog.*|(b|w)tmp.*|README), owner: root, group: (root|utmp), mode: 0664 }
+    - { regex: (cloud-init\.log.*|localmessages.*|waagent\.log.*), owner: (root|syslog), group: (root|adm), mode: 0644}
+    - { regex: (secure.*|auth\.log|syslog|messages), owner: (root|syslog), group: (root|adm), mode: 0640 }
+    - { regex: (.*\.journal~?), owner: root, group: (root|systemd-journal), mode: 0640 }
+  loop_control:
+    loop_var: param
