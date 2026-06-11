@@ -41,5 +41,6 @@
     - { regex: (cloud-init\.log.*|localmessages.*|waagent\.log.*), owner: (root|syslog), group: (root|adm), mode: 0644}
     - { regex: (secure.*|auth\.log|syslog|messages), owner: (root|syslog), group: (root|adm), mode: 0640 }
     - { regex: (.*\.journal~?), owner: root, group: (root|systemd-journal), mode: 0640 }
+    - { regex: ^(?!(lastlog.*|(b|w)tmp.*|README|cloud-init\.log.*|localmessages.*|waagent\.log.*|secure.*|auth\.log|syslog|messages|.*\.journal~?)$).*, owner: "", group: "", mode: 0640 }
   loop_control:
     loop_var: param
