@@ -144,3 +144,9 @@
         file: "./sections/section_7.1.yaml"
       tags:
         - "7.1"
+
+    - name: "Section 7.2"
+      ansible.builtin.import_tasks:
+        file: "./sections/section_7.2.yaml"
+      tags:
+        - "7.2"

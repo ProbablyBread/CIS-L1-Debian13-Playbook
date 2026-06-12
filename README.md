@@ -42,6 +42,12 @@ All remote syslog configurations are excluded. With configurations varying widel
 #### Section 7.1.11/7.1.12
 World writable files and directories would be better secured manually to reduce the risk of majorly breaking a system. Orphaned files and directories should also be removed manually to prevent potential data loss from removing directories/files that may still be required even though they are orphaned.
 
+#### Section 7.2.3
+Groups that exist in `/etc/passwd` that do not exist in `/etc/group` should be manually remediated by either removing the user or adding the respective group.
+
+#### Section 7.2.4 (partial)
+This section only ensures that the `shadow` group does not have any users explicitly added to the group. Remediation has to be done manually if there are any users that have the `shadow` group as their primary group.
+
 ### Included L2/Manual Settings
 - Section 3.1.1 - Enables or disables IPv6 (see `./options/3.1_network_options.yaml`)
 - Section 5.3.3.2.3 - Configures password complexity requirements (see `./options/5.3_pam_options.yaml`)
