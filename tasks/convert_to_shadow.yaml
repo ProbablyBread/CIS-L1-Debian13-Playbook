@@ -1,28 +1,23 @@
-- name: "Reading {{ input_file }}..."
+- name: "Reading /etc/passwd..."
   ansible.builtin.slurp:
-    src: "{{ input_file }}"
+    src: "/etc/passwd"
   register: file
 
 - name: "Decoding content..."
   ansible.builtin.set_fact:
     list: "{{ (file.content | b64decode) | regex_findall('^([^:]+):([^:]+):\\d+:.*$', multiline=True) }}"
 
-- name: "DEBUG"
-  ansible.builtin.debug:
-    msg: "{{ item[0] }} : {{ item[1] }}"
-  loop: "{{ list }}"
-
-- name: "Editing {{ input_file }}..."
+- name: "Editing /etc/passwd..."
   ansible.builtin.replace:
-    path: "{{ input_file }}"
+    path: "/etc/passwd"
     regexp: '^{{ item[0] | regex_escape }}:[^:]+:(.*$)'
     replace: '{{ item[0] }}:x:\g<1>'
   when: item[1] != "x"
   loop: "{{ list }}"
 
-- name: "Editing {{ output_file }}..."
+- name: "Editing /etc/shadow..."
   ansible.builtin.replace:
-    path: "{{ output_file }}"
+    path: "/etc/shadow"
     regexp: '^{{ item[0] | regex_escape }}:[^:]+:(.*$)'
     replace: '{{ item[0] }}:{{ item[1] }}:\g<1>'
   when: item[1] != "x"
