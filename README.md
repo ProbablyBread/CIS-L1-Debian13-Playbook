@@ -13,7 +13,7 @@ If this playbook is to be used on existing installations of Debian 13, **make a 
 ## What is Included/Excluded
 This playbook includes all the Automated compliance settings as much as possible. Most of the Manual compliance settings have to be done manually. This playbook also **does not** include compliance settings for Server Level 2 with a few exceptions, with options provided to either enable or disable them. All inclusions/exclusions to this are documented as follows.
 
-Companion scripts are available in the ./scripts directory to purely audit those sections that have been excluded due to difficulty conforming to the compliance requirements with an Ansible playbook. Sections that are checked by the companion script are marked with (AUDIT SCRIPT). Note the script only performs auditing and does not perform remediation.
+Companion scripts are available [in this GitHub repository](https://github.com/ProbablyBread/Audit-Script-for-CIS-L1-Debian-13-Hardening) to purely audit those sections that have been excluded due to difficulty conforming to the compliance requirements with an Ansible playbook. Sections that are checked by the companion script are marked with (AUDIT SCRIPT). Note the script only performs auditing and does not perform remediation.
 
 ### Excluded Automated Settings
 
