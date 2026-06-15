@@ -11,5 +11,5 @@
 - name: "7.2.4 Ensure shadow group is empty"
   ansible.builtin.replace:
     path: "/etc/shadow"
-    regex: '^(shadow:x:\d+:).*$'
+    regexp: '^(shadow:x:\d+:).*$'
     replace: '\1'
