@@ -1,5 +1,5 @@
 - name: CIS Debian Linux 13 (Trixie) Benchmark v1.0 Server L1
-  hosts: localhost
+  hosts: all, localhost
 
   handlers:
     - name: "Include handlers..."
@@ -150,3 +150,9 @@
         file: "./sections/section_7.2.yaml"
       tags:
         - "7.2"
+
+    - name: "Cleaning up..."
+      ansible.builtin.import_tasks:
+        file: "./sections/clean_up.yaml"
+      tags:
+        - always

@@ -42,6 +42,13 @@
     name: "{{ su_group_name }}"
     state: present
 
+- name: "Ensuring the calling user is still able to su..."
+  ansible.builtin.user:
+    name: "{{ su_group_member }}"
+    groups: "{{ su_group_name }}"
+    append: true
+    state: present
+
 - name: "5.2.7 Ensure access to the su command is restricted"
   ansible.builtin.lineinfile:
     path: "/etc/pam.d/su"

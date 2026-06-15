@@ -1,0 +1,6 @@
+- name: "Removing {{ su_group_member }} from {{ su_group_name }}..."
+  ansible.builtin.lineinfile:
+    path: "/etc/group"
+    regexp: '^({{ su_group_name | regex_escape }}:x:\d+:).*$'
+    backrefs: true
+    line: '\1'
