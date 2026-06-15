@@ -139,6 +139,12 @@
       tags:
         - "6.1"
 
+    - name: "Section 6.3"
+      ansible.builtin.import_tasks:
+        file: "./sections/section_6.3.yaml"
+      tags:
+        - "6.3"
+
     - name: "Section 7.1"
       ansible.builtin.import_tasks:
         file: "./sections/section_7.1.yaml"

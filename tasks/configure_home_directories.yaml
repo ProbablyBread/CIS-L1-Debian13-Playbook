@@ -1,0 +1,33 @@
+- name: "Reading /etc/shells..."
+  ansible.builtin.slurp:
+    src: "/etc/shells"
+  register: etc_shell
+
+- name: "Decoding content..."
+  ansible.builtin.set_fact:
+    shells: "{{ (etc_shell.content | b64decode) | regex_findall('^[^#].*$', multiline=True) }}"
+
+- name: "Reading /etc/passwd..."
+  ansible.builtin.getent:
+    database: passwd
+
+- name: "Getting list of users with valid login shells..."
+  ansible.builtin.set_fact:
+    interactive_users: | 
+      {%- set users = [] -%}
+      {%- for username, info in ansible_facts.getent_passwd.items() -%}
+        {%- if info[5] in shells -%}
+          {%- set _ = users.append({'user': username, 'home': info[4]}) -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {{ users }}
+
+- name: "Ensuring permissions for home directory..."
+  ansible.builtin.file:
+    path: "{{ item.home }}"
+    state: directory
+    recurse: false
+    owner: "{{ item.user }}"
+    group: "{{ item.user }}"
+    mode: u=rwX,g=,o=
+  loop: "{{ interactive_users }}"

@@ -13,3 +13,7 @@
     path: "/etc/shadow"
     regexp: '^(shadow:x:\d+:).*$'
     replace: '\1'
+
+- name: "7.2.9 Ensure local interactive user home directories are configured"
+  ansible.builtin.include_tasks:
+    file: "../tasks/configure_home_directories.yaml"

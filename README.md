@@ -47,11 +47,17 @@ World writable files and directories needs to be secured manually since there is
 #### Section 7.2.3 (AUDIT SCRIPT)
 Groups that exist in `/etc/passwd` that do not exist in `/etc/group` should be manually remediated by either removing the user or adding the respective group.
 
-#### Section 7.2.4 (AUDIT SCRIPT)
-This section only ensures that the `shadow` group does not have any users explicitly added to the group. Remediation has to be done manually if there are any users that have the `shadow` group as their primary group.
+#### Section 7.2.4 (partial) (AUDIT SCRIPT)
+This playbook only ensures that the `shadow` group does not have any users explicitly added to the group. Remediation has to be done manually if there are any users that have the `shadow` group as their primary group.
 
-#### Section 7.2.5/7.2.6 (AUDIT SCRIPT)
-The compliance setting for these two sections ensure that all UIDs and GIDs are unique on the system. Remediation of files that are assigned to users that had the same UID/GID has to be done manually after changing the UIDs or GIDs. 
+#### Section 7.2.5/7.2.6/7.2.7/7.2.8 (AUDIT SCRIPT)
+The compliance setting for these sections ensure that all UIDs and GIDs are unique on the system. Remediation of files that are assigned to users that had the same UID/GID has to be done manually after changing the UIDs or GIDs. Similarly for duplicate usernames and group names, remediation should be performed manually to rename the affected user(s)/group(s). 
+
+#### Section 7.2.9 (partial) (AUDIT SCRIPT)
+This playbook only ensures that the home directory of all interactive users on the system are owned by the respective users, and have their permissions set to 0750. Remediation has to be done manually if there are any users who have missing or nonexistent home directories.
+
+#### Section 7.2.10 (AUDIT SCRIPT)
+Permissions on dot files for interactive users should be configured manually since different permissions may be required for different dot files (e.g. `.bash_history` vs `.vimrc`. There is a need to manually review each dot file and ensure that changing their permissions do not result in overly open permissions.
 
 ### Included L2/Manual Settings
 - Section 3.1.1 - Enables or disables IPv6 (see `./options/3.1_network_options.yaml`)

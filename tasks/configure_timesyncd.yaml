@@ -24,7 +24,7 @@
 
   - name: "Configuring systemd-timesyncd fallback NTP..."
     community.general.ini_file:
-      path: "/usr/lib/systemd/timesyncd.conf.d/99-timesyncd.conf"
+      path: "/etc/systemd/timesyncd.conf.d/99-timesyncd.conf"
       owner: root
       group: root
       mode: '0644'

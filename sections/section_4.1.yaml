@@ -4,6 +4,16 @@
       name: "ufw"
       state: present
 
+  - name: "Ensuring ufw doesn't override /etc/sysctl.conf.d/99-cis.conf..."
+    ansible.builtin.lineinfile:
+      path: "/etc/ufw/sysctl.conf"
+      regexp: "{{ item }}"
+      backrefs: true
+      line: '#\1'
+    loop:
+      - '^(net\/ipv4\/conf\/all\/log_martians=\d+)$'
+      - '^(net\/ipv4\/conf\/default\/log_martians=\d+)$'
+
   - name: "4.1.2 Ensure ufw service is configured"
     ansible.builtin.systemd_service:
       name: "ufw.service"

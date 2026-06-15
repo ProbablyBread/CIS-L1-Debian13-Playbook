@@ -1,0 +1,40 @@
+- name: "6.3.1 Ensure AIDE is installed"
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - aide
+    - aide-common
+
+- name: "Checking if AIDE is already initialised..."
+  register: aide_init
+  ansible.builtin.stat:
+    path: "/var/lib/aide/aide.db" 
+
+- block: 
+  - name: "IMPORTANT MESSAGE"
+    ansible.builtin.debug:
+      msg: "This process WILL take a long time. Please wait patiently."
+
+  - name: "Initialising AIDE..."
+    ansible.builtin.shell:
+      cmd: "aideinit"
+
+  - name: "Copying AIDE database..."
+    ansible.builtin.copy:
+      src: "/var/lib/aide/aide.db.new"
+      dest: "/var/lib/aide/aide.db"
+      remote_src: true
+      force: false 
+    when: aide_init.stat.exists == false
+
+  when: aide_init.stat.exists == false
+
+- name: "6.3.2 Ensure filesystem integrity is regularly checked"
+  ansible.builtin.systemd_service:
+    name: "{{ item }}"
+    enabled: true
+    masked: false
+  loop:
+    - "dailyaidecheck.timer"
+    - "dailyaidecheck.service"

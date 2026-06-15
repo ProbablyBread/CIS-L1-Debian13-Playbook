@@ -6,7 +6,7 @@
     line: "{{ item.line }}"
     state: present
   loop:
-    - { regexp: '^set superusers=.*$', line: "set superusers={{ bootloader_user }}" }
+    - { regexp: '^set superusers=.*$', line: "set superusers=\"{{ bootloader_user }}\"" }
     - { regexp: '^password_pbkdf2.*$', line: "password_pbkdf2 {{ bootloader_user }} {{ bootloader_pbkdf2 }}" }
 
 - name: "Disabling bootloader password on boot..."
