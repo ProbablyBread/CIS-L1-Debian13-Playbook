@@ -11,13 +11,16 @@
       - require_usb_storage | bool in [true, false]
       - tmp_size | lower is match("^\d{1,}[gmk]$")
       - shm_size | lower is match("^\d{1,}[gmk]$")
+      - fs_type | length > 0
       - is_home_partition | bool in [true, false]
       - is_tmp_partition | bool in [true, false]
       - is_var_tmp_partition | bool in [true, false]
       - is_var_log_partition | bool in [true, false]
       - is_var_log_audit_partition | bool in [true, false]
       - is_var_partition | bool in [true, false]
+      - bootloader_user | length > 0
       - bootloader_pbkdf2 is match("^grub.pbkdf2.*")
+      - bootloader_password_required | bool in [true, false]
       - require_coredump | bool in [true, false]
       - require_motd | bool in [true, false]
       - require_autofs | bool in [true, false]
@@ -72,10 +75,10 @@
       - require_client_ldap | bool in [true, false]
       - require_client_ftp | bool in [true, false]
       - use_systemd_timesyncd | bool in [true, false]
-      - require_cron | bool in [true, false]
-      - is_cron_deny | bool in [true, false]
       - require_at | bool in [true, false]
       - is_at_deny | bool in [true, false]
+      - require_cron | bool in [true, false]
+      - is_cron_deny | bool in [true, false]
       - require_ipv6 | bool in [true, false]
       - require_wlan | bool in [true, false]
       - require_bluetooth | bool in [true, false]
@@ -125,6 +128,7 @@
       - shadow_pass_warn_age is match ("\d+$")
       - shadow_inactive is match ("\d+$")
       - is_root_breakglass | bool in [true, false]
+      - user_env_timeout is match ("\d+$")
       - require_remote_syslog | bool in [true, false]
       - journald_system_max_use | lower is match("^\d{1,}[gmk]$")
       - journald_system_keep_free | lower is match("^\d{1,}[gmk]$")

@@ -1,6 +1,7 @@
 # Configure the time synchronisation daemon on the server. 
 #
 # use_systemd_timesyncd - sets whether to use systemd-timesyncd as the timesync daemon
+#   - if this setting is set to false, please configure your own timesync daemon
 # timesyncd_primary - configures the list of space separated primary NTP servers for systemd-timesyncd
 # timesyncd_fallback - configures the list of space separated fallback NTP servers for systemd-timesyncd
 #

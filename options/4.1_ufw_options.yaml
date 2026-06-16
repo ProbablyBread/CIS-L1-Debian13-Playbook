@@ -3,6 +3,7 @@
 # require_ufw - controls whether ufw is installed
 # require_ufw_ssh - controls whether SSH is allowed through the UFW firewall upon configuration. 
 # ufw_ssh_ip - configures what IP addresses (e.g. single IP, CIDR, any) are allowed to access the server over SSH
+#   - WARNING: disabling this option means that SSH access will be lost upon UFW activation
 # require_ufw_routing - controls whether ufw is allowed to route between network interfaces
 
 require_ufw: true
