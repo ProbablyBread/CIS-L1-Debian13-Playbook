@@ -64,6 +64,8 @@ Permissions on dot files for interactive users should be configured manually sin
 - Explanations and appropriate values for each option is in each of the .yaml files for easy reference.
 
 ## Using This Playbook
-- Once you have the options configured, the playbook by default runs against the localhost without an inventory file supplied.
+- Clone this repository to your local machine or Ansible control node and configure the inventory as necessary.
+- Make any necessary changes to ansible.cfg to fit your environment.
+- Once you have the options configured, the playbook by default runs against all hosts in the inventory file supplied as well as the localhost. Make any required adjustments as necessary before using.
 - Tags are provided for each major section (e.g. entirety of 1.1 or 2.2 etc) if only specific sections are to be applied.
 - Tags for individual sub-sections (e.g. 1.1.1 etc) are not supplied.
