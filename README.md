@@ -32,7 +32,7 @@ The compliance setting for 5.4.2.4 states that the `root` account must have a pa
 
 The compliance setting for 5.4.2.5 states that the `root` account's `PATH` must not include unsafe directories such as non-`root` owned directories or invalid directories etc. By default, the `PATH` for root only contains `/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin`. Since overriding `PATH` requires editing `.bashrc` or `.profile`, or manually using `export PATH`, this setting should be manually checked.
 
-#### Section 6.1.1.2/6.1.2 (AUDIT SCRIPT)
+#### Section 6.1.1.2/6.1.2
 All remote syslog configurations are excluded. With configurations varying widely across different systems with different syslogging needs, remote syslogging options would be better controlled using a separate playbook that defines what is to be forwarded. However, this playbook also provides a convenience option to enable or disable the forwarding of `journald` logs.
 
 #### Section 7.1.11/7.1.12 (AUDIT SCRIPT)
