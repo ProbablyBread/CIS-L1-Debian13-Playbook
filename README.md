@@ -60,7 +60,7 @@ Permissions on dot files for interactive users should be configured manually sin
 - Section 6.1.1.1.3 - Configures `journald` log rotation (see `./options/6.1_logging_options.yaml`)
 
 ## Before Using This Playbook
-- **Carefully review the options in `./options/\*.yaml`** before running this playbook.
+- **Carefully review the options in `./options/*.yaml`** before running this playbook.
 - Explanations and appropriate values for each option is in each of the .yaml files for easy reference.
 
 ## Using This Playbook
